@@ -1,0 +1,236 @@
+:root {
+  font-family: "Roboto", sans-serif;
+}
+
+h2 {
+  margin: 0;
+  color: #0A0A0A;
+  text-align: center;
+}
+
+h3 {
+  padding-left: 0.6rem;
+  padding-top: 0.3rem;
+  color: #0A0A0A;
+  text-align: left;
+  font-weight: 300;
+  font-size: 1.5ch;
+}
+
+hr {
+  color: #0A0A0A;
+}
+
+html {
+  font-size: clamp(12px, 0.9vw, 18px);
+}
+
+body {
+  margin: 0;
+  background: #F3F4F6;
+}
+
+header {
+  display: flex;
+  width: 100%;
+  background: #AF2B1E;
+  color: #F4F4F4;
+  text-align: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.heading {
+  margin: 0;
+  padding: 1rem;
+  flex: 0 1 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.text {
+  flex: 0 1 auto;
+  text-decoration: none;
+  color: #F4F4F4;
+}
+
+.container {
+  width: min(95vw, 1900px);
+  margin: 1rem;
+}
+
+/* IndexPage */
+
+.top-duty {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #B6D5FB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0A0A0A;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 80px;
+  width: clamp(110px, 9vw, 200px);
+}
+
+.card:hover {
+  cursor: grab;
+}
+
+.card:active {
+  background: #ddd;
+}
+
+.card.dragging {
+  opacity: 0.5;
+}
+
+.middle-duty {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+
+.vehicle {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  width: clamp(110px, 9vw, 200px);
+  justify-content: space-between;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+}
+
+.vehicle .person:last-child {
+  margin-bottom: 0.4rem;
+}
+
+.person {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0A0A0A;
+  background-color: #D1D5DB;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 80px;
+}
+
+.person:hover {
+  cursor: grab;
+}
+
+.person.drop-hover {
+  outline: 2px dashed #4caf50;
+  background: #eaffea;
+}
+
+.vehicle h3 {
+  margin: 0 !important;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  gap: 0.5rem;
+}
+
+.side .vehicle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.team {
+  flex-wrap: wrap;
+  padding: 1rem;
+  background-color: #FFFFFF;
+  height: min(80px, fit-content);
+  max-height: fit-content;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+/* SettingsPage */
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+input[type="file"]::file-selector-button {
+  display: none;
+
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #0A0A0A;
+}
+
+.btn {
+  font-weight: bold;
+  font-size: 1.5ch;
+  background-color: #0A0A0A;
+  border-style: none;
+  color: #F4F4F4;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  min-height: 50px;
+  min-width: 160px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
+  text-align: center;
+}
+
+.btn:hover,
+.btn:focus {
+  opacity: .75;
+}
+
+.drop-target {
+  outline: 2px dashed red;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.team.drop-target {
+  outline: 2px dashed blue;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+@media (max-width: 870px) {
+  .heading {
+    font-size: 3ch;
+  }
+}

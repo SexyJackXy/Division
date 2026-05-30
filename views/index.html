@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Diensteinteilung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+  <script src="../scripts/scripts.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1 class="heading">Feuerwehr Heilbronn Diensteinteilung</h1>
+    <a class="text" href="settings.html" style="padding-right: 0.6rem;">
+      <p>Einstellungen</p>
+    </a>
+  </header>
+
+  <main class="container">
+
+    <h2>Führungsdienste</h2>
+    <br>
+    <section class="top-duty">
+      <div class="vehicle">
+        <h3>ALvD</h3>
+        <div class="person" data-role="ALvD" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>DD</h3>
+        <div class="person" data-role="DD" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>LD1</h3>
+        <div class="person" data-role="LD1" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>LD2</h3>
+        <div class="person" data-role="LD2" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>HLD</h3>
+        <div class="person" data-role="HLD" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>EAL</h3>
+        <div class="person" data-role="EAL" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>BvD</h3>
+        <div class="person" data-role="BvD" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>LFüGr</h3>
+        <div class="person" data-role="LFüGr" draggable="true">Frei</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>Schichtführer</h3>
+        <div class="person" data-role="Schichtführer" draggable="true">Frei</div>
+      </div>
+    </section>
+
+
+    <h2>Fahrzeuge</h2>
+    <br>
+    <section class="middle-duty">
+      <div class="side">
+        <div class="vehicle">
+          <h3>ILS</h3>
+          <div class="person" data-role="1. Dispo" draggable="true">1. Dispo</div>
+          <div class="person" data-role="2.Dispo" draggable="true">2. Dispo</div>
+          <div class="person" data-role="3.Dispo" draggable="true">3. Dispo</div>
+        </div>
+
+        <div class="vehicle">
+          <h3>ELW</h3>
+          <div class="person" data-role="ELW" draggable="true">LD 1</div>
+          <div class="person" data-role="FüAss" draggable="true">FüAss</div>
+          <div class="person" data-role="Schw.Retter" draggable="true">3. Dispo</div>
+        </div>
+      </div>
+
+      <div class="vehicle">
+        <h3>LF1</h3>
+        <div class="person" data-role="LF 1 Fü" draggable="true">LF 1 Fü</div>
+        <div class="person" data-role="LF 1 Ma" draggable="true">LF 1 Ma</div>
+        <div class="person" data-role="LF 1 ATF" draggable="true">LF 1 ATF</div>
+        <div class="person" data-role="LF 1 ATM" draggable="true">LF 1 ATM</div>
+        <div class="person" data-role="LF 1 WTF" draggable="true">LF 1 WTF</div>
+        <div class="person" data-role="LF 1 WTM" draggable="true">LF 1 WTM</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>LF2</h3>
+        <div class="person" data-role="LF 2 Fü" draggable="true">LF 2 Fü</div>
+        <div class="person" data-role="LF 2 Ma" draggable="true">LF 2 Ma</div>
+        <div class="person" data-role="LF 2 ATF" draggable="true">LF 2 ATF</div>
+        <div class="person" data-role="LF 2 ATM" draggable="true">LF 2 ATM</div>
+        <div class="person" data-role="LF 2 WTF" draggable="true">LF 2 WTF</div>
+        <div class="person" data-role="LF 2 WTM" draggable="true">LF 2 WTM</div>
+      </div>
+
+      <div class="side">
+
+        <div class="vehicle">
+          <h3>DLK/RW</h3>
+          <div class="person" data-role="DLK Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="DLK Ma" draggable="true">Maschinist</div>
+        </div>
+
+        <div class="vehicle">
+          <h3>Sonderfahrzeug</h3>
+          <div class="person" data-role="SOFA Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="SOFA Ma" draggable="true">Maschinist</div>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="vehicle">
+          <h3>KEF/GW-T</h3>
+          <div class="person" data-role="KEF Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="KEF Ma" draggable="true">Maschinist</div>
+        </div>
+
+        <div class="vehicle">
+          <h3>FwK/GW-Rüst</h3>
+          <div class="person" data-role="FwK Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="FwK Ma" draggable="true">Maschinist</div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <h2>Arbeitsdienste</h2>
+    <br>
+    <section class="middle-duty">
+      <div class="vehicle">
+        <h3>Kantine</h3>
+        <div class="person" data-role="Kantine" draggable="true">Kantine</div>
+        <div class="person" data-role="Kantine 2" draggable="true">Kantine</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>Wäsche</h3>
+        <div class="person" data-role="Wäsche" draggable="true">Wäsche</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>Getränke</h3>
+        <div class="person" data-role="Getränke" draggable="true">Getränke</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>ZAW</h3>
+        <div class="person" data-role="ZAW" draggable="true">ZAW</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>ZSW</h3>
+        <div class="person" data-role="ZSW" draggable="true">ZSW</div>
+      </div>
+
+      <div class="vehicle">
+        <h3>Abrufschicht</h3>
+        <div class="person" data-role="Abrufschicht" draggable="true">Abrufschicht</div>
+      </div>
+    </section>
+
+
+    <h2>Mannschaft Frei</h2>
+    <br>
+    <section class="team" id="teamSection">
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const csv = window.Dienste.getCsv();
+        if (!csv) return;
+        const assignments = window.Dienste.parseCsv(csv);
+        window.Dienste.renderAssignments(assignments);
+        window.Dienste.initDragAndDrop();
+      });
+
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem(K);
+      });
+    </script>
+</body>
+
+</html>
