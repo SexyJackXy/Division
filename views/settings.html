@@ -16,38 +16,39 @@
 
 <body>
   <header>
+    <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
     <h1 class="heading">Feuerwehr Heilbronn Diensteinteilung</h1>
-    <a class="text" href="index.html" style="padding-right: 0.6rem;">
-      <p>Hauptseite</p>
+    <a class="text" href="settings.html" style="padding-right: 0.6rem;">
+      <p>Einstellungen</p>
     </a>
   </header>
+
 
   <main class="container">
     <div class="controls">
       <input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
       <input id="pdfFile" type="file" accept=".pdf" style="display:none">
 
-      <div id="upload">
+      <div class="btnSpace">
         <button id="btnCsv" class="btn" type="button">
           <p>CSV hochladen</p>
         </button>
         <a id="csvResult"></a>
       </div>
 
-      <div id="reset">
+      <div class="btnSpace">
         <button id="btnClear" class="btn" type="button">
           <p>Reset</p>
         </button>
         <a id="resetResult"></a>
       </div>
 
-      <!-- Neuer Button: ersetzt dein altes start.bat/ps1 -->
-      <!-- <button id="btnStructed" class="btn" type="button">
-        <p>Structed Seating erzeugen</p>
-      </button> -->
-
-      <pre id="buildResult" style="margin-top:1rem; white-space:pre-line;"></pre>
-    </div>
+      <div class="btnSpace">
+        <button id="btnStructed" class="btn" type="button">
+          <p>Structed Seating erzeugen</p>
+        </button>
+        <a id="buildResult"></a>
+      </div>
   </main>
 
   <script>
@@ -77,12 +78,13 @@
       resetResult.textContent = res;
     });
 
-    // Electron: ruft dein build.js auf
-    // btnStructed.addEventListener('click', async () => {
-    //   buildResult.textContent = "Läuft...";
-    //   const res = await window.api.runBuild();
-    //   buildResult.textContent = res;
-    // });
+    btnStructed.addEventListener('click', async () => {
+      buildResult.textContent = "Läuft...";
+      const res = await window.api.runBuild("structedSeating_20260526.xlsx", "neueCSV.csv");
+
+      buildResult.textContent = res;
+    });
+
   </script>
 </body>
 
