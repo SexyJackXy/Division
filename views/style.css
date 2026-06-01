@@ -9,12 +9,21 @@ h2 {
 }
 
 h3 {
+  display: flex;
   padding-left: 0.6rem;
   padding-top: 0.3rem;
   color: #0A0A0A;
   text-align: left;
   font-weight: 300;
   font-size: 1.5ch;
+}
+
+.close {
+  display: flex;
+  float: right;
+  justify-content: flex-end;
+  padding-right: 0.6rem;
+  padding-top: 0.3rem;
 }
 
 hr {
@@ -36,9 +45,15 @@ header {
   background: #AF2B1E;
   color: #F4F4F4;
   text-align: center;
-  justify-content: flex-end;
   gap: 0.6rem;
   align-items: center;
+  justify-content: space-between;
+}
+
+header img {
+  float: left;
+  margin-left: 0.6rem;
+  max-height: 3ch;
 }
 
 .heading {
@@ -54,6 +69,7 @@ header {
   flex: 0 1 auto;
   text-decoration: none;
   color: #F4F4F4;
+  float: right;
 }
 
 .container {
@@ -110,14 +126,31 @@ header {
 
 
 .vehicle {
+  position: relative;
   display: flex;
   flex-direction: column;
-  text-align: center;
   background-color: #FFFFFF;
   border-radius: 10px;
   width: clamp(110px, 9vw, 200px);
-  justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+  padding-top: 2rem;
+  /* Platz für die Kopfzeile */
+}
+
+.vehicle h3 {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.6rem;
+}
+
+.close {
+  right: 0.6rem;
+  max-height: 18px;
+  color: #374151;
+}
+
+.close:hover {
+  cursor: pointer;
 }
 
 .vehicle .person:last-child {
@@ -176,7 +209,8 @@ header {
   justify-content: center;
   gap: 0.6rem;
   align-items: stretch;
-  margin-bottom: 1rem;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 /* SettingsPage */

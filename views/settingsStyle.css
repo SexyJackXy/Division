@@ -1,0 +1,17 @@
+#upload {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
+    max-width: 160px;
+    word-wrap: break-word;
+}
+
+#reset {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
+    max-width: 160px;
+    word-wrap: break-word;
+}

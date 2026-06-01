@@ -6,6 +6,7 @@
   <title>Diensteinteilung</title>
 
   <link rel="stylesheet" href="../views/style.css">
+  <link rel="stylesheet" href="../views/settingsStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
@@ -26,18 +27,24 @@
       <input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
       <input id="pdfFile" type="file" accept=".pdf" style="display:none">
 
-      <button id="btnCsv" class="btn" type="button">
-        <p>CSV hochladen</p>
-      </button>
+      <div id="upload">
+        <button id="btnCsv" class="btn" type="button">
+          <p>CSV hochladen</p>
+        </button>
+        <a id="csvResult"></a>
+      </div>
 
-      <button id="btnClear" class="btn" type="button">
-        <p>Reset</p>
-      </button>
+      <div id="reset">
+        <button id="btnClear" class="btn" type="button">
+          <p>Reset</p>
+        </button>
+        <a id="resetResult"></a>
+      </div>
 
       <!-- Neuer Button: ersetzt dein altes start.bat/ps1 -->
-      <button id="btnStructed" class="btn" type="button">
+      <!-- <button id="btnStructed" class="btn" type="button">
         <p>Structed Seating erzeugen</p>
-      </button>
+      </button> -->
 
       <pre id="buildResult" style="margin-top:1rem; white-space:pre-line;"></pre>
     </div>
@@ -50,27 +57,32 @@
     const btnCsv = document.getElementById('btnCsv');
     const btnClear = document.getElementById('btnClear');
     const btnStructed = document.getElementById('btnStructed');
+
     const buildResult = document.getElementById('buildResult');
+    const resetResult = document.getElementById('resetResult');
+    const csvResult = document.getElementById('csvResult');
 
     btnCsv.addEventListener('click', () => csvInput.click());
 
-    csvInput.addEventListener('change', async (e) => {
+    csvInput.addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (!f) return;
-      await window.Dienste.saveCsvFromFile(f);
+      const res = window.Dienste.saveCsvFromFile(f);
       csvInput.value = "";
+      csvResult.textContent = res;
     });
 
     btnClear.addEventListener('click', () => {
-      window.Dienste.clearStoredCsv();
+      const res = window.Dienste.clearStoredCsv();
+      resetResult.textContent = res;
     });
 
     // Electron: ruft dein build.js auf
-    btnStructed.addEventListener('click', async () => {
-      buildResult.textContent = "Läuft...";
-      const res = await window.api.runBuild();
-      buildResult.textContent = res;
-    });
+    // btnStructed.addEventListener('click', async () => {
+    //   buildResult.textContent = "Läuft...";
+    //   const res = await window.api.runBuild();
+    //   buildResult.textContent = res;
+    // });
   </script>
 </body>
 
