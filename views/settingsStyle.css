@@ -1,17 +1,32 @@
-#upload {
+.btnSpace {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     gap: 0.3rem;
-    max-width: 160px;
+    max-width: 190px;
     word-wrap: break-word;
 }
 
-#reset {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    gap: 0.3rem;
-    max-width: 160px;
-    word-wrap: break-word;
+.btn {
+  font-weight: bold;
+  font-size: 1.5ch;
+  background-color: #D1D5DB;
+  border-style: none;
+  color: #0A0A0A;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  min-height: 50px;
+  min-width: 160px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.btn:hover,
+.btn:focus {
+  opacity: .75;
 }
