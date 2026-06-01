@@ -1,5 +1,3 @@
-console.log("TYPE OF LOG:", typeof console.log);
-
 (function () {
   const K = 'dienste_csv';
   const reservedNames = [
@@ -31,8 +29,6 @@ console.log("TYPE OF LOG:", typeof console.log);
     "Abrufschicht"
   ];
 
-
-
   function saveCsvFromFile(file) {
     file.arrayBuffer().then(b => {
       let t = decodeBest(b);
@@ -43,6 +39,8 @@ console.log("TYPE OF LOG:", typeof console.log);
 
       localStorage.setItem(K, t);
     });
+
+    return "Datei " + file.name + " erfolgreich hochgeladen"
   }
 
   function decodeBest(b) {
@@ -84,8 +82,9 @@ console.log("TYPE OF LOG:", typeof console.log);
 
   function clearStoredCsv() {
     localStorage.removeItem(K);
-    console.log("Reset all roles → 'Frei'");
     document.querySelectorAll('.person').forEach(e => e.textContent = 'Frei');
+
+    return "Reset all roles → 'Frei'"
   }
 
   function parseCsv(t) {
@@ -101,8 +100,6 @@ console.log("TYPE OF LOG:", typeof console.log);
   }
 
   function renderAssignments(a) {
-    console.log("Rendering assignments:", a.length);
-
     const c = document.getElementById('teamSection');
 
     a.forEach(({ role, name }) => {
@@ -135,9 +132,7 @@ console.log("TYPE OF LOG:", typeof console.log);
         .forEach(el => el.classList.remove("drop-target"));
     }
 
-    // =========================
     // 🟦 DRAG START (CAPTURE PHASE!)
-    // =========================
     document.addEventListener("dragstart", e => {
       const card = e.target.closest(".card");
       const person = e.target.closest(".person");
@@ -158,9 +153,7 @@ console.log("TYPE OF LOG:", typeof console.log);
       }
     }, true);
 
-    // =========================
     // 🟦 DRAG END
-    // =========================
     document.addEventListener("dragend", e => {
       const el = e.target.closest(".card, .person");
       if (!el) return;
@@ -170,9 +163,7 @@ console.log("TYPE OF LOG:", typeof console.log);
       dragged = null;
     });
 
-    // =========================
     // 🟩 PERSON DROP
-    // =========================
     document.addEventListener("dragover", e => {
       const target = e.target.closest(".person");
       if (!target) return;
@@ -199,14 +190,11 @@ console.log("TYPE OF LOG:", typeof console.log);
       const isCard = dragged.classList.contains("card");
       const isPerson = dragged.classList.contains("person");
 
-      // =====================
       // CARD → PERSON
-      // =====================
       if (isCard) {
 
         const old = target.textContent;
 
-        // Namen einsetzen
         target.textContent = dragged.textContent;
         updatePersonColor(target);
 
@@ -223,13 +211,10 @@ console.log("TYPE OF LOG:", typeof console.log);
           pool.appendChild(c);
         }
 
-        // Ursprüngliche Card entfernen
         dragged.remove();
       }
 
-      // =====================
       // PERSON → PERSON
-      // =====================
       else if (isPerson) {
         const draggedText = dragged.innerText;
         const targetText = target.innerText;
@@ -246,9 +231,7 @@ console.log("TYPE OF LOG:", typeof console.log);
       dragged = null;
     });
 
-    // =========================
     // 🟨 DROP BACK IN POOL
-    // =========================
     document.addEventListener("dragover", e => {
       const cardZone = e.target.closest("#teamSection");
 
@@ -283,7 +266,7 @@ console.log("TYPE OF LOG:", typeof console.log);
   function updatePersonColor(el) {
     const text = el.textContent.trim();
 
-    console.log(text)
+    // console.log(text)
 
     if (!reservedNames.includes(text)) {
       el.style.backgroundColor = "#B6D5FB";
@@ -292,14 +275,40 @@ console.log("TYPE OF LOG:", typeof console.log);
     }
   }
 
+  function initDeleteButtons() {
+    const deleteBtns = document.querySelectorAll('.close');
+    const pool = document.getElementById("teamSection");
+
+    deleteBtns.forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        const parent = event.target.parentElement;
+        const persons = parent.querySelectorAll('.person');
+
+        persons.forEach(p => {
+          const oldPerson = p.innerHTML;
+          const c = document.createElement("div");
+
+          console.log(p);
+          p.style.backgroundColor = "#D1D5DB"
+          p.textContent = "Frei"
+          c.className = "card";
+          c.setAttribute("draggable", "true");
+          c.textContent = oldPerson;
+
+          pool.appendChild(c);
+        });
+      });
+    });
+  }
+
   window.Dienste = {
     saveCsvFromFile,
-    saveCsvText,
     getCsv,
     clearStoredCsv,
     parseCsv,
     renderAssignments,
-    initDragAndDrop
+    initDragAndDrop,
+    initDeleteButtons
   };
 
 })();
