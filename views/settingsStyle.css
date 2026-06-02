@@ -35,19 +35,21 @@
     display: flex;
     gap: 0.3rem;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     align-content: flex-start;
+    flex-wrap: wrap;
 }
 
 .wachabteilung {
     background-color: #D1D5DB;
-    width: 22vw;
+    /* width: 22vw; */
+    max-width: 30vw;
     padding: 0.3em 0.2rem;
     border-radius: 10px;
 }
 
 .wachabteilung>h2 {
-    text-shadow: 2px 2px 2px rgba(206, 89, 55, 0)
+text-shadow: 0px 0px 2px black;
 }
 
 .abteilungspersonal {
@@ -58,6 +60,10 @@
     flex-direction: row;
     flex-wrap: wrap;
     border-radius: 10px;
+}
+
+.abteilungspersonal .card{
+    font-size: 1.6ch;
 }
 
 .waPerson {
