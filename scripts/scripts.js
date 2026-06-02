@@ -122,146 +122,134 @@
     });
   }
 
-  function initDragAndDrop() {
-    let dragged = null;
+function initDragAndDrop() {
+  let dragged = null;
 
-    const pool = document.getElementById("teamSection");
+  const pool = document.getElementById("teamSection");
 
-    function clearHighlights() {
-      document.querySelectorAll(".person.drop-target")
-        .forEach(el => el.classList.remove("drop-target"));
+  function clearHighlights() {
+    document.querySelectorAll(".drop-target")
+      .forEach(el => el.classList.remove("drop-target"));
+  }
+
+  // Drag Start
+  document.addEventListener("dragstart", e => {
+    const element = e.target.closest(".card, .person");
+
+    if (!element) return;
+
+    dragged = element;
+    dragged.classList.add("dragging");
+  }, true);
+
+  // Drag End
+  document.addEventListener("dragend", e => {
+    const element = e.target.closest(".card, .person");
+
+    if (!element) return;
+
+    element.classList.remove("dragging");
+    clearHighlights();
+    dragged = null;
+  });
+
+  // Drag Over
+  document.addEventListener("dragover", e => {
+    const target = e.target.closest(
+      ".person, .abteilungspersonal, #teamSection"
+    );
+
+    if (!target) return;
+
+    e.preventDefault();
+
+    clearHighlights();
+    target.classList.add("drop-target");
+  });
+
+  // Drop
+  document.addEventListener("drop", e => {
+    if (!dragged) return;
+
+    clearHighlights();
+
+    const personTarget = e.target.closest(".person");
+    const departmentTarget = e.target.closest(".abteilungspersonal");
+    const poolTarget = e.target.closest("#teamSection");
+
+    // CARD -> PERSON
+    if (
+      dragged.classList.contains("card") &&
+      personTarget
+    ) {
+      if (personTarget.textContent.trim() !== "Frei") {
+        return;
+      }
+
+      personTarget.textContent = dragged.textContent;
+      updatePersonColor(personTarget);
+
+      dragged.remove();
     }
 
-    // 🟦 DRAG START (CAPTURE PHASE!)
-    document.addEventListener("dragstart", e => {
-      const card = e.target.closest(".card");
-      const person = e.target.closest(".person");
+    // PERSON -> PERSON (tauschen)
+    else if (
+      dragged.classList.contains("person") &&
+      personTarget &&
+      dragged !== personTarget
+    ) {
+      const temp = dragged.textContent;
 
-      const toDraggingText = e.target.textContent;
+      dragged.textContent = personTarget.textContent;
+      personTarget.textContent = temp;
 
+      updatePersonColor(dragged);
+      updatePersonColor(personTarget);
+    }
 
-      if (card) {
-        dragged = card;
-        card.classList.add("dragging");
-        return;
-      }
+    // CARD -> ABTEILUNG
+    else if (
+      dragged.classList.contains("card") &&
+      departmentTarget
+    ) {
+      departmentTarget.appendChild(dragged);
+    }
 
-      if (person) {
-        dragged = person;
-        person.classList.add("dragging");
-        return;
-      }
-    }, true);
+    // PERSON -> POOL
+    else if (
+      dragged.classList.contains("person") &&
+      poolTarget
+    ) {
+      const name = dragged.textContent.trim();
 
-    // 🟦 DRAG END
-    document.addEventListener("dragend", e => {
-      const el = e.target.closest(".card, .person");
-      if (!el) return;
-
-      el.classList.remove("dragging");
-      clearHighlights();
-      dragged = null;
-    });
-
-    // 🟩 PERSON DROP
-    document.addEventListener("dragover", e => {
-      const target = e.target.closest(".person");
-      if (!target) return;
-
-      e.preventDefault();
-
-      clearHighlights();
-      target.classList.add("drop-target");
-    });
-
-    document.addEventListener("drop", e => {
-      const target = e.target.closest(".person");
-      if (!target || !dragged) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (dragged === target) return;
-
-      e.preventDefault();
-
-      const pool = document.getElementById("teamSection");
-
-      const isCard = dragged.classList.contains("card");
-      const isPerson = dragged.classList.contains("person");
-
-      // CARD → PERSON
-      if (isCard) {
-
-        const old = target.textContent;
-
-        target.textContent = dragged.textContent;
-        updatePersonColor(target);
-
-        console.log("draggedText: ", old, "targetText:", target);
-
-        // Alte Person zurück in Pool
-        if (old && !reservedNames.includes(old)) {
-
-          const c = document.createElement("div");
-          c.className = "card";
-          c.setAttribute("draggable", "true");
-          c.textContent = old;
-
-          pool.appendChild(c);
-        }
-
-        dragged.remove();
-      }
-
-      // PERSON → PERSON
-      else if (isPerson) {
-        const draggedText = dragged.innerText;
-        const targetText = target.innerText;
-
-        console.log("draggedText: ", draggedText, "targetText:", targetText);
-
-        // Inhalte tauschen
-        dragged.innerText = targetText;
-        target.innerText = draggedText;
-
-        updatePersonColor(dragged);
-        updatePersonColor(target);
-      }
-      dragged = null;
-    });
-
-    // 🟨 DROP BACK IN POOL
-    document.addEventListener("dragover", e => {
-      const cardZone = e.target.closest("#teamSection");
-
-      if (!cardZone) return;
-      clearHighlights();
-      e.preventDefault();
-    });
-
-    document.addEventListener("drop", e => {
-      const cardZone = e.target.closest("#teamSection");
-      if (!cardZone || !dragged) return;
-
-      if (dragged.classList.contains("person")) {
-
-        if (reservedNames.includes(dragged.textContent.trim())) {
-          return;
-        }
-
+      if (
+        name !== "Frei" &&
+        !reservedNames.includes(name)
+      ) {
         const newCard = document.createElement("div");
+
         newCard.className = "card";
-        newCard.setAttribute("draggable", "true");
-        newCard.textContent = dragged.textContent;
+        newCard.draggable = true;
+        newCard.textContent = name;
 
         pool.appendChild(newCard);
 
         dragged.textContent = "Frei";
         updatePersonColor(dragged);
       }
-    });
-  }
+    }
+
+    // CARD -> POOL
+    else if (
+      dragged.classList.contains("card") &&
+      poolTarget
+    ) {
+      pool.appendChild(dragged);
+    }
+
+    dragged = null;
+  });
+}
 
   function updatePersonColor(el) {
     const text = el.textContent.trim();
