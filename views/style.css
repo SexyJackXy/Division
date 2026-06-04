@@ -186,7 +186,6 @@ header img {
 .side {
   display: flex;
   flex-direction: column;
-  height: 320px;
   gap: 0.5rem;
 }
 

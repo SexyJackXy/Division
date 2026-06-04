@@ -8,7 +8,7 @@ async function runBuild() {
   const pdfPath = path.join(__dirname, "..", "Einteilung", "Einteilung 11.05.2026.pdf");
   const logPath = path.join(__dirname, "..", "structedSeating");
   const template = path.join(__dirname, "..", "Sieda_template.xlsx");
-  let outputFile = `output${i}.txt`;
+  let outputFile = 'output${i}.txt';
 
   const mapping = {
     2:"B1",4:"F1",6:"F2",9:"F3",12:"F4",15:"F5",18:"F6",20:"F7",23:"F8",26:"F9",30:"F10",33:"F11",36:"F12",
@@ -62,7 +62,7 @@ async function runBuild() {
 
   while (await fs.pathExists(path.join(logPath, outputFile))) {
     i++;
-    outputFile = `output${i}.txt`;
+    outputFile = 'output${i}.txt';
   }
 
   const textOut = cleanedLines.join("\n");
@@ -82,15 +82,15 @@ async function runBuild() {
   let row = 13;
   for (const name of removedNames) {
     if (row > 23) break;
-    sheet.getCell(`F${row}`).value = name;
+    sheet.getCell('F${row}').value = name;
     row++;
   }
 
   const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
-  const outputExcel = path.join(logPath, `structedSeating_${dateStr}.xlsx`);
+  const outputExcel = path.join(logPath, 'structedSeating_${dateStr}.xlsx');
   await workbook.xlsx.writeFile(outputExcel);
 
-  return `Fertig!\nTXT: ${outputFile}\nExcel: structedSeating_${dateStr}.xlsx`;
+  return 'Fertig';
 }
 
 module.exports = { runBuild };

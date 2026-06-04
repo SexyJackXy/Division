@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
+const fs = require("fs");
 const { runBuild } = require("./scripts/build");
 
 function createWindow() {
@@ -7,17 +8,29 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'scripts', 'preload.js'),
+      preload: path.join(__dirname, "scripts", "preload.js"),
       contextIsolation: true,
-      nodeIntegration: false
-    }
+      nodeIntegration: false,
+    },
   });
-
   win.loadFile(path.join(__dirname, "views", "index.html"));
 }
 
 ipcMain.handle("run-build", async () => {
   return runBuild();
+});
+
+ipcMain.handle("save-json", async (event, jsonString) => {
+  const { filePath, canceled } = await dialog.showSaveDialog({
+    title: "Schicht speichern",
+    defaultPath: "schicht.json",
+    filters: [{ name: "JSON", extensions: ["json"] }],
+  });
+
+  if (canceled || !filePath) return { success: false };
+
+  fs.writeFileSync(filePath, jsonString, "utf-8");
+  return { success: true, filePath };
 });
 
 app.whenReady().then(createWindow);
