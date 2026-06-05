@@ -10,8 +10,8 @@ const reservedNames = [
   "Schichtführer", "1. Dispo", "2. Dispo", "3. Dispo", "ELW", "FüAss",
   "Schw.Retter", "LF 1 Fü", "LF 1 Ma", "LF 1 ATF", "LF 1 ATM",
   "LF 1 WTF", "LF 1 WTM", "LF 2 Fü", "LF 2 Ma", "LF 2 ATF",
-  "LF 2 ATM", "LF 2 WTF", "LF 2 WTM", "DLK Fü", "DLK Ma",
-  "SOFA Fü", "SOFA Ma", "KEF Fü", "KEF Ma", "FwK Fü", "FwK Ma",
+  "LF 2 ATM", "LF 2 WTF", "LF 2 WTM", "DLK1 Fü", "DLK1 Ma",
+  "SoFzg Fü", "SoFzg Ma", "KEF Fü", "KEF Ma", "Fwk Fü", "Fwk Ma",
   "Kantine", "Wäsche", "Getränke", "ZAW", "ZSW", "Abrufschicht"
 ];
 
@@ -39,8 +39,10 @@ async function extractShiftFromPdf(fileBuffer) {
     }
     lines.push(line);
     i++;
-    if (i === 84) break;
+    // if (i === 84) break;
   }
+
+  console.log(lines)
 
   return parseShiftArray(lines);
 }

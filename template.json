@@ -8,11 +8,11 @@
       "name": ""
    },
    {
-      "role": "LD1",
+      "role": "LD 1",
       "name": ""
    },
    {
-      "role": "LD2",
+      "role": "LD 2",
       "name": ""
    },
    {
@@ -40,11 +40,11 @@
       "name": ""
    },
    {
-      "role": "2.Dispo",
+      "role": "2. Dispo",
       "name": ""
    },
    {
-      "role": "3.Dispo",
+      "role": "3. Dispo",
       "name": ""
    },
    {
@@ -108,19 +108,19 @@
       "name": ""
    },
    {
-      "role": "DLK Fü",
+      "role": "DLK1 Fü",
       "name": ""
    },
    {
-      "role": "DLK Ma",
+      "role": "DLK1 Ma",
       "name": ""
    },
    {
-      "role": "SOFA Fü",
+      "role": "SoFzg Fü",
       "name": ""
    },
    {
-      "role": "SOFA Ma",
+      "role": "SoFzg Ma",
       "name": ""
    },
    {
@@ -132,11 +132,11 @@
       "name": ""
    },
    {
-      "role": "FwK Fü",
+      "role": "Fwk Fü",
       "name": ""
    },
    {
-      "role": "FwK Ma",
+      "role": "Fwk Ma",
       "name": ""
    },
    {

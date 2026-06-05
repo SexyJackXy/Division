@@ -12,7 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
   <script type="module" src="../scripts/test.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.54/pdf.min.mjs"></script>
 </head>
 
 <body>
@@ -103,14 +102,21 @@
     });
 
     btnUpload.addEventListener("click", async () => {
-      const arrayBuffer = await inpFile.files[0].arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
+      const file = inpFile.files[0];
+      if (!file) return;
 
-      const shiftJson = await extractShiftFromPdf(buffer);
-      console.log(shiftJson);
+      // Datei als Base64 lesen — kein Buffer/Node nötig
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(",")[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
 
-      ipcRenderer.send("save-json", JSON.stringify(shiftJson, null, 2));
-      resultText.textContent = "Fertig";
+      const result = await window.electronAPI.extractAndSave(base64);
+      resultText.textContent = result.success
+        ? `Gespeichert: ${result.filePath}`
+        : "Fehler beim Speichern";
     });
   </script>
 </body>

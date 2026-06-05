@@ -20,18 +20,18 @@ ipcMain.handle("run-build", async () => {
   return runBuild();
 });
 
-ipcMain.handle("save-json", async (event, jsonString) => {
-  const { filePath, canceled } = await dialog.showSaveDialog({
-    title: "Schicht speichern",
-    defaultPath: "schicht.json",
-    filters: [{ name: "JSON", extensions: ["json"] }],
-  });
+// ipcMain.handle("save-json", async (event, jsonString) => {
+//   const { filePath, canceled } = await dialog.showSaveDialog({
+//     title: "Schicht speichern",
+//     defaultPath: "schicht.json",
+//     filters: [{ name: "JSON", extensions: ["json"] }],
+//   });
 
-  if (canceled || !filePath) return { success: false };
+//   if (canceled || !filePath) return { success: false };
 
-  fs.writeFileSync(filePath, jsonString, "utf-8");
-  return { success: true, filePath };
-});
+//   fs.writeFileSync(filePath, jsonString, "utf-8");
+//   return { success: true, filePath };
+// });
 
 app.whenReady().then(createWindow);
 
@@ -41,4 +41,35 @@ app.on("activate", () => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+const { extractShiftFromPdf } = require("./scripts/pdfExtractor");
+
+ipcMain.handle("extract-and-save", async (event, base64) => {
+  const buffer = Buffer.from(base64, "base64");
+  const shiftJson = await extractShiftFromPdf(buffer);
+
+  const outputDir = path.join(__dirname, "structuredSeating");
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, "0");
+  const MM = String(now.getMonth() + 1).padStart(2, "0");
+  const yyyy = now.getFullYear();
+  const baseName = `Einteilung_${dd}${MM}${yyyy}`;
+
+  // Eindeutigen Dateinamen finden
+  let fileName = `${baseName}.json`;
+  let counter = 1;
+  while (fs.existsSync(path.join(outputDir, fileName))) {
+    fileName = `${baseName} (${counter}).json`;
+    counter++;
+  }
+
+  const filePath = path.join(outputDir, fileName);
+  fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
+
+  return { success: true, filePath };
 });
