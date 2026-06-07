@@ -33,6 +33,7 @@
     <div class="controls">
       <input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
       <input id="pdfFile" type="file" accept=".pdf" style="display:none">
+      <input id="inpFile" type="file"  style="display:none">
 
       <div class=" btnSpace">
         <button id="btnCsv" class="btn" type="button">
@@ -42,23 +43,16 @@
       </div>
 
       <div class="btnSpace">
+        <button type="button" class="btn" id="btnUpload">
+          <p>Create JSON</p>
+        </button>
+      </div>
+
+      <div class="btnSpace">
         <button id="btnClear" class="btn" type="button">
           <p>Reset</p>
         </button>
         <a id="resetResult"></a>
-      </div>
-
-      <div class="btnSpace">
-        <button id="btnStructed" class="btn" type="button">
-          <p>Lade text aus PDF</p>
-        </button>
-        <a id="buildResult"></a>
-      </div>
-
-      <div class="btnSpace">
-        <input type="file" id="inpFile">
-        <button type="button" id="pntUpload">Upload</button>
-        <textarea id="resultText"></textarea>
       </div>
     </div>
 
@@ -67,17 +61,12 @@
 
   <script>
     const csvInput = document.getElementById('csvFile');
-    const pdfInput = document.getElementById('pdfFile');
     const btnCsv = document.getElementById('btnCsv');
     const btnClear = document.getElementById('btnClear');
-    const btnStructed = document.getElementById('btnStructed');
-    const buildResult = document.getElementById('buildResult');
     const resetResult = document.getElementById('resetResult');
     const csvResult = document.getElementById('csvResult');
-
-    const btnUpload = document.getElementById("pntUpload");
+    const btnUpload = document.getElementById("btnUpload");
     const inpFile = document.getElementById("inpFile");
-    const resultText = document.getElementById("resultText");
 
     btnCsv.addEventListener('click', () => csvInput.click());
 
@@ -94,14 +83,9 @@
       resetResult.textContent = res;
     });
 
-    btnStructed.addEventListener("click", async () => {
-      const pdfPath = "../Einteilung/Einteilung 30.05.2026.pdf";
-      const res = await extractFromPath(pdfPath);
+    btnUpload.addEventListener("click", async () => inpFile.click());
 
-      buildResult.textContent = JSON.stringify(res, null, 2);
-    });
-
-    btnUpload.addEventListener("click", async () => {
+    inpFile.addEventListener('change', async (e) => {
       const file = inpFile.files[0];
       if (!file) return;
 
@@ -114,9 +98,7 @@
       });
 
       const result = await window.electronAPI.extractAndSave(base64);
-      resultText.textContent = result.success
-        ? `Gespeichert: ${result.filePath}`
-        : "Fehler beim Speichern";
+      btnUpload.innerHTML("Gespeichert!")
     });
   </script>
 </body>
