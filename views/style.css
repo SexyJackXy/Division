@@ -42,7 +42,7 @@ body {
 header {
   display: flex;
   width: 100%;
-  background: #AF2B1E;
+  background: #FF2A1C;
   color: #F4F4F4;
   text-align: center;
   gap: 0.6rem;
@@ -63,6 +63,7 @@ header img {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
 .text {
@@ -70,6 +71,7 @@ header img {
   text-decoration: none;
   color: #F4F4F4;
   float: right;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
 .container {
