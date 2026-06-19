@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <title>Diensteinteilung</title>
 
-  <link rel="stylesheet" href="../views/style.css">
-  <link rel="stylesheet" href="../views/settingsStyle.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/settingsStyle.css">
+  <link rel="stylesheet" href="styles/tailwind.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
-  <script type="module" src="../scripts/test.js"></script>
+  <script src="../scripts/settings.js"></script>
 </head>
 
 <body>
@@ -19,35 +20,34 @@
     <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
     <h1 class="heading">Feuerwehr Diensteinteilung</h1>
     <div class="navBar" style="float: right;">
-      <a class="text" href="index.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Hauptmenü</p>
-      </a>
       <a class="text" href="settings.html" style="padding-right: 0.6rem;">
         <p>Einstellungen</p>
       </a>
       <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Schichtplan</p>
       </a>
+      <a class="text" href="index.html" style="padding-right: 0.6rem;color: #A72920 !important;">
+        <p>Hauptmenü</p>
+      </a>
     </div>
   </header>
 
 
   <main class="container">
-    <div class="controls">
-      <input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
-      <input id="pdfFile" type="file" accept=".pdf" style="display:none">
+    <div class="buttonspace">
+      <input id="csvFile" type="file" accept=".json" style="display:none">
       <input id="inpFile" type="file" style="display:none">
 
       <div class=" btnSpace">
         <button id="btnCsv" class="btn" type="button">
-          <p>CSV hochladen</p>
+          <p>Plan Importieren</p>
         </button>
         <a id="csvResult"></a>
       </div>
 
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
-          <p>Create JSON</p>
+          <p>PDF einlesen</p>
         </button>
       </div>
 
@@ -58,8 +58,33 @@
         <a id="resetResult"></a>
       </div>
     </div>
-
     <hr>
+    <div class="settingSpace">
+      <div class="settingLine">
+        <a>Zeige Wachabteilung in Einteilung</a>
+        <label class="switch">
+          <input type="checkbox" id="showWachabteilung">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="settingLine">
+        <a>Automatischen laden des Tagdienst</a>
+        <label class="switch">
+          <input type="checkbox" id="autoLoadTagdienst">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="settingLine">
+        <a>Arbeitsdienste anzeigen</a>
+        <label class="switch">
+          <input type="checkbox" id="showArbeitsdienste">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <button id="Save" class="btn" type="button">
+        <p>Einstellung speichern</p>
+      </button>
+    </div>
   </main>
 
   <script>
@@ -76,13 +101,13 @@
     csvInput.addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (!f) return;
-      const res = window.Dienste.saveCsvFromFile(f);
+      const res = window.Dienste.readFromFile(f);
       csvInput.value = "";
       csvResult.textContent = res;
     });
 
     btnClear.addEventListener('click', () => {
-      const res = window.Dienste.clearStoredCsv();
+      const res = window.Dienste.clearCookies();
       resetResult.textContent = res;
     });
 
@@ -101,7 +126,14 @@
       });
 
       const result = await window.electronAPI.extractAndSave(base64);
-      btnUpload.innerHTML("Gespeichert!")
+
+      const p = btnUpload.querySelector("p");
+      const originalText = p.textContent;
+
+      p.textContent = "Gespeichert!";
+      setTimeout(() => {
+        p.textContent = originalText;
+      }, 2000);
     });
   </script>
 </body>

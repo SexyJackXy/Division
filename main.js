@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { runBuild } = require("./scripts/build");
+const SETTINGS_PATH = path.join(__dirname, "settings.json");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -72,4 +73,17 @@ ipcMain.handle("extract-and-save", async (event, base64) => {
   fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
 
   return { success: true, filePath };
+});
+
+ipcMain.handle("save-settings", async (event, settings) => {
+  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), "utf-8");
+  return { success: true };
+});
+
+ipcMain.handle("load-settings", async () => {
+  if (!fs.existsSync(SETTINGS_PATH)) {
+    return {};
+  }
+  const raw = fs.readFileSync(SETTINGS_PATH, "utf-8");
+  return JSON.parse(raw);
 });
