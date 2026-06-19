@@ -97,6 +97,16 @@ function parseShiftArray(lines) {
     i++;
   }
 
+  // ELW bekommt immer denselben Namen wie LD 1
+  const ld1Entry = result.find((r) => r.role === "LD 1");
+  if (ld1Entry) {
+    result.forEach((r) => {
+      if (r.role === "ELW") {
+        r.name = ld1Entry.name;
+      }
+    });
+  }
+
   return result;
 }
 

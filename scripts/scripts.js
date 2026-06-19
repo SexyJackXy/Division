@@ -29,80 +29,71 @@
     "Abrufschicht"
   ];
 
-  function saveCsvFromFile(file) {
+function readFromFile(file) {
     file.arrayBuffer().then(b => {
-      let t = decodeBest(b);
+      const candidates = [
+        new TextDecoder('utf-8').decode(b),
+        new TextDecoder('windows-1252').decode(b),
+        new TextDecoder('utf-16le').decode(b)
+      ];
+
+      let t = candidates[0], best = -1e9;
+
+      for (const c of candidates) {
+        let sc = 0;
+        if (c.includes('{')) sc += 5;
+        if (c.includes(',')) sc += 2;
+        if (/[a-zA-Z]{3,}/.test(c)) sc += 5;
+        if (c.includes('�')) sc -= 10;
+        if (sc > best) (best = sc, t = c);
+      }
+
       if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
 
-      console.log("FINAL TEXT:");
-      console.log(t);
+      const parsed = parseContent(t);
 
-      localStorage.setItem(K, t);
+      console.log("FINAL DATA:");
+      console.log(parsed);
+
+      localStorage.setItem(K, JSON.stringify(parsed));
     });
 
     return "Datei " + file.name + " erfolgreich hochgeladen"
   }
 
-  function decodeBest(b) {
-    return pick(
-      new TextDecoder('utf-8').decode(b),
-      new TextDecoder('windows-1252').decode(b),
-      new TextDecoder('utf-16le').decode(b)
-    );
-  }
+  function parseContent(t) {
+    if (!t) return [];
+    try {
+      const data = JSON.parse(t);
+      if (!Array.isArray(data)) return [];
 
-  function pick(...v) {
-    let best = v[0], s = -1e9;
-
-    for (const t of v) {
-      let sc = 0;
-      if (t.includes(';')) sc += 5;
-      if (t.includes(',')) sc += 2;
-      if (/[a-zA-Z]{3,}/.test(t)) sc += 5;
-      if (t.includes('�')) sc -= 10;
-
-      if (sc > s) (s = sc, best = t);
+      return data
+        .filter(e => e && typeof e.role === 'string')
+        .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }));
+    } catch (e) {
+      console.error("Parse Error:", e);
+      return [];
     }
-    return best;
   }
 
-  function saveCsvText(t) {
-    console.log("🔥 WIRD IN LOCALSTORAGE GESCHREIBEN:");
-    console.log(t);
-
-    localStorage.setItem(K, t);
-
-    console.log("🔥 JETZT IM LOCALSTORAGE:");
-    console.log(localStorage.getItem(K));
+  function getContent() {
+    const raw = localStorage.getItem(K);
+    return raw ? JSON.parse(raw) : [];
   }
 
-  function getCsv() {
-    return localStorage.getItem(K);
-  }
-
-  function clearStoredCsv() {
+  function clearCookies() {
     localStorage.removeItem(K);
     document.querySelectorAll('.person').forEach(e => e.textContent = 'Frei');
 
     return "Reset all roles → 'Frei'"
   }
 
-  function parseCsv(t) {
-    if (!t) return [];
-    return t.split(/\r?\n/).filter(Boolean).flatMap(l =>
-      l.split(';').map(s => s.trim()).reduce((a, _, i, arr) => {
-        if (i % 2 === 0 && arr[i] && arr[i + 1]) {
-          a.push({ role: arr[i], name: arr[i + 1] });
-        }
-        return a;
-      }, [])
-    );
-  }
-
   function renderAssignments(a) {
     const c = document.getElementById('teamSection');
 
     a.forEach(({ role, name }) => {
+      if (!name) return;
+
       if (role === "Frei") {
         if (!c) return;
 
@@ -122,134 +113,134 @@
     });
   }
 
-function initDragAndDrop() {
-  let dragged = null;
+  function initDragAndDrop() {
+    let dragged = null;
 
-  const pool = document.getElementById("teamSection");
+    const pool = document.getElementById("teamSection");
 
-  function clearHighlights() {
-    document.querySelectorAll(".drop-target")
-      .forEach(el => el.classList.remove("drop-target"));
-  }
-
-  // Drag Start
-  document.addEventListener("dragstart", e => {
-    const element = e.target.closest(".card, .person");
-
-    if (!element) return;
-
-    dragged = element;
-    dragged.classList.add("dragging");
-  }, true);
-
-  // Drag End
-  document.addEventListener("dragend", e => {
-    const element = e.target.closest(".card, .person");
-
-    if (!element) return;
-
-    element.classList.remove("dragging");
-    clearHighlights();
-    dragged = null;
-  });
-
-  // Drag Over
-  document.addEventListener("dragover", e => {
-    const target = e.target.closest(
-      ".person, .abteilungspersonal, #teamSection"
-    );
-
-    if (!target) return;
-
-    e.preventDefault();
-
-    clearHighlights();
-    target.classList.add("drop-target");
-  });
-
-  // Drop
-  document.addEventListener("drop", e => {
-    if (!dragged) return;
-
-    clearHighlights();
-
-    const personTarget = e.target.closest(".person");
-    const departmentTarget = e.target.closest(".abteilungspersonal");
-    const poolTarget = e.target.closest("#teamSection");
-
-    // CARD -> PERSON
-    if (
-      dragged.classList.contains("card") &&
-      personTarget
-    ) {
-      if (personTarget.textContent.trim() !== "Frei") {
-        return;
-      }
-
-      personTarget.textContent = dragged.textContent;
-      updatePersonColor(personTarget);
-
-      dragged.remove();
+    function clearHighlights() {
+      document.querySelectorAll(".drop-target")
+        .forEach(el => el.classList.remove("drop-target"));
     }
 
-    // PERSON -> PERSON (tauschen)
-    else if (
-      dragged.classList.contains("person") &&
-      personTarget &&
-      dragged !== personTarget
-    ) {
-      const temp = dragged.textContent;
+    // Drag Start
+    document.addEventListener("dragstart", e => {
+      const element = e.target.closest(".card, .person");
 
-      dragged.textContent = personTarget.textContent;
-      personTarget.textContent = temp;
+      if (!element) return;
 
-      updatePersonColor(dragged);
-      updatePersonColor(personTarget);
-    }
+      dragged = element;
+      dragged.classList.add("dragging");
+    }, true);
 
-    // CARD -> ABTEILUNG
-    else if (
-      dragged.classList.contains("card") &&
-      departmentTarget
-    ) {
-      departmentTarget.appendChild(dragged);
-    }
+    // Drag End
+    document.addEventListener("dragend", e => {
+      const element = e.target.closest(".card, .person");
 
-    // PERSON -> POOL
-    else if (
-      dragged.classList.contains("person") &&
-      poolTarget
-    ) {
-      const name = dragged.textContent.trim();
+      if (!element) return;
 
+      element.classList.remove("dragging");
+      clearHighlights();
+      dragged = null;
+    });
+
+    // Drag Over
+    document.addEventListener("dragover", e => {
+      const target = e.target.closest(
+        ".person, .abteilungspersonal, #teamSection"
+      );
+
+      if (!target) return;
+
+      e.preventDefault();
+
+      clearHighlights();
+      target.classList.add("drop-target");
+    });
+
+    // Drop
+    document.addEventListener("drop", e => {
+      if (!dragged) return;
+
+      clearHighlights();
+
+      const personTarget = e.target.closest(".person");
+      const departmentTarget = e.target.closest(".abteilungspersonal");
+      const poolTarget = e.target.closest("#teamSection");
+
+      // CARD -> PERSON
       if (
-        name !== "Frei" &&
-        !reservedNames.includes(name)
+        dragged.classList.contains("card") &&
+        personTarget
       ) {
-        const newCard = document.createElement("div");
+        if (personTarget.textContent.trim() !== "Frei") {
+          return;
+        }
 
-        newCard.className = "card";
-        newCard.draggable = true;
-        newCard.textContent = name;
+        personTarget.textContent = dragged.textContent;
+        updatePersonColor(personTarget);
 
-        pool.appendChild(newCard);
-
-        dragged.textContent = "Frei";
-        updatePersonColor(dragged);
+        dragged.remove();
       }
-    }
 
-    // CARD -> POOL
-    else if (
-      dragged.classList.contains("card") &&
-      poolTarget
-    ) {
-      pool.appendChild(dragged);
-    }
+      // PERSON -> PERSON (tauschen)
+      else if (
+        dragged.classList.contains("person") &&
+        personTarget &&
+        dragged !== personTarget
+      ) {
+        const temp = dragged.textContent;
 
-    dragged = null;
-  });
-}
+        dragged.textContent = personTarget.textContent;
+        personTarget.textContent = temp;
+
+        updatePersonColor(dragged);
+        updatePersonColor(personTarget);
+      }
+
+      // CARD -> ABTEILUNG
+      else if (
+        dragged.classList.contains("card") &&
+        departmentTarget
+      ) {
+        departmentTarget.appendChild(dragged);
+      }
+
+      // PERSON -> POOL
+      else if (
+        dragged.classList.contains("person") &&
+        poolTarget
+      ) {
+        const name = dragged.textContent.trim();
+
+        if (
+          name !== "Frei" &&
+          !reservedNames.includes(name)
+        ) {
+          const newCard = document.createElement("div");
+
+          newCard.className = "card";
+          newCard.draggable = true;
+          newCard.textContent = name;
+
+          pool.appendChild(newCard);
+
+          dragged.textContent = "Frei";
+          updatePersonColor(dragged);
+        }
+      }
+
+      // CARD -> POOL
+      else if (
+        dragged.classList.contains("card") &&
+        poolTarget
+      ) {
+        pool.appendChild(dragged);
+      }
+
+      dragged = null;
+    });
+  }
 
   function updatePersonColor(el) {
     const text = el.textContent.trim();
@@ -290,10 +281,10 @@ function initDragAndDrop() {
   }
 
   window.Dienste = {
-    saveCsvFromFile,
-    getCsv,
-    clearStoredCsv,
-    parseCsv,
+    readFromFile,
+    getContent,
+    clearCookies,
+    parseContent,
     renderAssignments,
     initDragAndDrop,
     initDeleteButtons

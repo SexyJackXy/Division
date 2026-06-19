@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/style.css" >
   <title>Diensteinteilung</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,14 +16,14 @@
     <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
     <h1 class="heading">Feuerwehr Diensteinteilung</h1>
     <div class="navBar" style="float: right;">
-      <a class="text" href="index.html" style="padding-right: 0.6rem;">
-        <p>Hauptmenü</p>
-      </a>
       <a class="text" href="settings.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Einstellungen</p>
       </a>
       <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Schichtplan</p>
+      </a>
+      <a class="text" href="index.html" style="padding-right: 0.6rem;">
+        <p>Hauptmenü</p>
       </a>
     </div>
   </header>
@@ -48,13 +48,13 @@
       <div class="vehicle">
         <h3>LD1</h3>
         <h3 class="close">X</h3>
-        <div class="person" data-role="LD1" draggable="true">Frei</div>
+        <div class="person" data-role="LD 1" draggable="true">Frei</div>
       </div>
 
       <div class="vehicle">
         <h3>LD2</h3>
         <h3 class="close">X</h3>
-        <div class="person" data-role="LD2" draggable="true">Frei</div>
+        <div class="person" data-role="LD 2" draggable="true">Frei</div>
       </div>
 
       <div class="vehicle">
@@ -97,8 +97,8 @@
           <h3>ILS</h3>
           <h3 class="close">X</h3>
           <div class="person" data-role="1. Dispo" draggable="true">1. Dispo</div>
-          <div class="person" data-role="2.Dispo" draggable="true">2. Dispo</div>
-          <div class="person" data-role="3.Dispo" draggable="true">3. Dispo</div>
+          <div class="person" data-role="2. Dispo" draggable="true">2. Dispo</div>
+          <div class="person" data-role="3. Dispo" draggable="true">3. Dispo</div>
         </div>
 
         <div class="vehicle">
@@ -137,15 +137,15 @@
         <div class="vehicle">
           <h3>DLK/RW</h3>
           <h3 class="close">X</h3>
-          <div class="person" data-role="DLK Fü" draggable="true">Fahrzeugführer</div>
-          <div class="person" data-role="DLK Ma" draggable="true">Maschinist</div>
+          <div class="person" data-role="DLK1 Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="DLK1 Ma" draggable="true">Maschinist</div>
         </div>
 
         <div class="vehicle">
           <h3>Sonderfahrzeug</h3>
           <h3 class="close">X</h3>
-          <div class="person" data-role="SOFA Fü" draggable="true">Fahrzeugführer</div>
-          <div class="person" data-role="SOFA Ma" draggable="true">Maschinist</div>
+          <div class="person" data-role="SoFzg Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="SoFzg Ma" draggable="true">Maschinist</div>
         </div>
       </div>
 
@@ -160,15 +160,15 @@
         <div class="vehicle">
           <h3>FwK/GW-Rüst</h3>
           <h3 class="close">X</h3>
-          <div class="person" data-role="FwK Fü" draggable="true">Fahrzeugführer</div>
-          <div class="person" data-role="FwK Ma" draggable="true">Maschinist</div>
+          <div class="person" data-role="Fwk Fü" draggable="true">Fahrzeugführer</div>
+          <div class="person" data-role="Fwk Ma" draggable="true">Maschinist</div>
         </div>
 
       </div>
     </section>
 
 
-    <h2>Arbeitsdienste</h2>
+    <h2 id="workServices">Arbeitsdienste</h2>
     <br>
     <section class="middle-duty">
       <div class="vehicle">
@@ -217,9 +217,8 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const csv = window.Dienste.getCsv();
-        if (!csv) return;
-        const assignments = window.Dienste.parseCsv(csv);
+        const assignments = window.Dienste.getContent();
+        if (!assignments || !assignments.length) return;
         window.Dienste.renderAssignments(assignments);
         window.Dienste.initDragAndDrop();
         window.Dienste.initDeleteButtons();

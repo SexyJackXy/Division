@@ -136,7 +136,8 @@ header img {
   width: clamp(110px, 9vw, 200px);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
   padding-top: 2rem;
-  /* Platz für die Kopfzeile */
+  min-width: 180px;
+  font-size: 1.6ch;
 }
 
 .vehicle h3 {
@@ -215,7 +216,7 @@ header img {
 }
 
 /* SettingsPage */
-.controls {
+.buttonspace {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -241,8 +242,12 @@ input[type="file"]::file-selector-button:hover {
   background-color: rgba(255, 0, 0, 0.05);
 }
 
-@media (max-width: 870px) {
+@media (max-width: 1100px) {
   .heading {
     font-size: 3ch;
+  }
+
+  .vehicle{
+    min-width: 60px;
   }
 }
