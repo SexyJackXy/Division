@@ -218,12 +218,14 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        window.DiensteSettings.initSettingsAdjustment();
+
         const assignments = window.Dienste.getContent();
         if (!assignments || !assignments.length) return;
+
         window.Dienste.renderAssignments(assignments);
         window.Dienste.initDragAndDrop();
         window.Dienste.initDeleteButtons();
-        window.DiensteSettings.initSettingsAdjustment();
       });
 
       window.addEventListener("beforeunload", () => {

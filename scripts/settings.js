@@ -1,44 +1,47 @@
 (function () {
-  document.addEventListener("DOMContentLoaded", () => {
-    const settingCheckboxes = {
+  function getCheckboxes() {
+    return {
       showWachabteilung: document.getElementById('showWachabteilung'),
       autoLoadTagdienst: document.getElementById('autoLoadTagdienst'),
       showArbeitsdienste: document.getElementById('showArbeitsdienste'),
     };
+  }
 
-    async function loadSettings() {
-      const settings = await window.electronAPI.loadSettings();
+  async function loadSettings() {
+    const settings = await window.electronAPI.loadSettings();
+    const settingCheckboxes = getCheckboxes();
 
-      Object.entries(settingCheckboxes).forEach(([key, el]) => {
-        if (el) el.checked = !!settings[key];
-      });
+    Object.entries(settingCheckboxes).forEach(([key, el]) => {
+      if (el) el.checked = !!settings[key];
+    });
 
-      return settings;
-    }
+    return settings;
+  }
 
-    async function saveSettings() {
-      const settings = {};
-      Object.entries(settingCheckboxes).forEach(([key, el]) => {
-        settings[key] = el ? el.checked : false;
-      });
+  async function saveSettings() {
+    const settingCheckboxes = getCheckboxes();
+    const settings = {};
+    Object.entries(settingCheckboxes).forEach(([key, el]) => {
+      settings[key] = el ? el.checked : false;
+    });
 
-      const result = await window.electronAPI.saveSettings(settings);
-      return result;
-    }
+    const result = await window.electronAPI.saveSettings(settings);
+    return result;
+  }
 
-    async function initSettingsAdjustment() {
-      const settings = await window.electronAPI.loadSettings();
-      console.log("test");
-      console.log(settings);
+  async function initSettingsAdjustment() {
+    const settings = await window.electronAPI.loadSettings();
+    console.log("test");
 
-      const teamSection = document.getElementById('teamSection');
-      if (teamSection) {
-        teamSection.style.display = settings.showWachabteilung === false ? 'none' : '';
-      }
+    // const teamSection = document.getElementById('teamSection');
+    // if (teamSection) {
+    //   teamSection.style.display = settings.showWachabteilung === false ? 'none' : '';
+    // }
 
-      return settings;
-    }
+    return settings;
+  }
 
+  function initSettingsPage() {
     loadSettings();
 
     const saveBtn = document.getElementById('Save');
@@ -57,11 +60,19 @@
         }
       });
     }
+  }
 
-    window.DiensteSettings = {
-      loadSettings,
-      saveSettings,
-      initSettingsAdjustment,
-    };
+  // Nur auf der settings.html ausführen (Button existiert nur dort)
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById('Save')) {
+      initSettingsPage();
+    }
   });
+
+  // Sofort verfügbar machen, unabhängig von DOMContentLoaded-Reihenfolge
+  window.DiensteSettings = {
+    loadSettings,
+    saveSettings,
+    initSettingsAdjustment,
+  };
 })();
