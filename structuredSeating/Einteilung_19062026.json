@@ -1,0 +1,170 @@
+[
+  {
+    "role": "ALvD",
+    "name": "Müller, Fabian"
+  },
+  {
+    "role": "DD",
+    "name": "Müller, Fabian"
+  },
+  {
+    "role": "LD 1",
+    "name": "Reber, Alexander"
+  },
+  {
+    "role": "LD 2",
+    "name": "Zürn, Benjamin"
+  },
+  {
+    "role": "HLD",
+    "name": "Krahmer, Benjamin"
+  },
+  {
+    "role": "EAL",
+    "name": "Pilz, Yannick"
+  },
+  {
+    "role": "BvD",
+    "name": "Samojauska, Stefan"
+  },
+  {
+    "role": "LFüGr",
+    "name": "Vogt, Jürgen"
+  },
+  {
+    "role": "Schichtführer",
+    "name": "Hintz, Markus"
+  },
+  {
+    "role": "1. Dispo",
+    "name": "Frebel, Simon"
+  },
+  {
+    "role": "2. Dispo",
+    "name": "Sassmann, Luciano"
+  },
+  {
+    "role": "3. Dispo",
+    "name": "Riehl, Fabian"
+  },
+  {
+    "role": "ELW",
+    "name": "Reber, Alexander"
+  },
+  {
+    "role": "FüAss",
+    "name": "Reichert, Michael"
+  },
+  {
+    "role": "Schw.Retter",
+    "name": "Weiss, Christof"
+  },
+  {
+    "role": "LF 1 Fü",
+    "name": "Hintz, Markus"
+  },
+  {
+    "role": "LF 1 Ma",
+    "name": "Rössel, Timo"
+  },
+  {
+    "role": "LF 1 ATF",
+    "name": "Fromm, Thomas"
+  },
+  {
+    "role": "LF 1 ATM",
+    "name": "Fried, Marlon"
+  },
+  {
+    "role": "LF 1 WTF",
+    "name": "Berg, André"
+  },
+  {
+    "role": "LF 1 WTM",
+    "name": "Weiss, Christof"
+  },
+  {
+    "role": "LF 2 Fü",
+    "name": "Pfitzenmaier, Andy"
+  },
+  {
+    "role": "LF 2 Ma",
+    "name": "Braun, Steffen"
+  },
+  {
+    "role": "LF 2 ATF",
+    "name": "Haas, Steffen"
+  },
+  {
+    "role": "LF 2 ATM",
+    "name": "Kumpf, Christian"
+  },
+  {
+    "role": "LF 2 WTF",
+    "name": "Knurr, Thomas"
+  },
+  {
+    "role": "LF 2 WTM",
+    "name": "Raum, Matthias"
+  },
+  {
+    "role": "DLK1 Fü",
+    "name": "Gabeli, Michael"
+  },
+  {
+    "role": "DLK1 Ma",
+    "name": "Künzel, Matthias"
+  },
+  {
+    "role": "SoFzg Fü",
+    "name": "Samojauska, Stefan"
+  },
+  {
+    "role": "SoFzg Ma",
+    "name": "Noller, Philip"
+  },
+  {
+    "role": "KEF Fü",
+    "name": "Berg, André"
+  },
+  {
+    "role": "KEF Ma",
+    "name": "Weiss, Christof"
+  },
+  {
+    "role": "Fwk Fü",
+    "name": "Samojauska, Stefan"
+  },
+  {
+    "role": "Fwk Ma",
+    "name": "Künzel, Matthias"
+  },
+  {
+    "role": "Kantine",
+    "name": ""
+  },
+  {
+    "role": "Kantine",
+    "name": ""
+  },
+  {
+    "role": "Wäsche",
+    "name": "Weiss, Christof"
+  },
+  {
+    "role": "Getränke",
+    "name": "Noller, Philip"
+  },
+  {
+    "role": "ZAW",
+    "name": "Berg, André"
+  },
+  {
+    "role": "ZSW",
+    "name": "Fried, Marlon"
+  },
+  {
+    "role": "Abrufschicht",
+    "name": "Aras, Bastian"
+  }
+]
