@@ -31,12 +31,18 @@
 
   async function initSettingsAdjustment() {
     const settings = await window.electronAPI.loadSettings();
-    console.log("test");
-
-    // const teamSection = document.getElementById('teamSection');
-    // if (teamSection) {
-    //   teamSection.style.display = settings.showWachabteilung === false ? 'none' : '';
-    // }
+    const showWachabteilung = settings.showWachabteilung;
+    const autoLoadTagdienst = settings.autoLoadTagdienst;
+    const showArbeitsdienste = settings.showArbeitsdienste;
+    
+    console.log(settings);
+    
+    if(showArbeitsdienste === true){
+      const workServices = document.getElementById('workServices');
+      const workServicesTitle = document.getElementById('workServicesTitle')
+      workServices.style.display = 'flex';
+      workServicesTitle.style.display = 'block';
+    }
 
     return settings;
   }

@@ -215,6 +215,14 @@ header img {
   margin: 0 auto;
 }
 
+#workServices{
+  display: none;
+}
+
+#workServicesTitle{
+    display: none;
+}
+
 /* SettingsPage */
 .buttonspace {
   display: flex;
