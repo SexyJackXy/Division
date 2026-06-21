@@ -42,7 +42,7 @@ body {
 header {
   display: flex;
   width: 100%;
-  background: #AF2B1E;
+  background: #FF2A1C;
   color: #F4F4F4;
   text-align: center;
   gap: 0.6rem;
@@ -63,6 +63,7 @@ header img {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
 .text {
@@ -70,6 +71,7 @@ header img {
   text-decoration: none;
   color: #F4F4F4;
   float: right;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
 .container {
@@ -134,7 +136,8 @@ header img {
   width: clamp(110px, 9vw, 200px);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
   padding-top: 2rem;
-  /* Platz für die Kopfzeile */
+  min-width: 180px;
+  font-size: 1.6ch;
 }
 
 .vehicle h3 {
@@ -186,7 +189,6 @@ header img {
 .side {
   display: flex;
   flex-direction: column;
-  height: 320px;
   gap: 0.5rem;
 }
 
@@ -213,8 +215,16 @@ header img {
   margin: 0 auto;
 }
 
+#workServices{
+  display: none;
+}
+
+#workServicesTitle{
+    display: none;
+}
+
 /* SettingsPage */
-.controls {
+.buttonspace {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -240,8 +250,12 @@ input[type="file"]::file-selector-button:hover {
   background-color: rgba(255, 0, 0, 0.05);
 }
 
-@media (max-width: 870px) {
+@media (max-width: 1100px) {
   .heading {
     font-size: 3ch;
+  }
+
+  .vehicle{
+    min-width: 60px;
   }
 }

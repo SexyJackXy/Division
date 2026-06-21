@@ -42,14 +42,13 @@
 
 .wachabteilung {
     background-color: #D1D5DB;
-    /* width: 22vw; */
     max-width: 30vw;
     padding: 0.3em 0.2rem;
     border-radius: 10px;
 }
 
 .wachabteilung>h2 {
-text-shadow: 0px 0px 2px black;
+    text-shadow: 0px 0px 2px black;
 }
 
 .abteilungspersonal {
@@ -62,7 +61,7 @@ text-shadow: 0px 0px 2px black;
     border-radius: 10px;
 }
 
-.abteilungspersonal .card{
+.abteilungspersonal .card {
     font-size: 1.6ch;
 }
 
@@ -78,4 +77,51 @@ text-shadow: 0px 0px 2px black;
     padding: 0.5rem 0;
     max-height: 80px;
     width: clamp(110px, 9vw, 200px);
+}
+
+.buttonspace {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.settingSpace {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.6rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #D3D4D6;
+    padding: 0.6rem;
+    border-radius: 10px;
+}
+
+.settingLine {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#Save {
+    background-color: #A72920;
+    color: #F4F4F4;
+    width: fit-content;
+    float: right;
+    padding: 0;
+    min-height: 40px;
+    font-size: 1.4ch;
+    font-weight: normal;
+    margin-left: auto;
+    margin-top: 1rem;
+}
+
+#Save p {
+    margin: 0;
 }
