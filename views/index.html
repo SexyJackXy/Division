@@ -215,23 +215,24 @@
     <br>
     <section class="team" id="teamSection">
     </section>
+  </main>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      window.DiensteSettings.initSettingsAdjustment();
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        window.DiensteSettings.initSettingsAdjustment();
+      const assignments = window.Dienste.getContent();
+      if (!assignments || !assignments.length) return;
 
-        const assignments = window.Dienste.getContent();
-        if (!assignments || !assignments.length) return;
+      window.Dienste.renderAssignments(assignments);
+      window.Dienste.initDragAndDrop();
+      window.Dienste.initDeleteButtons();
+    });
 
-        window.Dienste.renderAssignments(assignments);
-        window.Dienste.initDragAndDrop();
-        window.Dienste.initDeleteButtons();
-      });
-
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem(K);
-      });
-    </script>
+    window.addEventListener("beforeunload", () => {
+      localStorage.removeItem(K);
+    });
+  </script>
 </body>
 
 </html>

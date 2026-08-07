@@ -1,5 +1,5 @@
 (function () {
-  const K = 'dienste_csv';
+  const cookies = 'dienste_csv';
   const reservedNames = [
     "Frei",
     "1. Dispo",
@@ -55,7 +55,7 @@ function readFromFile(file) {
       console.log("FINAL DATA:");
       console.log(parsed);
 
-      localStorage.setItem(K, JSON.stringify(parsed));
+      localStorage.setItem(cookies, JSON.stringify(parsed));
     });
 
     return "Datei " + file.name + " erfolgreich hochgeladen"
@@ -77,12 +77,12 @@ function readFromFile(file) {
   }
 
   function getContent() {
-    const raw = localStorage.getItem(K);
+    const raw = localStorage.getItem(cookies);
     return raw ? JSON.parse(raw) : [];
   }
 
   function clearCookies() {
-    localStorage.removeItem(K);
+    localStorage.removeItem(cookies);
     document.querySelectorAll('.person').forEach(e => e.textContent = 'Frei');
 
     return "Reset all roles → 'Frei'"
