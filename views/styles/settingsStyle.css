@@ -3,7 +3,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 0.3rem;
-    max-width: 190px;
+    max-width: 250px;
     word-wrap: break-word;
 }
 
@@ -17,7 +17,7 @@
     display: inline-block;
     margin: 0;
     min-height: 50px;
-    min-width: 160px;
+    min-width: 190px;
     outline: none;
     overflow: hidden;
     padding: 9px 20px 8px;

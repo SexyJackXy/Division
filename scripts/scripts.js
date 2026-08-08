@@ -50,6 +50,8 @@ function readFromFile(file) {
 
       if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
 
+      console.log(t);
+
       const parsed = parseContent(t);
 
       console.log("FINAL DATA:");

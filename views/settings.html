@@ -38,17 +38,18 @@
       <input id="inpoutJson" type="file" accept=".json" style="display:none">
       <input id="inputPdf" type="file" accept=".pdf" style="display:none">
 
-      <div class=" btnSpace">
+      <div class="btnSpace">
         <button id="btnJson" class="btn" type="button">
-          <p>Plan Importieren</p>
+          <p>JSON Importieren</p>
         </button>
-        <a id="importResult"></a>
+        <a id="jsonResult"></a>
       </div>
 
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
-          <p>PDF einlesen</p>
+          <p>PDF Importieren</p>
         </button>
+        <a id="pdfResult"></a>
       </div>
 
       <div class="btnSpace">
@@ -61,14 +62,14 @@
     <hr>
     <div class="settingSpace">
       <div class="settingLine">
-        <a>Zeige Wachabteilung in Einteilung</a>
+        <a>Zeige Wachabteilung in Einteilung [Work in Progress]</a>
         <label class="switch">
           <input type="checkbox" id="showWachabteilung">
           <span class="slider"></span>
         </label>
       </div>
       <div class="settingLine">
-        <a>Automatischen laden des Tagdienst</a>
+        <a>Automatischen laden des Tagdienst [Work in Progress]</a>
         <label class="switch">
           <input type="checkbox" id="autoLoadTagdienst">
           <span class="slider"></span>
@@ -94,7 +95,8 @@
     const btnReset = document.getElementById('btnReset');
     const btnUpload = document.getElementById("btnUpload");
     const resetResult = document.getElementById('resetResult');
-    const importResult = document.getElementById('importResult');
+    const jsonResult = document.getElementById('jsonResult');
+    const pdfResult = document.getElementById('pdfResult');
 
     inputJson.addEventListener('change', (e) => {
       const f = e.target.files[0];
@@ -104,7 +106,7 @@
 
       const res = window.Dienste.readFromFile(f);
       inputJson.value = "";
-      importResult.textContent = res;
+      jsonResult.textContent = res;
     });
 
     inputPdf.addEventListener('change', async (e) => {
@@ -121,22 +123,15 @@
       });
 
       console.log(file)
-      console.log(f)
 
       const result = await window.electronAPI.extractAndSave(base64);
-      // const fileToUpload = result.filePath.trim();
-      // if (!fileToUpload) return;
-      // const res = window.Dienste.readFromFile(fileToUpload);
-      // inputPath.value = "";
-      // importResult.textContent = res;
+      const fileToUpload = result.filePath.trim();
 
-      const p = btnUpload.querySelector("p");
-      const originalText = p.textContent;
+      const response = await fetch(fileToUpload);
+      const res = window.Dienste.readFromFile(response);
 
-      p.textContent = "Gespeichert!";
-      setTimeout(() => {
-        p.textContent = originalText;
-      }, 2000);
+      inputPdf.value = "";
+      pdfResult.textContent = res;
     });
 
     btnReset.addEventListener('click', () => {
