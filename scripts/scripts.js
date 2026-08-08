@@ -85,33 +85,35 @@ function readFromFile(file) {
     localStorage.removeItem(cookies);
     document.querySelectorAll('.person').forEach(e => e.textContent = 'Frei');
 
-    return "Reset all roles → 'Frei'"
+    return "Einteilung Zurückgesetzt"
   }
 
-  function renderAssignments(a) {
-    const c = document.getElementById('teamSection');
+function renderAssignments(a) {
+  const c = document.getElementById('teamSection');
+  if (!c) return;
 
-    a.forEach(({ role, name }) => {
-      if (!name) return;
+  c.style.display = "none"; // Default: nichts drin -> versteckt
 
-      if (role === "Frei") {
-        if (!c) return;
+  a.forEach(({ role, name }) => {
+    if (!name) return;
 
-        const d = document.createElement('div');
-        d.className = 'card';
-        d.setAttribute("draggable", "true");
-        d.innerHTML = name;
-        c.appendChild(d);
-        return;
-      }
+    if (role === "Frei") {
+      const d = document.createElement('div');
+      d.className = 'card';
+      d.setAttribute("draggable", "true");
+      d.innerHTML = name;
+      c.appendChild(d);
+      c.style.display = "flex"; // Sobald was reinkommt -> sichtbar
+      return;
+    }
 
-      const el = document.querySelector(`.person[data-role="${role}"]`);
-      if (!el) return;
+    const el = document.querySelector(`.person[data-role="${role}"]`);
+    if (!el) return;
 
-      el.textContent = name;
-      updatePersonColor(el)
-    });
-  }
+    el.textContent = name;
+    updatePersonColor(el);
+  });
+}
 
   function initDragAndDrop() {
     let dragged = null;

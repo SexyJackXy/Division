@@ -5,7 +5,7 @@
 h1.loginText {
   text-align: center;
   font-size: 4ch;
-  color: #a81309;
+  color: #FF2A1C;
   margin-bottom: 0;
 }
 
@@ -293,7 +293,7 @@ input[type="file"]::file-selector-button:hover {
 
 .login p {
   padding: 6px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 2ch;
   margin: 0;
 }
@@ -304,20 +304,27 @@ input[type="file"]::file-selector-button:hover {
   margin-bottom: 22px;
 }
 
-#loginbtn.btn {
+#loginbtn.btn,
+#registerbtn.btn {
   align-self: center;
   border-radius: 10px;
-  border: 1px solid #a81309;
-  background-color: #a81309;
+  border: 1px solid #FF2A1C;
+  background-color: #FF2A1C;
   color: #FFFFFF;
   font-size: 2ch;
-  margin: auto 0;
+  margin: auto 10px;
+}
+
+#loginbtn.btn:hover,
+#registerbtn.btn:hover {
+  border: 1px solid #a81309;
+  background-color: #a81309;
 }
 
 .loginPicture {
   position: absolute;
   /* left: 335px; */
-  right:0;
+  right: 0;
   z-index: -1;
 }
 
@@ -327,7 +334,7 @@ input[type="file"]::file-selector-button:hover {
   max-width: 700px;
   float: right;
   border-radius: 10px;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
 }
 
 input[type="text"],

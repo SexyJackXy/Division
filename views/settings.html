@@ -35,14 +35,14 @@
 
   <main class="container">
     <div class="buttonspace">
-      <input id="csvFile" type="file" accept=".json" style="display:none">
-      <input id="inpFile" type="file" style="display:none">
+      <input id="inpoutJson" type="file" accept=".json" style="display:none">
+      <input id="inputPdf" type="file" accept=".pdf" style="display:none">
 
       <div class=" btnSpace">
-        <button id="btnCsv" class="btn" type="button">
+        <button id="btnJson" class="btn" type="button">
           <p>Plan Importieren</p>
         </button>
-        <a id="csvResult"></a>
+        <a id="importResult"></a>
       </div>
 
       <div class="btnSpace">
@@ -52,7 +52,7 @@
       </div>
 
       <div class="btnSpace">
-        <button id="btnClear" class="btn" type="button">
+        <button id="btnReset" class="btn" type="button">
           <p>Reset</p>
         </button>
         <a id="resetResult"></a>
@@ -88,33 +88,28 @@
   </main>
 
   <script>
-    const csvInput = document.getElementById('csvFile');
-    const btnCsv = document.getElementById('btnCsv');
-    const btnClear = document.getElementById('btnClear');
-    const resetResult = document.getElementById('resetResult');
-    const csvResult = document.getElementById('csvResult');
+    const inputJson = document.getElementById('inpoutJson');
+    const inputPdf = document.getElementById("inputPdf");
+    const btnJson = document.getElementById('btnJson');
+    const btnReset = document.getElementById('btnReset');
     const btnUpload = document.getElementById("btnUpload");
-    const inpFile = document.getElementById("inpFile");
+    const resetResult = document.getElementById('resetResult');
+    const importResult = document.getElementById('importResult');
 
-    btnCsv.addEventListener('click', () => csvInput.click());
-
-    csvInput.addEventListener('change', (e) => {
+    inputJson.addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (!f) return;
+
+      console.log(f)
+
       const res = window.Dienste.readFromFile(f);
-      csvInput.value = "";
-      csvResult.textContent = res;
+      inputJson.value = "";
+      importResult.textContent = res;
     });
 
-    btnClear.addEventListener('click', () => {
-      const res = window.Dienste.clearCookies();
-      resetResult.textContent = res;
-    });
-
-    btnUpload.addEventListener("click", async () => inpFile.click());
-
-    inpFile.addEventListener('change', async (e) => {
-      const file = inpFile.files[0];
+    inputPdf.addEventListener('change', async (e) => {
+      const file = inputPdf.files[0];
+      const f = e.target.files[0];
       if (!file) return;
 
       // Datei als Base64 lesen — kein Buffer/Node nötig
@@ -125,7 +120,15 @@
         reader.readAsDataURL(file);
       });
 
+      console.log(file)
+      console.log(f)
+
       const result = await window.electronAPI.extractAndSave(base64);
+      // const fileToUpload = result.filePath.trim();
+      // if (!fileToUpload) return;
+      // const res = window.Dienste.readFromFile(fileToUpload);
+      // inputPath.value = "";
+      // importResult.textContent = res;
 
       const p = btnUpload.querySelector("p");
       const originalText = p.textContent;
@@ -135,6 +138,15 @@
         p.textContent = originalText;
       }, 2000);
     });
+
+    btnReset.addEventListener('click', () => {
+      const res = window.Dienste.clearCookies();
+      resetResult.textContent = res;
+    });
+
+    btnJson.addEventListener('click', () => inputJson.click());
+
+    btnUpload.addEventListener("click", async () => inputPdf.click())
   </script>
 </body>
 
