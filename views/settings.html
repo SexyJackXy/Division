@@ -123,7 +123,11 @@
       console.log(file)
       console.log(f)
 
-      const result = await window.electronAPI.extractAndSave(base64);
+      const result = await fetch('/api/extract-and-save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base64 })
+      }).then(r => r.json());
       // const fileToUpload = result.filePath.trim();
       // if (!fileToUpload) return;
       // const res = window.Dienste.readFromFile(fileToUpload);
