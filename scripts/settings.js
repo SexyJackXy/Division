@@ -8,7 +8,7 @@
   }
 
   async function loadSettings() {
-    const settings = await window.electronAPI.loadSettings();
+    const settings = await fetch ('/api/settings').then(r => r.json());
     const settingCheckboxes = getCheckboxes();
 
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
@@ -25,12 +25,16 @@
       settings[key] = el ? el.checked : false;
     });
 
-    const result = await window.electronAPI.saveSettings(settings);
+    const result = await fetch ('/api/settings/',{
+	methode: 'POST',
+	headers: { 'Content-Type': 'application/json'},
+	body: JSON.stringify(settings)
+	}).then(r => r.json());
     return result;
   }
 
   async function initSettingsAdjustment() {
-    const settings = await window.electronAPI.loadSettings();
+    const settings = await fetch('/api/settings');
     const showWachabteilung = settings.showWachabteilung;
     const autoLoadTagdienst = settings.autoLoadTagdienst;
     const showArbeitsdienste = settings.showArbeitsdienste;

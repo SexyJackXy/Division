@@ -36,7 +36,7 @@ app.post("/api/extract-and-save", async (req, res) => {
 
     const filePath = path.join(outputDir, fileName);
     fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
-    res.json({ success: true, filePath });
+    res.json({ success: true, filePath, data: shiftJson });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });

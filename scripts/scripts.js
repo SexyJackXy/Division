@@ -92,8 +92,6 @@ function renderAssignments(a) {
   const c = document.getElementById('teamSection');
   if (!c) return;
 
-  c.style.display = "none"; // Default: nichts drin -> versteckt
-
   a.forEach(({ role, name }) => {
     if (!name) return;
 
@@ -103,7 +101,6 @@ function renderAssignments(a) {
       d.setAttribute("draggable", "true");
       d.innerHTML = name;
       c.appendChild(d);
-      c.style.display = "flex"; // Sobald was reinkommt -> sichtbar
       return;
     }
 

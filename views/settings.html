@@ -120,19 +120,17 @@
         reader.readAsDataURL(file);
       });
 
-      console.log(file)
-      console.log(f)
+      //console.log(file)
+      //console.log(f)
 
       const result = await fetch('/api/extract-and-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64 })
       }).then(r => r.json());
-      // const fileToUpload = result.filePath.trim();
-      // if (!fileToUpload) return;
-      // const res = window.Dienste.readFromFile(fileToUpload);
-      // inputPath.value = "";
-      // importResult.textContent = res;
+
+	localStorage.setItem('dienste_csv',JSON.stringify(result.data));
+	importResult.textContent = "Erfolgreich importiert"
 
       const p = btnUpload.querySelector("p");
       const originalText = p.textContent;
