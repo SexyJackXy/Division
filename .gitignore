@@ -56,3 +56,8 @@ patches/mtime-cache.json
 spec/fixtures/logo.png
 
 .yarn/install-state.gz
+app.db
+app.db-shm
+app.db-wal
+sessions.db
+
