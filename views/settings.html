@@ -49,6 +49,7 @@
         <button type="button" class="btn" id="btnUpload">
           <p>PDF einlesen</p>
         </button>
+	<a id="pdfResult"></a>
       </div>
 
       <div class="btnSpace">
@@ -95,6 +96,7 @@
     const btnUpload = document.getElementById("btnUpload");
     const resetResult = document.getElementById('resetResult');
     const importResult = document.getElementById('importResult');
+    const pdfResult = document.getElementById('pdfResult')
 
     inputJson.addEventListener('change', (e) => {
       const f = e.target.files[0];
@@ -130,7 +132,7 @@
       }).then(r => r.json());
 
 	localStorage.setItem('dienste_csv',JSON.stringify(result.data));
-	importResult.textContent = "Erfolgreich importiert"
+	pdfResult.textContent = "Erfolgreich importiert"
 
       const p = btnUpload.querySelector("p");
       const originalText = p.textContent;

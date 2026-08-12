@@ -25,8 +25,8 @@
       settings[key] = el ? el.checked : false;
     });
 
-    const result = await fetch ('/api/settings/',{
-	methode: 'POST',
+    const result = await fetch ('/api/settings',{
+	method: 'POST',
 	headers: { 'Content-Type': 'application/json'},
 	body: JSON.stringify(settings)
 	}).then(r => r.json());
@@ -34,7 +34,7 @@
   }
 
   async function initSettingsAdjustment() {
-    const settings = await fetch('/api/settings');
+    const settings = await fetch('/api/settings').then(r => r.json());
     const showWachabteilung = settings.showWachabteilung;
     const autoLoadTagdienst = settings.autoLoadTagdienst;
     const showArbeitsdienste = settings.showArbeitsdienste;
