@@ -44,6 +44,7 @@ function parseShiftArray(lines) {
     "KEF Ma",
     "Fwk Fü",
     "Fwk Ma",
+    "Frei"
   ]);
 
   const result = template.map((t) => ({ role: t.role, name: "" }));
