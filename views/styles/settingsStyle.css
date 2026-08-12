@@ -3,8 +3,8 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 0.3rem;
-    max-width: 190px;
     word-wrap: break-word;
+    width: 245px;
 }
 
 .btn {
