@@ -29,7 +29,7 @@
     "Abrufschicht"
   ];
 
-function readFromFile(file) {
+  function readFromFile(file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -88,29 +88,29 @@ function readFromFile(file) {
     return "Einteilung Zurückgesetzt"
   }
 
-function renderAssignments(a) {
-  const c = document.getElementById('teamSection');
-  if (!c) return;
+  function renderAssignments(a) {
+    const c = document.getElementById('teamSection');
+    if (!c) return;
 
-  a.forEach(({ role, name }) => {
-    if (!name) return;
+    a.forEach(({ role, name }) => {
+      if (!name) return;
 
-    if (role === "Frei") {
-      const d = document.createElement('div');
-      d.className = 'card';
-      d.setAttribute("draggable", "true");
-      d.innerHTML = name;
-      c.appendChild(d);
-      return;
-    }
+      if (role === "Frei") {
+        const d = document.createElement('div');
+        d.className = 'card';
+        d.setAttribute("draggable", "true");
+        d.innerHTML = name;
+        c.appendChild(d);
+        return;
+      }
 
-    const el = document.querySelector(`.person[data-role="${role}"]`);
-    if (!el) return;
+      const el = document.querySelector(`.person[data-role="${role}"]`);
+      if (!el) return;
 
-    el.textContent = name;
-    updatePersonColor(el);
-  });
-}
+      el.textContent = name;
+      updatePersonColor(el);
+    });
+  }
 
   function initDragAndDrop() {
     let dragged = null;
@@ -279,6 +279,17 @@ function renderAssignments(a) {
     });
   }
 
+  async function logout() {
+    try {
+      const res = await fetch("/api/logout", { method: "POST" });
+      const data = await res.json();
+      window.location.href = data.redirect || "login.html";
+    } catch (e) {
+      console.error("Logout fehlgeschlagen:", e);
+      window.location.href = "login.html";
+    }
+  }
+
   window.Dienste = {
     readFromFile,
     getContent,
@@ -286,7 +297,8 @@ function renderAssignments(a) {
     parseContent,
     renderAssignments,
     initDragAndDrop,
-    initDeleteButtons
+    initDeleteButtons,
+    logout
   };
 
 })();

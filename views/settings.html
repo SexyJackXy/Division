@@ -20,11 +20,11 @@
     <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
     <h1 class="heading">Feuerwehr Diensteinteilung</h1>
     <div class="navBar" style="float: right;">
-      <a class="text" href="settings.html" style="padding-right: 0.6rem;">
-        <p>Einstellungen</p>
+      <a class="text" style="padding-right: 0.6rem ;color: #A72920 !important;" href="login.html" onclick="Dienste.logout(); return false;">
+        <p>Logut</p>
       </a>
-      <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Schichtplan</p>
+      <a class="text" href="settings.html" style="padding-right: 0.6rem;color: #A72920 !important;">
+        <p>Einstellungen</p>
       </a>
       <a class="text" href="index.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Hauptmenü</p>
@@ -49,7 +49,7 @@
         <button type="button" class="btn" id="btnUpload">
           <p>PDF einlesen</p>
         </button>
-	<a id="pdfResult"></a>
+        <a id="pdfResult"></a>
       </div>
 
       <div class="btnSpace">
@@ -131,8 +131,8 @@
         body: JSON.stringify({ base64 })
       }).then(r => r.json());
 
-	localStorage.setItem('dienste_csv',JSON.stringify(result.data));
-	pdfResult.textContent = "Erfolgreich importiert"
+      localStorage.setItem('dienste_csv', JSON.stringify(result.data));
+      pdfResult.textContent = "Erfolgreich importiert"
 
       const p = btnUpload.querySelector("p");
       const originalText = p.textContent;

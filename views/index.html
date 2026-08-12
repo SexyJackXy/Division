@@ -17,13 +17,13 @@
     <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
     <h1 class="heading">Feuerwehr Diensteinteilung</h1>
     <div class="navBar" style="float: right;">
+      <a class="text" style="padding-right: 0.6rem ;color: #A72920 !important;" href="login.html" onclick="Dienste.logout(); return false;">
+        <p>Logut</p>
+      </a>
       <a class="text" href="settings.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Einstellungen</p>
       </a>
-      <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Schichtplan</p>
-      </a>
-      <a class="text" href="index.html" style="padding-right: 0.6rem;">
+      <a class="text" href="index.html" style="padding-right: 0.6rem;color: #A72920 !important;">
         <p>Hauptmenü</p>
       </a>
     </div>
@@ -216,7 +216,7 @@
     <section class="team" id="teamSection">
     </section>
   </main>
-  
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       window.DiensteSettings.initSettingsAdjustment();
