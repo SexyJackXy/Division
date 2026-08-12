@@ -59,6 +59,21 @@ function parseShiftArray(lines) {
   while (i < lines.length) {
     const entry = lines[i].trim();
 
+    if(entry == "Frei"){
+	let j = i + 1;
+	white(j<lines.length){
+		const next = lines[j].trim();
+		if(next =="Frei"){j++; continue;}
+		if (roleSet.has(next) || next == "Frei")break;
+		result.push({role: "Frei",name: next});
+		j++;
+	}
+	i=j;
+	continue;
+	}	
+}
+}
+
     if (roleSet.has(entry)) {
       const role = entry;
       let name = "";
