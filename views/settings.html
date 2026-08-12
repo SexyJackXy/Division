@@ -91,7 +91,6 @@
   <script>
     const inputJson = document.getElementById('inpoutJson');
     const inputPdf = document.getElementById("inputPdf");
-    const btnJson = document.getElementById('btnJson');
     const btnReset = document.getElementById('btnReset');
     const btnUpload = document.getElementById("btnUpload");
     const resetResult = document.getElementById('resetResult');
@@ -147,8 +146,6 @@
       const res = window.Dienste.clearCookies();
       resetResult.textContent = res;
     });
-
-    btnJson.addEventListener('click', () => inputJson.click());
 
     btnUpload.addEventListener("click", async () => inputPdf.click())
   </script>
