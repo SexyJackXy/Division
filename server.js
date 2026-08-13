@@ -14,7 +14,7 @@ const SETTINGS_PATH = path.join(__dirname, "settings.json");
 // Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 const PUBLIC_PATHS = new Set([
   "/",
-  "/views/index_start.html",
+  "/views/dashboard.html",
   "/views/login.html",
 ]);
 
@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
   if (req.session && req.session.userId) {
     return res.redirect("/views/index.html");
   }
-  return res.redirect("/views/index_start.html");
+  return res.redirect("/views/dashboard.html");
 });
 
 app.post("/api/login", async (req, res) => {
@@ -120,7 +120,6 @@ app.post("/api/extract-and-save", async (req, res) => {
   try {
     const { base64 } = req.body;
     const buffer = Buffer.from(base64, "base64");
-      console.log(buffer);
     const shiftJson = await extractShiftFromPdf(buffer);
 
     const outputDir = path.join(__dirname, "structuredSeating");

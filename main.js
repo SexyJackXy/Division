@@ -14,7 +14,7 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
-  win.loadFile(path.join(__dirname, "views", "index_start.html"));
+  win.loadFile(path.join(__dirname, "views", "dashboard.html"));
 }
 
 ipcMain.handle("run-build", async () => {
@@ -48,7 +48,6 @@ const { extractShiftFromPdf } = require("./scripts/pdfExtractor");
 
 ipcMain.handle("extract-and-save", async (event, base64) => {
   const buffer = Buffer.from(base64, "base64");
-  console.log(buffer);
   const shiftJson = await extractShiftFromPdf(buffer);
 
   const outputDir = path.join(__dirname, "structuredSeating");

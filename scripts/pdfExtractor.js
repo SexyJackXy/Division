@@ -42,7 +42,7 @@ async function extractShiftFromPdf(fileBuffer) {
     // if (i === 84) break;
   }
 
-  console.log(lines)
+  //console.log(lines)
 
   return parseShiftArray(lines);
 }
