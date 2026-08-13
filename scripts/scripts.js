@@ -224,7 +224,7 @@ d.setAttribute("draggable", !reservedNames.includes(name));
 
           pool.appendChild(newCard);
 
-          dragged.textContent = "Frei";
+          // dragged.textContent = "Frei";
           updatePersonColor(dragged);
         }
       }
@@ -241,17 +241,17 @@ d.setAttribute("draggable", !reservedNames.includes(name));
     });
   }
 
-  function updatePersonColor(el) {
-    const text = el.textContent.trim();
+function updatePersonColor(el) {
+  const text = el.textContent.trim();
 
-    // console.log(text)
-
-    if (!reservedNames.includes(text)) {
-      el.style.backgroundColor = "#B6D5FB";
-    } else {
-      el.style.backgroundColor = "";
-    }
+  if (!reservedNames.includes(text)) {
+    el.style.backgroundColor = "#B6D5FB";
+    el.draggable = true;
+  } else {
+    el.style.backgroundColor = "";
+    el.draggable = false;
   }
+}
 
   function initDeleteButtons() {
     const deleteBtns = document.querySelectorAll('.close');
@@ -268,7 +268,6 @@ d.setAttribute("draggable", !reservedNames.includes(name));
 
           console.log(p);
           p.style.backgroundColor = "#D1D5DB"
-          p.textContent = "Frei"
           c.className = "card";
 c.setAttribute("draggable", !reservedNames.includes(oldPerson.trim()));
           c.textContent = oldPerson;
