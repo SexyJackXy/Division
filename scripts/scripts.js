@@ -98,7 +98,7 @@
       if (role === "Frei") {
         const d = document.createElement('div');
         d.className = 'card';
-        d.setAttribute("draggable", "true");
+d.setAttribute("draggable", !reservedNames.includes(name));
         d.innerHTML = name;
         c.appendChild(d);
         return;
@@ -270,7 +270,7 @@
           p.style.backgroundColor = "#D1D5DB"
           p.textContent = "Frei"
           c.className = "card";
-          c.setAttribute("draggable", "true");
+c.setAttribute("draggable", !reservedNames.includes(oldPerson.trim()));
           c.textContent = oldPerson;
 
           pool.appendChild(c);
