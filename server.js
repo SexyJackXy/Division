@@ -120,6 +120,7 @@ app.post("/api/extract-and-save", async (req, res) => {
   try {
     const { base64 } = req.body;
     const buffer = Buffer.from(base64, "base64");
+      console.log(buffer);
     const shiftJson = await extractShiftFromPdf(buffer);
 
     const outputDir = path.join(__dirname, "structuredSeating");

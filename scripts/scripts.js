@@ -1,6 +1,14 @@
 ;(function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
+    'ALvD',
+    'DD',
+    'LD 2',
+    'HLD',
+    'EAL',
+    'BvD',
+    'LFüGr',
+    'Schichtführer',
     'Frei',
     '1. Dispo',
     '2. Dispo',
@@ -19,14 +27,23 @@
     'LF 2 ATM',
     'LF 2 WTF',
     'LF 2 WTM',
-    'Fahrzeugführer',
+    "LF 2 Ma",
+    "Schw.Retter",
+    "DLK1 Fü",
+    "DLK1 Ma",
+    "SoFzg Fü",
+    "SoFzg Ma",
+    "KEF Fü",
+    "KEF Ma",
+    "Fwk Fü",
+    "Fwk Ma",
     'Maschinist',
     'Kantine',
     'Wäsche',
     'Getränke',
     'ZAW',
     'ZSW',
-    'Abrufschicht'
+    'Abrufschicht',
   ]
 
   function captureDefaults () {
@@ -178,9 +195,22 @@
       const personTarget = e.target.closest('.person')
       const departmentTarget = e.target.closest('.abteilungspersonal')
       const poolTarget = e.target.closest('#teamSection')
+      const draggedRole = dragged.dataset.role
 
       // CARD -> PERSON
       if (dragged.classList.contains('card') && personTarget) {
+        const name = dragged.textContent.trim()
+        const pool = null
+
+        console.log(
+          'Switched',
+          name,
+          'from: ',
+          draggedRole,
+          'to: ',
+          personTarget
+        )
+
         if (!reservedNames.includes(personTarget.textContent.trim())) {
           return
         }
@@ -192,23 +222,25 @@
       }
 
       // PERSON -> PERSON (tauschen)
-      else if (
-        dragged.classList.contains('person') &&
-        personTarget &&
-        dragged !== personTarget
-      ) {
-        const draggedText = dragged.textContent.trim()
-        const targetText = personTarget.textContent.trim()
-        const targetIsEmpty = reservedNames.includes(targetText)
+else if (dragged.classList.contains('person') && personTarget && dragged !== personTarget) {
+  const draggedText = dragged.textContent.trim()
+  const targetText = personTarget.textContent.trim()
+  const targetIsEmpty = reservedNames.includes(targetText)
+  const targetRole = personTarget.dataset.role
 
-        personTarget.textContent = draggedText
-        dragged.textContent = targetIsEmpty
-          ? dragged.dataset.default || targetText
-          : targetText
+  console.log('Switched', draggedText, 'from: ', draggedRole, 'to: ', targetRole)
 
-        updatePersonColor(dragged)
-        updatePersonColor(personTarget)
-      }
+  personTarget.textContent = draggedText
+
+  if (targetIsEmpty) {
+    dragged.textContent = draggedRole === 'ELW' ? 'LD 1' : draggedRole
+  } else {
+    dragged.textContent = targetText
+  }
+
+  updatePersonColor(dragged)
+  updatePersonColor(personTarget)
+}
 
       // CARD -> ABTEILUNG
       else if (dragged.classList.contains('card') && departmentTarget) {
@@ -219,6 +251,8 @@
       else if (dragged.classList.contains('person') && poolTarget) {
         const name = dragged.textContent.trim()
 
+        console.log('Switched', name, 'from: ', dragged, 'to: ', personTarget)
+
         if (!reservedNames.includes(name)) {
           const newCard = document.createElement('div')
 
@@ -228,7 +262,7 @@
 
           pool.appendChild(newCard)
 
-          // dragged.textContent = "Frei";
+          dragged.textContent = draggedRole
           updatePersonColor(dragged)
         }
       }

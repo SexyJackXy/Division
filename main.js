@@ -48,6 +48,7 @@ const { extractShiftFromPdf } = require("./scripts/pdfExtractor");
 
 ipcMain.handle("extract-and-save", async (event, base64) => {
   const buffer = Buffer.from(base64, "base64");
+  console.log(buffer);
   const shiftJson = await extractShiftFromPdf(buffer);
 
   const outputDir = path.join(__dirname, "structuredSeating");

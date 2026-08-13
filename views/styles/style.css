@@ -73,6 +73,11 @@ header img {
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
+.navLogo{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 .text {
   flex: 0 1 auto;
   text-decoration: none;

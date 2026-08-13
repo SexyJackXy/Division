@@ -14,17 +14,21 @@
 
 <body>
   <header>
-    <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+    <a href="https://feuerwehr.heilbronn.de/startseite.html">
+      <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+    </a>
+
     <h1 class="heading">Feuerwehr Diensteinteilung</h1>
     <div class="navBar" style="float: right;">
-      <a class="text" style="padding-right: 0.6rem ;color: #D1D5DB !important;" href="login.html" onclick="Dienste.logout(); return false;">
-        <p>Logut</p>
+      <a class="text" style="padding-right: 0.6rem ;color: #D1D5DB !important;" href="login.html"
+        onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
       </a>
       <a class="text" href="settings.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Einstellungen</p>
+        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
       </a>
       <a class="text" href="index.html" style="padding-right: 0.6rem;">
-        <p>Hauptmenü</p>
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
     </div>
   </header>
@@ -230,7 +234,7 @@
     });
 
     window.addEventListener("beforeunload", () => {
-      localStorage.removeItem(dienste_csv);
+      localStorage.removeItem(K);
     });
   </script>
 </body>

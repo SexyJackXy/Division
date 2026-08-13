@@ -15,6 +15,7 @@ const template = JSON.parse(
  * @returns {object[]} - Array mit { role, name } Objekten
  */
 function parseShiftArray(lines) {
+    console.log(lines);
   const roleSet = new Set(template.map((t) => t.role));
 
   // Für diese Rollen steht der Name ÜBER (davor) der Rolle
@@ -110,6 +111,8 @@ function parseShiftArray(lines) {
 
     i++;
   }
+
+  console.log(result);
 
   // ELW bekommt immer denselben Namen wie LD 1
   const ld1Entry = result.find((r) => r.role === "LD 1");
