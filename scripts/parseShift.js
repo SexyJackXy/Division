@@ -14,8 +14,12 @@ const template = JSON.parse(
  * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
  * @returns {object[]} - Array mit { role, name } Objekten
  */
-function parseShiftArray (lines) {
+function parseShiftArray(lines) {
   const roleSet = new Set(template.map(t => t.role))
+
+  lines.forEach(line => {
+    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '');
+  });
 
   // Für diese Rollen steht der Name ÜBER (davor) der Rolle
   const nameBeforeRole = new Set([
@@ -59,59 +63,39 @@ function parseShiftArray (lines) {
   while (i < lines.length) {
     const entry = lines[i].trim()
 
-    if (entry === 'Gäste') {
-      console.log('Entry', entry)
+    console.log(i, entry)
+    if (entry === 'Wäsche') {
+      if (lines.length < 100) {
+        const firstCafeteria = lines[i - 1].trim();
+        const secondCafetaria = lines[i - 2].trim();
 
-      const indices = roleIndexTracker['Kantine'] || []
-      let filled = roleFillCount['Kantine'] || 0
-      let j = i + 1
+        result.push({ role: 'Kantine1', name: firstCafeteria })
+        result.push({ role: 'Kantine2', name: secondCafetaria })
 
-      while (j < lines.length && filled < indices.length) {
-        const next = lines[j].trim()
-        const nextCleant = next.replace(/([a-z])([A-Z])/g, '$1\n$2')
-        console.log('J', j, '\n', 'filled', filled, '\n', 'lines[j]', lines[j])
-
-        console.log('Next', nextCleant)
-        if (next === '') {
-          j++
-          continue
-        }
-        if (roleSet.has(next)) break // z.B. "Wäsche" -> Kantine-Block zu Ende
-
-        if (roleSet.has(next)) break // z.B. "Wäsche" -> Kantine-Block zu Ende
-
-        if (filled == 1) {
-          console.log(next.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, ''))
-          result[indices[filled]].name = next.replace(
-            /(?<=[a-zäöüß])[A-ZÄÖÜ].*$/,
-            ''
-          )
-        }
-        lines[j] = '' // verbraucht markieren
-        filled++
-        j++
+        console.log(firstCafeteria, '\n', secondCafetaria);
       }
-
-      roleFillCount['Kantine'] = filled
-      i = j
-      continue
+      else {
+        const firstCafeteria = lines[i - 1].trim();
+        //Logik mit das ich nach Wäsche Gucke die postion -1 ein nehmen und beim 2 eine sucher laufen lasse ob dieser 
+        // Name schon auf einer role gestztes ist wenn ja dann ist der der 2 in der Kantein
+      }
     }
 
-    if (entry === 'Frei') {
-      let j = i + 1
-      while (j < lines.length) {
-        const next = lines[j].trim()
-        if (next === '') {
-          j++
-          continue
-        }
-        if (roleSet.has(next) || next === 'Frei') break
-        result.push({ role: 'Frei', name: next })
-        j++
-      }
-      i = j
-      continue
-    }
+    // if (entry === 'Frei') {
+    //   let j = i + 1
+    //   while (j < lines.length) {
+    //     const next = lines[j].trim()
+    //     if (next === '') {
+    //       j++
+    //       continue
+    //     }
+    //     if (roleSet.has(next) || next === 'Frei') break
+    //     result.push({ role: 'Frei', name: next })
+    //     j++
+    //   }
+    //   i = j
+    //   continue;
+    // }
 
     if (roleSet.has(entry)) {
       const role = entry
