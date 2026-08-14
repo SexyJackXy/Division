@@ -81,21 +81,21 @@ function parseShiftArray(lines) {
       }
     }
 
-    // if (entry === 'Frei') {
-    //   let j = i + 1
-    //   while (j < lines.length) {
-    //     const next = lines[j].trim()
-    //     if (next === '') {
-    //       j++
-    //       continue
-    //     }
-    //     if (roleSet.has(next) || next === 'Frei') break
-    //     result.push({ role: 'Frei', name: next })
-    //     j++
-    //   }
-    //   i = j
-    //   continue;
-    // }
+    if (entry === 'Frei') {
+      let j = i + 1
+      while (j < lines.length) {
+        const next = lines[j].trim()
+        if (next === '') {
+          j++
+          continue
+        }
+        if (roleSet.has(next) || next === 'Frei') break
+        result.push({ role: 'Frei', name: next })
+        j++
+      }
+      i = j
+      continue;
+    }
 
     if (roleSet.has(entry)) {
       const role = entry
