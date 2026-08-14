@@ -14,12 +14,12 @@ const template = JSON.parse(
  * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
  * @returns {object[]} - Array mit { role, name } Objekten
  */
-function parseShiftArray(lines) {
+function parseShiftArray (lines) {
   const roleSet = new Set(template.map(t => t.role))
 
   lines.forEach(line => {
-    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '');
-  });
+    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
+  })
 
   // Für diese Rollen steht der Name ÜBER (davor) der Rolle
   const nameBeforeRole = new Set([
@@ -50,7 +50,25 @@ function parseShiftArray(lines) {
     'Fwk Ma',
     'Frei'
   ])
-
+  const forbiddenLines = new Set([
+    'Feuerwehr Heilbronn',
+    'Diensteinteilung',
+    'Wäsche',
+    'Gäste',
+    'ILS',
+    'LF 2',
+    'LF 1',
+    'GW-Wasser',
+    'DLK / RW',
+    'Sonderfahrzeuge',
+    'GW-G / WLF',
+    'KEF',
+    'GW-T (Unimog)',
+    'Fw',
+    'K / GW-Rüst',
+    'Kantine',
+    'ALvD'
+  ])
   const result = template.map(t => ({ role: t.role, name: '' }))
   const roleIndexTracker = {}
   result.forEach((item, idx) => {
@@ -66,35 +84,18 @@ function parseShiftArray(lines) {
     console.log(i, entry)
     if (entry === 'Wäsche') {
       if (lines.length < 100) {
-        const firstCafeteria = lines[i - 1].trim();
-        const secondCafetaria = lines[i - 2].trim();
+        const firstCafeteria = lines[i - 1].trim()
+        const secondCafetaria = lines[i - 2].trim()
 
         result.push({ role: 'Kantine1', name: firstCafeteria })
         result.push({ role: 'Kantine2', name: secondCafetaria })
 
-        console.log(firstCafeteria, '\n', secondCafetaria);
-      }
-      else {
-        const firstCafeteria = lines[i - 1].trim();
-        //Logik mit das ich nach Wäsche Gucke die postion -1 ein nehmen und beim 2 eine sucher laufen lasse ob dieser 
-        // Name schon auf einer role gestztes ist wenn ja dann ist der der 2 in der Kantein
-      }
-    }
+        console.log(firstCafeteria, '\n', secondCafetaria)
+      } else {
+        const firstCafeteria = lines[i - 1].trim()
 
-    if (entry === 'Frei') {
-      let j = i + 1
-      while (j < lines.length) {
-        const next = lines[j].trim()
-        if (next === '') {
-          j++
-          continue
-        }
-        if (roleSet.has(next) || next === 'Frei') break
-        result.push({ role: 'Frei', name: next })
-        j++
+        result.push({ role: 'Kantine1', name: firstCafeteria })
       }
-      i = j
-      continue;
     }
 
     if (roleSet.has(entry)) {
@@ -142,7 +143,6 @@ function parseShiftArray(lines) {
     i++
   }
 
-  // ELW bekommt immer denselben Namen wie LD 1
   const ld1Entry = result.find(r => r.role === 'LD 1')
   if (ld1Entry) {
     result.forEach(r => {
@@ -151,6 +151,35 @@ function parseShiftArray(lines) {
       }
     })
   }
+
+  const assignedNames = new Set(result.filter(r => r.name).map(r => r.name))
+
+  const dateLineRegex =
+    /^(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag),\s*\d{1,2}\.\s*\w+\s*\d{4}$/
+
+  const freiNames = new Set()
+  lines.forEach(line => {
+    const entry = line.trim()
+
+    if (entry === '') return
+    if (roleSet.has(entry)) return
+    if (nameBeforeRole.has(entry)) return
+    if (assignedNames.has(entry)) return
+    if (freiNames.has(entry)) return
+    if (forbiddenLines.has(entry)) return
+    if (dateLineRegex.test(entry)) return
+
+    freiNames.add(entry)
+    result.push({ role: 'Frei', name: entry })
+  })
+
+  const cleanArray = lines.filter(wort => !result.includes(wort))
+  const gefiltertA = cleanArray.filter(
+    zeile => !nameBeforeRole.has(zeile) && !freiNames.has(zeile)
+  )
+
+  console.log(gefiltertA)
+  console.log(result)
 
   return result
 }
