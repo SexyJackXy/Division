@@ -9,14 +9,6 @@ const template = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'template.json'), 'utf-8')
 )
 
-/**
- * Konvertiert das extrahierte Zeilen-Array in das Template-Format.
- * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
- * @returns {object[]} - Array mit { role, name } Objekten
- */
-function parseShiftArray(lines) {
-  const roleSet = new Set(template.map(t => t.role))
-  // Für diese Rollen steht der Name ÜBER (davor) der Rolle
   const nameBeforeRole = new Set([
     '1. Dispo',
     '2. Dispo',
@@ -78,17 +70,17 @@ function parseShiftArray(lines) {
     'ELW'
   ])
 
+/**
+ * Konvertiert das extrahierte Zeilen-Array in das Template-Format.
+ * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
+ * @returns {object[]} - Array mit { role, name } Objekten
+ */
+function parseShiftArray(lines) {
+  const roleSet = new Set(template.map(t => t.role))
+
   lines.forEach(line => {
     line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
   })
-
-  let x = 0
-
-  lines.forEach(output => {
-    x++
-
-    console.log(x, output)
-  });
 
   const result = template.map(t => ({ role: t.role, name: '' }))
   const roleIndexTracker = {}
@@ -192,7 +184,6 @@ function parseShiftArray(lines) {
     freiNames.add(entry)
     result.push({ role: 'Frei', name: entry })
   })
-
 
   return result
 }
