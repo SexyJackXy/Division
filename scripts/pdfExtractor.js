@@ -12,7 +12,7 @@ const reservedNames = [
   "LF 1 WTF", "LF 1 WTM", "LF 2 Fü", "LF 2 Ma", "LF 2 ATF",
   "LF 2 ATM", "LF 2 WTF", "LF 2 WTM", "DLK1 Fü", "DLK1 Ma",
   "SoFzg Fü", "SoFzg Ma", "KEF Fü", "KEF Ma", "Fwk Fü", "Fwk Ma",
-  "Kantine", "Wäsche", "Getränke", "ZAW", "ZSW", "Abrufschicht","Frei"
+  "Kantine", "Wäsche", "Getränke", "ZAW", "ZSW", "Abrufschicht", "Frei"
 ];
 
 /**

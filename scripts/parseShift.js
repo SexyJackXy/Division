@@ -14,13 +14,8 @@ const template = JSON.parse(
  * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
  * @returns {object[]} - Array mit { role, name } Objekten
  */
-function parseShiftArray (lines) {
+function parseShiftArray(lines) {
   const roleSet = new Set(template.map(t => t.role))
-
-  lines.forEach(line => {
-    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
-  })
-
   // Für diese Rollen steht der Name ÜBER (davor) der Rolle
   const nameBeforeRole = new Set([
     '1. Dispo',
@@ -51,6 +46,7 @@ function parseShiftArray (lines) {
     'Frei'
   ])
   const forbiddenLines = new Set([
+    'Schichtführer',
     'Feuerwehr Heilbronn',
     'Diensteinteilung',
     'Wäsche',
@@ -67,8 +63,33 @@ function parseShiftArray (lines) {
     'Fw',
     'K / GW-Rüst',
     'Kantine',
-    'ALvD'
+    'ALvD',
+    'LD 1',
+    'LD 2',
+    'HLD',
+    'Getränke',
+    'DD',
+    'BvD',
+    'LFüGr',
+    'EAL',
+    'ZAW',
+    'ZSW',
+    'Abrufschicht',
+    'ELW'
   ])
+
+  lines.forEach(line => {
+    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
+  })
+
+  let x = 0
+
+  lines.forEach(output => {
+    x++
+
+    console.log(x, output)
+  });
+
   const result = template.map(t => ({ role: t.role, name: '' }))
   const roleIndexTracker = {}
   result.forEach((item, idx) => {
@@ -81,7 +102,6 @@ function parseShiftArray (lines) {
   while (i < lines.length) {
     const entry = lines[i].trim()
 
-    console.log(i, entry)
     if (entry === 'Wäsche') {
       if (lines.length < 100) {
         const firstCafeteria = lines[i - 1].trim()
@@ -173,13 +193,6 @@ function parseShiftArray (lines) {
     result.push({ role: 'Frei', name: entry })
   })
 
-  const cleanArray = lines.filter(wort => !result.includes(wort))
-  const gefiltertA = cleanArray.filter(
-    zeile => !nameBeforeRole.has(zeile) && !freiNames.has(zeile)
-  )
-
-  console.log(gefiltertA)
-  console.log(result)
 
   return result
 }
