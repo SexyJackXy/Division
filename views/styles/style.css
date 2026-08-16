@@ -73,6 +73,16 @@ header img {
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
 
+.logoContainer {
+width: 220px;
+    /* display: flex; */
+    align-items: baseline;
+    /* gap: 8px; */
+    /* flex-direction: row; */
+    /* justify-content: center; */
+    align-content: center;
+}
+
 .navLogo{
   padding-top: 15px;
   padding-bottom: 15px;
