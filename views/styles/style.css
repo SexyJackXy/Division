@@ -64,6 +64,7 @@ header img {
 }
 
 .heading {
+    color: #F4F4F4;
   margin: 0;
   padding: 1rem;
   flex: 0 1 auto;
@@ -71,6 +72,7 @@ header img {
   left: 50%;
   transform: translateX(-50%);
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
+  text-decoration: none;
 }
 
 .logoContainer {
