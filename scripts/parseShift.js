@@ -9,67 +9,66 @@ const template = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'template.json'), 'utf-8')
 )
 
-  const nameBeforeRole = new Set([
-    '1. Dispo',
-    '2. Dispo',
-    '3. Dispo',
-    'LF 2 Fü',
-    'FüAss',
-    'LF 2 Ma',
-    'Schw.Retter',
-    'LF 2 ATF',
-    'LF 1 Fü',
-    'LF 2 ATM',
-    'LF 1 Ma',
-    'LF 2 WTF',
-    'LF 1 ATF',
-    'LF 2 WTM',
-    'LF 1 ATM',
-    'LF 1 WTF',
-    'LF 1 WTM',
-    'DLK1 Fü',
-    'DLK1 Ma',
-    'SoFzg Fü',
-    'SoFzg Ma',
-    'KEF Fü',
-    'KEF Ma',
-    'Fwk Fü',
-    'Fwk Ma',
-    'Frei'
-  ])
-  const forbiddenLines = new Set([
-    'Schichtführer',
-    'Feuerwehr Heilbronn',
-    'Diensteinteilung',
-    'Wäsche',
-    'Gäste',
-    'ILS',
-    'LF 2',
-    'LF 1',
-    'GW-Wasser',
-    'DLK / RW',
-    'Sonderfahrzeuge',
-    'GW-G / WLF',
-    'KEF',
-    'GW-T (Unimog)',
-    'Fw',
-    'K / GW-Rüst',
-    'Kantine',
-    'ALvD',
-    'LD 1',
-    'LD 2',
-    'HLD',
-    'Getränke',
-    'DD',
-    'BvD',
-    'LFüGr',
-    'EAL',
-    'ZAW',
-    'ZSW',
-    'Abrufschicht',
-    'ELW'
-  ])
-
+const nameBeforeRole = new Set([
+  '1. Dispo',
+  '2. Dispo',
+  '3. Dispo',
+  'LF 2 Fü',
+  'FüAss',
+  'LF 2 Ma',
+  'Schw.Retter',
+  'LF 2 ATF',
+  'LF 1 Fü',
+  'LF 2 ATM',
+  'LF 1 Ma',
+  'LF 2 WTF',
+  'LF 1 ATF',
+  'LF 2 WTM',
+  'LF 1 ATM',
+  'LF 1 WTF',
+  'LF 1 WTM',
+  'DLK1 Fü',
+  'DLK1 Ma',
+  'SoFzg Fü',
+  'SoFzg Ma',
+  'KEF Fü',
+  'KEF Ma',
+  'Fwk Fü',
+  'Fwk Ma',
+  'Frei'
+])
+const forbiddenLines = new Set([
+  'Schichtführer',
+  'Feuerwehr Heilbronn',
+  'Diensteinteilung',
+  'Wäsche',
+  'Gäste',
+  'ILS',
+  'LF 2',
+  'LF 1',
+  'GW-Wasser',
+  'DLK / RW',
+  'Sonderfahrzeuge',
+  'GW-G / WLF',
+  'KEF',
+  'GW-T (Unimog)',
+  'Fw',
+  'K / GW-Rüst',
+  'Kantine',
+  'ALvD',
+  'LD 1',
+  'LD 2',
+  'HLD',
+  'Getränke',
+  'DD',
+  'BvD',
+  'LFüGr',
+  'EAL',
+  'ZAW',
+  'ZSW',
+  'Abrufschicht',
+  'ELW'
+])
 /**
  * Konvertiert das extrahierte Zeilen-Array in das Template-Format.
  * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
@@ -80,6 +79,15 @@ function parseShiftArray(lines) {
 
   lines.forEach(line => {
     line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
+  })
+
+
+  const nameOccurrences = {}
+  lines.forEach((line, idx) => {
+    const entry = line.trim()
+    if (entry === '') return
+    if (!nameOccurrences[entry]) nameOccurrences[entry] = []
+    nameOccurrences[entry].push(idx)
   })
 
   const result = template.map(t => ({ role: t.role, name: '' }))
@@ -106,7 +114,39 @@ function parseShiftArray(lines) {
       } else {
         const firstCafeteria = lines[i - 1].trim()
 
-        result.push({ role: 'Kantine1', name: firstCafeteria })
+        result.push({ role: 'Kantine2', name: firstCafeteria })
+
+        Object.entries(nameOccurrences).forEach(([name, indices]) => {
+          if (indices.length <= 1) return // nur Duplikate weiterverarbeiten
+
+          if (nameBeforeRole.has(name)) {
+            // ...
+          } else if (forbiddenLines.has(name)) {
+            // ...
+          } else {
+            const rollenProIndex = indices
+              .map(idx => {
+                // nächste nicht-leere Zeile darüber
+                let j = idx - 1
+                while (j >= 0 && lines[j].trim() === '') j--
+                const above = j >= 0 ? lines[j].trim() : ''
+
+                // nächste nicht-leere Zeile darunter
+                let k = idx + 1
+                while (k < lines.length && lines[k].trim() === '') k++
+                const below = k < lines.length ? lines[k].trim() : ''
+
+                const role = roleSet.has(above) ? above : (roleSet.has(below) ? below : null)
+                return { idx, role }
+              })
+              .filter(eintrag => eintrag.role === null && eintrag.idx !== 0)
+
+            if (rollenProIndex.length > 0) {
+
+              result.push({ role: 'Kantine1', name: name })
+            }
+          }
+        })
       }
     }
 
