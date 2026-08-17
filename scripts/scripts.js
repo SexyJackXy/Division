@@ -110,13 +110,20 @@
       const res = await fetch('/api/latest-schedule')
       if (res.ok) {
         const json = await res.json()
-        if (json.success && Array.isArray(json.data)) {
-          localStorage.setItem(cookies, JSON.stringify(json.data))
-          return json.data
+        if (json.success) {
+          if (Array.isArray(json.data)) {
+            localStorage.setItem(cookies, JSON.stringify(json.data))
+            return json.data
+          }
+          // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
+          // lokalen Cache leeren statt auf alten Stand zurückzufallen.
+          localStorage.removeItem(cookies)
+          return []
         }
       }
     } catch (e) {
       console.warn('Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:', e)
+      return getContent()
     }
 
     return getContent()
