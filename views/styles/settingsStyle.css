@@ -41,14 +41,14 @@
 }
 
 .wachabteilung {
-    background-color: #D1D5DB;
+    background-color: #F3F4F6;
     max-width: 30vw;
     padding: 0.3em 0.2rem;
     border-radius: 10px;
 }
 
 .wachabteilung>h2 {
-    text-shadow: 0px 0px 2px black;
+    text-shadow: 0px 0px 2px #0A0A0A;
 }
 
 .abteilungspersonal {
@@ -66,7 +66,7 @@
 }
 
 .waPerson {
-    background: #B6D5FB;
+    background: #D1D5DB;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -95,7 +95,7 @@
     margin-bottom: 1rem;
     max-width: 500px;
     margin: 0 auto;
-    background-color: #D3D4D6;
+    background-color: #D1D5DB;
     padding: 0.6rem;
     border-radius: 10px;
 }
@@ -110,8 +110,8 @@
 }
 
 #Save {
-    background-color: #A72920;
-    color: #F4F4F4;
+    background-color: #A81309;
+    color: #F3F4F6;
     width: fit-content;
     float: right;
     padding: 0;

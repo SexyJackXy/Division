@@ -50,7 +50,7 @@ header {
   display: flex;
   width: 100%;
   background: #FF2A1C;
-  color: #F4F4F4;
+  color: #FFFFFF;
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -64,7 +64,7 @@ header img {
 }
 
 .heading {
-    color: #F4F4F4;
+  color: #FFFFFF;
   margin: 0;
   padding: 1rem;
   flex: 0 1 auto;
@@ -76,16 +76,12 @@ header img {
 }
 
 .logoContainer {
-width: 220px;
-    /* display: flex; */
-    align-items: baseline;
-    /* gap: 8px; */
-    /* flex-direction: row; */
-    /* justify-content: center; */
-    align-content: center;
+  width: 220px;
+  align-items: baseline;
+  align-content: center;
 }
 
-.navLogo{
+.navLogo {
   padding-top: 15px;
   padding-bottom: 15px;
 }
@@ -93,7 +89,7 @@ width: 220px;
 .text {
   flex: 0 1 auto;
   text-decoration: none;
-  color: #F4F4F4;
+  color: #FFFFFF;
   float: right;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
@@ -124,7 +120,7 @@ width: 220px;
 }
 
 .card {
-  background: #B6D5FB;
+  background: #D1D5DB;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -186,7 +182,7 @@ width: 220px;
 .close {
   right: 0.6rem;
   max-height: 18px;
-  color: #374151;
+  color: #0A0A0A;
 }
 
 .close:hover {
@@ -215,8 +211,7 @@ width: 220px;
 }
 
 .person.drop-hover {
-  outline: 2px dashed #4caf50;
-  background: #eaffea;
+  outline: 2px dashed #A81309;
 }
 
 .vehicle h3 {
@@ -237,19 +232,19 @@ width: 220px;
 }
 
 .team {
-    flex-wrap: wrap;
-    padding: 1rem;
-    background-color: #FFFFFF;
-    height: min(80px, fit-content);
-    max-height: fit-content;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 0.6rem;
-    align-items: stretch;
-    max-width: 1566px;
-    margin: 0 auto;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background-color: #FFFFFF;
+  height: min(80px, fit-content);
+  max-height: fit-content;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  max-width: 1566px;
+  margin: 0 auto;
 }
 
 #workServices {
@@ -261,7 +256,7 @@ width: 220px;
 }
 
 .drop-target {
-  outline: 2px dashed red;
+  outline: 2px dashed #A81309;
   background-color: rgba(255, 0, 0, 0.05);
 }
 
@@ -299,7 +294,7 @@ input[type="file"]::file-selector-button:hover {
   flex-direction: column;
   justify-content: center;
   width: 350px;
-  background-color: #fff;
+  background-color: #FFFFFF;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
   max-height: 400px;
