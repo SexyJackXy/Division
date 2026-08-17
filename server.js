@@ -151,6 +151,33 @@ app.post("/api/extract-and-save", async (req, res) => {
   }
 });
 
+app.post("/api/reset-schedule", (req, res) => {
+  try {
+    const dir = path.join(__dirname, "structuredSeating");
+    if (!fs.existsSync(dir)) {
+      return res.json({ success: true });
+    }
+
+    const archiveDir = path.join(dir, "archive");
+    if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir);
+
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+    const stamp = Date.now();
+
+    files.forEach((f) => {
+      fs.renameSync(
+        path.join(dir, f),
+        path.join(archiveDir, `${stamp}_${f}`)
+      );
+    });
+
+    res.json({ success: true, archived: files.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get("/api/latest-schedule", (req, res) => {
   try {
     const dir = path.join(__dirname, "structuredSeating");
