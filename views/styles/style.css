@@ -120,6 +120,7 @@ width: 220px;
   align-items: stretch;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  max-width: 1800px;
 }
 
 .card {
@@ -236,19 +237,19 @@ width: 220px;
 }
 
 .team {
-  flex-wrap: wrap;
-  padding: 1rem;
-  background-color: #FFFFFF;
-  height: min(80px, fit-content);
-  max-height: fit-content;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 0.6rem;
-  align-items: stretch;
-  width: fit-content;
-  margin: 0 auto;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background-color: #FFFFFF;
+    height: min(80px, fit-content);
+    max-height: fit-content;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.6rem;
+    align-items: stretch;
+    max-width: 1566px;
+    margin: 0 auto;
 }
 
 #workServices {

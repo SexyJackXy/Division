@@ -1,5 +1,5 @@
 {
-  "showWachabteilung": true,
-  "autoLoadTagdienst": true,
+  "showWachabteilung": false,
+  "autoLoadTagdienst": false,
   "showArbeitsdienste": true
 }
