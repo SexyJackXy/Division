@@ -109,6 +109,8 @@
       const f = e.target.files[0];
       if (!f) return;
 
+      //console.log(f)
+
       const res = window.Dienste.readFromFile(f);
       inputJson.value = "";
       importResult.textContent = res;
@@ -126,6 +128,9 @@
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
+
+      //console.log(file)
+      //console.log(f)
 
       const result = await fetch('/api/extract-and-save', {
         method: 'POST',
@@ -145,12 +150,22 @@
       }, 2000);
     });
 
-    btnReset.addEventListener('click', () => {
+    btnReset.addEventListener('click', async () => {
       const res = window.Dienste.clearCookies();
-      resetResult.textContent = "Erfolgreich zurückgesetzt!";
-      setTimeout(() => {
-        resetResult.textContent = null;
-      }, 2000);
+
+      try {
+        const response = await fetch('/api/reset-schedule', { method: 'POST' });
+
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.error || `HTTP ${response.status}`);
+        }
+
+        resetResult.textContent = res;
+      } catch (e) {
+        console.error('Server-Reset fehlgeschlagen:', e);
+        resetResult.textContent = res + ' (Server-Reset fehlgeschlagen: ' + e.message + ' — bitte Seite neu laden und erneut versuchen)';
+      }
     });
 
     btnUpload.addEventListener("click", async () => inputPdf.click())
