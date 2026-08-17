@@ -51,7 +51,11 @@ app.use(
 // Zugriffsschutz: alles außer Login-Seite + zugehörige statische Assets
 // erfordert eine eingeloggte Session.
 app.use((req, res, next) => {
-  if (isPublicRequest(req) || req.path.startsWith("/api/login")) {
+  if (
+    isPublicRequest(req) ||
+    req.path.startsWith("/api/login") ||
+    (req.method === "GET" && req.path === "/api/latest-schedule")
+  ) {
     return next();
   }
   if (req.session && req.session.userId) {
@@ -141,6 +145,38 @@ app.post("/api/extract-and-save", async (req, res) => {
     const filePath = path.join(outputDir, fileName);
     fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
     res.json({ success: true, filePath, data: shiftJson });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get("/api/latest-schedule", (req, res) => {
+  try {
+    const dir = path.join(__dirname, "structuredSeating");
+    if (!fs.existsSync(dir)) {
+      return res.json({ success: true, data: null });
+    }
+
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => {
+        const full = path.join(dir, f);
+        return { name: f, mtime: fs.statSync(full).mtimeMs };
+      })
+      .sort((a, b) => b.mtime - a.mtime);
+
+    if (!files.length) {
+      return res.json({ success: true, data: null });
+    }
+
+    const latest = files[0];
+    const data = JSON.parse(
+      fs.readFileSync(path.join(dir, latest.name), "utf-8")
+    );
+
+    res.json({ success: true, fileName: latest.name, data });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });

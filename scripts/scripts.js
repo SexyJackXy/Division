@@ -105,6 +105,23 @@
     return raw ? JSON.parse(raw) : []
   }
 
+  async function loadContent () {
+    try {
+      const res = await fetch('/api/latest-schedule')
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && Array.isArray(json.data)) {
+          localStorage.setItem(cookies, JSON.stringify(json.data))
+          return json.data
+        }
+      }
+    } catch (e) {
+      console.warn('Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:', e)
+    }
+
+    return getContent()
+  }
+
   function clearCookies () {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
@@ -329,6 +346,7 @@ else if (dragged.classList.contains('person') && personTarget && dragged !== per
   window.Dienste = {
     readFromFile,
     getContent,
+    loadContent,
     clearCookies,
     parseContent,
     renderAssignments,

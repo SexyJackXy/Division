@@ -109,8 +109,6 @@
       const f = e.target.files[0];
       if (!f) return;
 
-      //console.log(f)
-
       const res = window.Dienste.readFromFile(f);
       inputJson.value = "";
       importResult.textContent = res;
@@ -128,9 +126,6 @@
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
-
-      //console.log(file)
-      //console.log(f)
 
       const result = await fetch('/api/extract-and-save', {
         method: 'POST',
@@ -152,7 +147,10 @@
 
     btnReset.addEventListener('click', () => {
       const res = window.Dienste.clearCookies();
-      resetResult.textContent = res;
+      resetResult.textContent = "Erfolgreich zurückgesetzt!";
+      setTimeout(() => {
+        resetResult.textContent = null;
+      }, 2000);
     });
 
     btnUpload.addEventListener("click", async () => inputPdf.click())
