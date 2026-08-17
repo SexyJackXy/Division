@@ -134,6 +134,11 @@ width: 220px;
   padding: 0.5rem 0;
   max-height: 80px;
   width: clamp(110px, 9vw, 200px);
+  touch-action: none;
+}
+
+.person[draggable="true"] {
+  touch-action: none;
 }
 
 .card:hover {

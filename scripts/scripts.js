@@ -136,6 +136,48 @@
     return 'Einteilung Zurückgesetzt'
   }
 
+  // Liest den aktuellen Stand direkt aus dem DOM aus (nach Drag&Drop-Änderungen)
+  // im selben Format, in dem die Einteilung importiert/gerendert wird.
+  function serializeAssignments () {
+    const result = []
+
+    document.querySelectorAll('.person[data-role]').forEach(el => {
+      const role = el.dataset.role
+      const text = el.textContent.trim()
+      const name = reservedNames.includes(text) ? '' : text
+      result.push({ role, name })
+    })
+
+    document.querySelectorAll('#teamSection .card').forEach(el => {
+      const name = el.textContent.trim()
+      if (name) result.push({ role: 'Frei', name })
+    })
+
+    return result
+  }
+
+  let saveTimer = null
+
+  // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
+  // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
+  function scheduleSave () {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(async () => {
+      const data = serializeAssignments()
+      localStorage.setItem(cookies, JSON.stringify(data))
+
+      try {
+        await fetch('/api/save-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn('Änderung konnte nicht auf dem Server gespeichert werden:', e)
+      }
+    }, 400)
+  }
+
   function renderAssignments (a) {
     const c = document.getElementById('teamSection')
     if (!c) return
@@ -238,6 +280,8 @@
       else if (draggedEl.classList.contains('card') && poolTarget) {
         pool.appendChild(draggedEl)
       }
+
+      scheduleSave()
     }
 
     // ---------- Maus-basiertes Drag & Drop (Desktop, native HTML5 DnD) ----------
@@ -351,6 +395,8 @@
       e => {
         if (!touchDragged) return
 
+        e.preventDefault() // verhindert Scrollen, sobald ein Drag-Kandidat aktiv ist
+
         const touch = e.touches[0]
 
         if (!ghost) {
@@ -361,8 +407,6 @@
           touchDragged.classList.add('dragging')
           ghost = createGhost(touchDragged)
         }
-
-        e.preventDefault() // verhindert Scrollen während des Drags
 
         moveGhost(touch.clientX, touch.clientY)
 
@@ -441,6 +485,8 @@
 
           pool.appendChild(c)
         })
+
+        scheduleSave()
       })
     })
   }

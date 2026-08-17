@@ -54,7 +54,8 @@ app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith("/api/login") ||
-    (req.method === "GET" && req.path === "/api/latest-schedule")
+    (req.method === "GET" && req.path === "/api/latest-schedule") ||
+    (req.method === "POST" && req.path === "/api/save-schedule")
   ) {
     return next();
   }
@@ -144,6 +145,15 @@ app.post("/api/extract-and-save", async (req, res) => {
 
     const filePath = path.join(outputDir, fileName);
     fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
+
+    // Importierte Einteilung wird zugleich der neue "aktuelle Stand",
+    // den alle Geräte über /api/latest-schedule bekommen.
+    fs.writeFileSync(
+      path.join(outputDir, "current.json"),
+      JSON.stringify(shiftJson, null, 2),
+      "utf-8"
+    );
+
     res.json({ success: true, filePath, data: shiftJson });
   } catch (err) {
     console.error(err);
@@ -172,6 +182,31 @@ app.post("/api/reset-schedule", (req, res) => {
     });
 
     res.json({ success: true, archived: files.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/save-schedule", (req, res) => {
+  try {
+    const { data } = req.body || {};
+    if (!Array.isArray(data)) {
+      return res
+        .status(400)
+        .json({ success: false, error: "data muss ein Array sein" });
+    }
+
+    const dir = path.join(__dirname, "structuredSeating");
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
+    fs.writeFileSync(
+      path.join(dir, "current.json"),
+      JSON.stringify(data, null, 2),
+      "utf-8"
+    );
+
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
