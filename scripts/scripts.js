@@ -171,7 +171,77 @@
         .forEach(el => el.classList.remove('drop-target'))
     }
 
-    // Drag Start
+    // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
+    // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
+    function performDrop (draggedEl, dropElement) {
+      if (!draggedEl || !dropElement) return
+
+      const personTarget = dropElement.closest('.person')
+      const departmentTarget = dropElement.closest('.abteilungspersonal')
+      const poolTarget = dropElement.closest('#teamSection')
+      const draggedRole = draggedEl.dataset.role
+
+      // CARD -> PERSON
+      if (draggedEl.classList.contains('card') && personTarget) {
+        if (!reservedNames.includes(personTarget.textContent.trim())) {
+          return
+        }
+
+        personTarget.textContent = draggedEl.textContent
+        updatePersonColor(personTarget)
+
+        draggedEl.remove()
+      }
+
+      // PERSON -> PERSON (tauschen)
+      else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget) {
+        const draggedText = draggedEl.textContent.trim()
+        const targetText = personTarget.textContent.trim()
+        const targetIsEmpty = reservedNames.includes(targetText)
+
+        personTarget.textContent = draggedText
+
+        if (targetIsEmpty) {
+          draggedEl.textContent = draggedRole === 'ELW' ? 'LD 1' : draggedRole
+        } else {
+          draggedEl.textContent = targetText
+        }
+
+        updatePersonColor(draggedEl)
+        updatePersonColor(personTarget)
+      }
+
+      // CARD -> ABTEILUNG
+      else if (draggedEl.classList.contains('card') && departmentTarget) {
+        departmentTarget.appendChild(draggedEl)
+      }
+
+      // PERSON -> POOL
+      else if (draggedEl.classList.contains('person') && poolTarget) {
+        const name = draggedEl.textContent.trim()
+
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
+
+          pool.appendChild(newCard)
+
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
+        }
+      }
+
+      // CARD -> POOL
+      else if (draggedEl.classList.contains('card') && poolTarget) {
+        pool.appendChild(draggedEl)
+      }
+    }
+
+    // ---------- Maus-basiertes Drag & Drop (Desktop, native HTML5 DnD) ----------
+
     document.addEventListener(
       'dragstart',
       e => {
@@ -185,7 +255,6 @@
       true
     )
 
-    // Drag End
     document.addEventListener('dragend', e => {
       const element = e.target.closest('.card, .person')
 
@@ -196,7 +265,6 @@
       dragged = null
     })
 
-    // Drag Over
     document.addEventListener('dragover', e => {
       const target = e.target.closest(
         '.person, .abteilungspersonal, #teamSection'
@@ -210,93 +278,131 @@
       target.classList.add('drop-target')
     })
 
-    // Drop
     document.addEventListener('drop', e => {
       if (!dragged) return
 
+      e.preventDefault()
       clearHighlights()
-
-      const personTarget = e.target.closest('.person')
-      const departmentTarget = e.target.closest('.abteilungspersonal')
-      const poolTarget = e.target.closest('#teamSection')
-      const draggedRole = dragged.dataset.role
-
-      // CARD -> PERSON
-      if (dragged.classList.contains('card') && personTarget) {
-        const name = dragged.textContent.trim()
-        const pool = null
-
-        console.log(
-          'Switched',
-          name,
-          'from: ',
-          draggedRole,
-          'to: ',
-          personTarget
-        )
-
-        if (!reservedNames.includes(personTarget.textContent.trim())) {
-          return
-        }
-
-        personTarget.textContent = dragged.textContent
-        updatePersonColor(personTarget)
-
-        dragged.remove()
-      }
-
-      // PERSON -> PERSON (tauschen)
-else if (dragged.classList.contains('person') && personTarget && dragged !== personTarget) {
-  const draggedText = dragged.textContent.trim()
-  const targetText = personTarget.textContent.trim()
-  const targetIsEmpty = reservedNames.includes(targetText)
-  const targetRole = personTarget.dataset.role
-
-  console.log('Switched', draggedText, 'from: ', draggedRole, 'to: ', targetRole)
-
-  personTarget.textContent = draggedText
-
-  if (targetIsEmpty) {
-    dragged.textContent = draggedRole === 'ELW' ? 'LD 1' : draggedRole
-  } else {
-    dragged.textContent = targetText
-  }
-
-  updatePersonColor(dragged)
-  updatePersonColor(personTarget)
-}
-
-      // CARD -> ABTEILUNG
-      else if (dragged.classList.contains('card') && departmentTarget) {
-        departmentTarget.appendChild(dragged)
-      }
-
-      // PERSON -> POOL
-      else if (dragged.classList.contains('person') && poolTarget) {
-        const name = dragged.textContent.trim()
-
-        console.log('Switched', name, 'from: ', dragged, 'to: ', personTarget)
-
-        if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
-
-          newCard.className = 'card'
-          newCard.draggable = true
-          newCard.textContent = name
-
-          pool.appendChild(newCard)
-
-          dragged.textContent = draggedRole
-          updatePersonColor(dragged)
-        }
-      }
-
-      // CARD -> POOL
-      else if (dragged.classList.contains('card') && poolTarget) {
-        pool.appendChild(dragged)
-      }
-
+      performDrop(dragged, e.target)
       dragged = null
+    })
+
+    // ---------- Touch-basiertes Drag & Drop (Handy/Tablet) ----------
+    // Die HTML5-Drag&Drop-API basiert auf Maus-Events und funktioniert auf
+    // den meisten mobilen Browsern nicht. Deshalb hier eine eigene,
+    // Touch-Events-basierte Umsetzung mit einem visuellen "Ghost"-Element.
+
+    let touchDragged = null
+    let ghost = null
+    let touchStartPos = null
+    const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
+
+    function createGhost (el) {
+      const rect = el.getBoundingClientRect()
+      const g = el.cloneNode(true)
+
+      g.style.position = 'fixed'
+      g.style.left = rect.left + 'px'
+      g.style.top = rect.top + 'px'
+      g.style.width = rect.width + 'px'
+      g.style.height = rect.height + 'px'
+      g.style.margin = '0'
+      g.style.pointerEvents = 'none'
+      g.style.opacity = '0.85'
+      g.style.zIndex = '9999'
+      g.style.transform = 'scale(1.05)'
+
+      document.body.appendChild(g)
+      return g
+    }
+
+    function moveGhost (x, y) {
+      if (!ghost) return
+      const rect = ghost.getBoundingClientRect()
+      ghost.style.left = x - rect.width / 2 + 'px'
+      ghost.style.top = y - rect.height / 2 + 'px'
+    }
+
+    function elementUnderGhost (x, y) {
+      if (!ghost) return document.elementFromPoint(x, y)
+      ghost.style.display = 'none'
+      const el = document.elementFromPoint(x, y)
+      ghost.style.display = ''
+      return el
+    }
+
+    document.addEventListener(
+      'touchstart',
+      e => {
+        const element = e.target.closest('.card, .person')
+
+        if (!element) return
+        if (element.draggable === false) return
+
+        const touch = e.touches[0]
+        touchDragged = element
+        touchStartPos = { x: touch.clientX, y: touch.clientY }
+      },
+      { passive: true }
+    )
+
+    document.addEventListener(
+      'touchmove',
+      e => {
+        if (!touchDragged) return
+
+        const touch = e.touches[0]
+
+        if (!ghost) {
+          const dx = touch.clientX - touchStartPos.x
+          const dy = touch.clientY - touchStartPos.y
+          if (Math.hypot(dx, dy) < TOUCH_MOVE_THRESHOLD) return
+
+          touchDragged.classList.add('dragging')
+          ghost = createGhost(touchDragged)
+        }
+
+        e.preventDefault() // verhindert Scrollen während des Drags
+
+        moveGhost(touch.clientX, touch.clientY)
+
+        clearHighlights()
+        const under = elementUnderGhost(touch.clientX, touch.clientY)
+        const target = under && under.closest('.person, .abteilungspersonal, #teamSection')
+        if (target) target.classList.add('drop-target')
+      },
+      { passive: false }
+    )
+
+    document.addEventListener('touchend', e => {
+      if (!touchDragged) return
+
+      if (ghost) {
+        const touch = e.changedTouches[0]
+        const dropElement = elementUnderGhost(touch.clientX, touch.clientY)
+
+        ghost.remove()
+        ghost = null
+
+        touchDragged.classList.remove('dragging')
+        clearHighlights()
+
+        performDrop(touchDragged, dropElement)
+      }
+
+      touchDragged = null
+      touchStartPos = null
+    })
+
+    document.addEventListener('touchcancel', () => {
+      if (ghost) {
+        ghost.remove()
+        ghost = null
+      }
+      if (touchDragged) touchDragged.classList.remove('dragging')
+      clearHighlights()
+      touchDragged = null
+      touchStartPos = null
     })
   }
 
