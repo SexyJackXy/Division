@@ -10,7 +10,7 @@ h1.loginText {
 }
 
 h2 {
-  margin: 0;
+  margin: 1rem 0;
   color: #0A0A0A;
   text-align: center;
 }
@@ -44,6 +44,7 @@ html {
 body {
   margin: 0;
   background: #F3F4F6;
+  max-height: 1080px;
 }
 
 header {
@@ -95,8 +96,8 @@ header img {
 }
 
 .container {
-  width: min(95vw, 1900px);
-  margin: 1rem;
+  width: min(90vw, 2560px);
+  margin: 0 auto;
 }
 
 .containerFlex {
@@ -114,9 +115,10 @@ header img {
   justify-content: center;
   gap: 0.6rem;
   align-items: stretch;
-  margin-bottom: 1rem;
+  margin-top: 0;
   flex-wrap: wrap;
   max-width: 1800px;
+  margin: 1rem auto;
 }
 
 .card {
@@ -129,8 +131,8 @@ header img {
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
-  max-height: 80px;
-  width: clamp(110px, 9vw, 200px);
+  max-height: 20px;
+  width: clamp(110px, 10vw, 200px);
   touch-action: none;
 }
 
@@ -166,7 +168,7 @@ header img {
   flex-direction: column;
   background-color: #FFFFFF;
   border-radius: 10px;
-  width: clamp(110px, 9vw, 200px);
+  width: clamp(110px, 8vw, 200px);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
   padding-top: 2rem;
   min-width: 180px;
@@ -235,7 +237,7 @@ header img {
   flex-wrap: wrap;
   padding: 1rem;
   background-color: #FFFFFF;
-  height: min(80px, fit-content);
+  height: min(80px, 90px);
   max-height: fit-content;
   border-radius: 10px;
   display: flex;
@@ -243,7 +245,7 @@ header img {
   justify-content: center;
   gap: 0.6rem;
   align-items: stretch;
-  max-width: 1566px;
+  max-width: min(90vw, 2560px);
   margin: 0 auto;
 }
 
