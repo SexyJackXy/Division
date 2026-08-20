@@ -1,4 +1,4 @@
-# 📁 Division
+# 📁 Papyrus
 
 Ein einfaches Projekt namens **Division**, das als Grundlage für weitere Entwicklung dient.
 

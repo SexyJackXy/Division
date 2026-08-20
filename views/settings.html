@@ -50,14 +50,14 @@
 
       <!-- <div class=" btnSpace">
         <button id="btnJson" class="btn" type="button">
-          <p>Plan Importieren</p>
+          <p>JSON Importieren</p>
         </button>
         <a id="importResult"></a>
       </div> -->
 
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
-          <p>PDF einlesen</p>
+          <p>PDF Importieren</p>
         </button>
         <a id="pdfResult"></a>
       </div>
@@ -115,7 +115,7 @@
 
       const res = window.Dienste.readFromFile(f);
       inputJson.value = "";
-      importResult.textContent = res;
+      jsonResult.textContent = res;
     });
 
     inputPdf.addEventListener('change', async (e) => {
