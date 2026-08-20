@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Diensteinteilung</title>
-
+  <title>Papyrus</title>
+  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/settingsStyle.css">
   <link rel="stylesheet" href="styles/tailwind.css">
@@ -17,19 +17,29 @@
 
 <body>
   <header>
-    <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
-    <h1 class="heading">Feuerwehr Diensteinteilung</h1>
-    <div class="navBar" style="float: right;">
-      <a class="text" href="settings.html" style="padding-right: 0.6rem;">
-        <p>Einstellungen</p>
-      </a>
-      <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Schichtplan</p>
-      </a>
-      <a class="text" href="index.html" style="padding-right: 0.6rem;color: #A72920 !important;">
-        <p>Hauptmenü</p>
+    <a href="https://feuerwehr.heilbronn.de/startseite.html" style="width: 165px;">
+      <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+    </a>
+
+    <div style="display: flex;flex-direction: row;justify-content: center;margin: 0 auto;">
+      <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
+        <img src="../img/Logo_2.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
+        <h1 style="text-decoration: none;color: #FFFFFF;margin: 0;padding: 0;">Papyrus</h1>
       </a>
     </div>
+
+    <div class="navBar" style="float: right; width: 265px;">
+      <a class="text" style="padding-right: 0.6rem ;" href="login.html" onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      </a>
+      <a class="text" href="settings.html" style="padding-right: 0.6rem;">
+        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
+      </a>
+      <a class="text" href="index.html" style="padding-right: 0.6rem;">
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+      </a>
+    </div>
+  </header>
   </header>
 
 
@@ -38,12 +48,12 @@
       <input id="inpoutJson" type="file" accept=".json" style="display:none">
       <input id="inputPdf" type="file" accept=".pdf" style="display:none">
 
-      <div class="btnSpace">
+      <!-- <div class=" btnSpace">
         <button id="btnJson" class="btn" type="button">
           <p>JSON Importieren</p>
         </button>
-        <a id="jsonResult"></a>
-      </div>
+        <a id="importResult"></a>
+      </div> -->
 
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
@@ -61,20 +71,20 @@
     </div>
     <hr>
     <div class="settingSpace">
-      <div class="settingLine">
-        <a>Zeige Wachabteilung in Einteilung [Work in Progress]</a>
+      <!-- <div class="settingLine">
+        <a>Zeige Wachabteilung in Einteilung [WiP]</a>
         <label class="switch">
           <input type="checkbox" id="showWachabteilung">
           <span class="slider"></span>
         </label>
       </div>
       <div class="settingLine">
-        <a>Automatischen laden des Tagdienst [Work in Progress]</a>
+        <a>Automatischen laden des Tagdienst [WiP]</a>
         <label class="switch">
           <input type="checkbox" id="autoLoadTagdienst">
           <span class="slider"></span>
         </label>
-      </div>
+      </div> -->
       <div class="settingLine">
         <a>Arbeitsdienste anzeigen</a>
         <label class="switch">
@@ -91,18 +101,17 @@
   <script>
     const inputJson = document.getElementById('inpoutJson');
     const inputPdf = document.getElementById("inputPdf");
-    const btnJson = document.getElementById('btnJson');
     const btnReset = document.getElementById('btnReset');
     const btnUpload = document.getElementById("btnUpload");
     const resetResult = document.getElementById('resetResult');
-    const jsonResult = document.getElementById('jsonResult');
-    const pdfResult = document.getElementById('pdfResult');
+    const importResult = document.getElementById('importResult');
+    const pdfResult = document.getElementById('pdfResult')
 
     inputJson.addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (!f) return;
 
-      console.log(f)
+      //console.log(f)
 
       const res = window.Dienste.readFromFile(f);
       inputJson.value = "";
@@ -122,24 +131,44 @@
         reader.readAsDataURL(file);
       });
 
-      console.log(file)
+      //console.log(file)
+      //console.log(f)
 
-      const result = await window.electronAPI.extractAndSave(base64);
-      const fileToUpload = result.filePath.trim();
+      const result = await fetch('/api/extract-and-save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base64 })
+      }).then(r => r.json());
 
-      const response = await fetch(fileToUpload);
-      const res = window.Dienste.readFromFile(response);
+      localStorage.setItem('dienste_csv', JSON.stringify(result.data));
+      pdfResult.textContent = "Erfolgreich importiert"
 
-      inputPdf.value = "";
-      pdfResult.textContent = res;
+      const p = btnUpload.querySelector("p");
+      const originalText = p.textContent;
+
+      p.textContent = "Gespeichert!";
+      setTimeout(() => {
+        p.textContent = originalText;
+      }, 2000);
     });
 
-    btnReset.addEventListener('click', () => {
+    btnReset.addEventListener('click', async () => {
       const res = window.Dienste.clearCookies();
-      resetResult.textContent = res;
-    });
 
-    btnJson.addEventListener('click', () => inputJson.click());
+      try {
+        const response = await fetch('/api/reset-schedule', { method: 'POST' });
+
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.error || `HTTP ${response.status}`);
+        }
+
+        resetResult.textContent = res;
+      } catch (e) {
+        console.error('Server-Reset fehlgeschlagen:', e);
+        resetResult.textContent = res + ' (Server-Reset fehlgeschlagen: ' + e.message + ' — bitte Seite neu laden und erneut versuchen)';
+      }
+    });
 
     btnUpload.addEventListener("click", async () => inputPdf.click())
   </script>

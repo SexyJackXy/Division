@@ -14,7 +14,7 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
-  win.loadFile(path.join(__dirname, "views", "index_start.html"));
+  win.loadFile(path.join(__dirname, "views", "dashboard.html"));
 }
 
 ipcMain.handle("run-build", async () => {

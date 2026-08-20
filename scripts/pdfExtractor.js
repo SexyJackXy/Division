@@ -12,7 +12,7 @@ const reservedNames = [
   "LF 1 WTF", "LF 1 WTM", "LF 2 Fü", "LF 2 Ma", "LF 2 ATF",
   "LF 2 ATM", "LF 2 WTF", "LF 2 WTM", "DLK1 Fü", "DLK1 Ma",
   "SoFzg Fü", "SoFzg Ma", "KEF Fü", "KEF Ma", "Fwk Fü", "Fwk Ma",
-  "Kantine", "Wäsche", "Getränke", "ZAW", "ZSW", "Abrufschicht"
+  "Kantine", "Wäsche", "Getränke", "ZAW", "ZSW", "Abrufschicht", "Frei"
 ];
 
 /**
@@ -32,17 +32,30 @@ async function extractShiftFromPdf(fileBuffer) {
   const formattedText = extractedText.replace(regex, "\n$1\n");
 
   const lines = [];
-  let i = 1;
-  for (const line of formattedText.split("\n")) {
-    if (line === "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") {
+  for (const rawLine of formattedText.split("\n")) {
+    if (rawLine === "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") {
       continue;
     }
-    lines.push(line);
-    i++;
-    // if (i === 84) break;
-  }
 
-  console.log(lines)
+    const trimmed = rawLine.trim();
+
+    // Reserved Names bleiben unangetastet
+    if (reservedNames.includes(trimmed)) {
+      lines.push(rawLine);
+      continue;
+    }
+
+    // Schritt 2: nur bei "normalen" Zeilen an Klein→Groß-Übergängen splitten
+    const subLines = rawLine
+      .replace(/([a-zäöüß])(?=[A-ZÄÖÜ])/g, "$1\n")
+      .split("\n");
+
+    for (const sub of subLines) {
+      if (sub.length > 0) {
+        lines.push(sub);
+      }
+    }
+  };
 
   return parseShiftArray(lines);
 }

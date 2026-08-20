@@ -50,7 +50,7 @@ header {
   display: flex;
   width: 100%;
   background: #FF2A1C;
-  color: #F4F4F4;
+  color: #FFFFFF;
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -64,6 +64,7 @@ header img {
 }
 
 .heading {
+  color: #FFFFFF;
   margin: 0;
   padding: 1rem;
   flex: 0 1 auto;
@@ -71,12 +72,24 @@ header img {
   left: 50%;
   transform: translateX(-50%);
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
+  text-decoration: none;
+}
+
+.logoContainer {
+  width: 220px;
+  align-items: baseline;
+  align-content: center;
+}
+
+.navLogo {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .text {
   flex: 0 1 auto;
   text-decoration: none;
-  color: #F4F4F4;
+  color: #FFFFFF;
   float: right;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
@@ -103,10 +116,11 @@ header img {
   align-items: stretch;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  max-width: 1800px;
 }
 
 .card {
-  background: #B6D5FB;
+  background: #D1D5DB;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,6 +131,11 @@ header img {
   padding: 0.5rem 0;
   max-height: 80px;
   width: clamp(110px, 9vw, 200px);
+  touch-action: none;
+}
+
+.person[draggable="true"] {
+  touch-action: none;
 }
 
 .card:hover {
@@ -163,7 +182,7 @@ header img {
 .close {
   right: 0.6rem;
   max-height: 18px;
-  color: #374151;
+  color: #0A0A0A;
 }
 
 .close:hover {
@@ -192,8 +211,7 @@ header img {
 }
 
 .person.drop-hover {
-  outline: 2px dashed #4caf50;
-  background: #eaffea;
+  outline: 2px dashed #A81309;
 }
 
 .vehicle h3 {
@@ -225,7 +243,7 @@ header img {
   justify-content: center;
   gap: 0.6rem;
   align-items: stretch;
-  width: fit-content;
+  max-width: 1566px;
   margin: 0 auto;
 }
 
@@ -238,7 +256,7 @@ header img {
 }
 
 .drop-target {
-  outline: 2px dashed red;
+  outline: 2px dashed #A81309;
   background-color: rgba(255, 0, 0, 0.05);
 }
 
@@ -266,22 +284,36 @@ input[type="file"]::file-selector-button:hover {
 
 /*loginPage*/
 .loginContainer {
-  position: relative;
-  width: 700px;
+  display: flex;
+  align-items: stretch;
+  width: fit-content;
 }
 
 .login {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 30vw;
-  background-color: #fff;
+  width: 350px;
+  background-color: #FFFFFF;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
-  min-height: 400px;
-  max-width: 350px;
-  position: absolute;
-  left: 0;
+  max-height: 400px;
+  position: relative;
+  z-index: 2;
+}
+
+.loginPicture {
+  width: 360px;
+  margin-left: -10px;
+  z-index: 1;
+}
+
+.loginPicture img {
+  width: 350px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
 }
 
 .inputFields {
@@ -319,22 +351,6 @@ input[type="file"]::file-selector-button:hover {
 #registerbtn.btn:hover {
   border: 1px solid #a81309;
   background-color: #a81309;
-}
-
-.loginPicture {
-  position: absolute;
-  /* left: 335px; */
-  right: 0;
-  z-index: -1;
-}
-
-.loginPicture img {
-  min-height: 400px;
-  max-height: 400px;
-  max-width: 700px;
-  float: right;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
 }
 
 input[type="text"],

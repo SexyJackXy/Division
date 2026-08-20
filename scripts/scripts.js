@@ -1,297 +1,516 @@
-(function () {
-  const cookies = 'dienste_csv';
+;(function () {
+  const cookies = 'dienste_csv'
   const reservedNames = [
-    "Frei",
-    "1. Dispo",
-    "2. Dispo",
-    "3. Dispo",
-    "LD 1",
-    "FüAss",
-    "LF 1 Fü",
-    "LF 1 Ma",
-    "LF 1 ATF",
-    "LF 1 ATM",
-    "LF 1 WTF",
-    "LF 1 WTM",
-    "LF 2 Fü",
+    'ALvD',
+    'DD',
+    'LD 2',
+    'HLD',
+    'EAL',
+    'BvD',
+    'LFüGr',
+    'Schichtführer',
+    'Frei',
+    '1. Dispo',
+    '2. Dispo',
+    '3. Dispo',
+    'LD 1',
+    'FüAss',
+    'LF 1 Fü',
+    'LF 1 Ma',
+    'LF 1 ATF',
+    'LF 1 ATM',
+    'LF 1 WTF',
+    'LF 1 WTM',
+    'LF 2 Fü',
+    'LF 2 Ma',
+    'LF 2 ATF',
+    'LF 2 ATM',
+    'LF 2 WTF',
+    'LF 2 WTM',
     "LF 2 Ma",
-    "LF 2 ATF",
-    "LF 2 ATM",
-    "LF 2 WTF",
-    "LF 2 WTM",
-    "Fahrzeugführer",
-    "Maschinist",
-    "Kantine",
-    "Wäsche",
-    "Getränke",
-    "ZAW",
-    "ZSW",
-    "Abrufschicht"
-  ];
+    "Schw.Retter",
+    "DLK1 Fü",
+    "DLK1 Ma",
+    "SoFzg Fü",
+    "SoFzg Ma",
+    "KEF Fü",
+    "KEF Ma",
+    "Fwk Fü",
+    "Fwk Ma",
+    'Maschinist',
+    'Kantine',
+    'Wäsche',
+    'Getränke',
+    'ZAW',
+    'ZSW',
+    'Abrufschicht',
+  ]
 
-function readFromFile(file) {
+  function captureDefaults () {
+    document.querySelectorAll('.person').forEach(el => {
+      el.dataset.default = el.textContent.trim()
+    })
+  }
+
+  function readFromFile (file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
         new TextDecoder('windows-1252').decode(b),
         new TextDecoder('utf-16le').decode(b)
-      ];
+      ]
 
-      let t = candidates[0], best = -1e9;
+      let t = candidates[0],
+        best = -1e9
 
       for (const c of candidates) {
-        let sc = 0;
-        if (c.includes('{')) sc += 5;
-        if (c.includes(',')) sc += 2;
-        if (/[a-zA-Z]{3,}/.test(c)) sc += 5;
-        if (c.includes('�')) sc -= 10;
-        if (sc > best) (best = sc, t = c);
+        let sc = 0
+        if (c.includes('{')) sc += 5
+        if (c.includes(',')) sc += 2
+        if (/[a-zA-Z]{3,}/.test(c)) sc += 5
+        if (c.includes('�')) sc -= 10
+        if (sc > best) (best = sc), (t = c)
       }
 
-      if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+      if (t.charCodeAt(0) === 0xfeff) t = t.slice(1)
 
-      console.log(t);
+      const parsed = parseContent(t)
 
-      const parsed = parseContent(t);
+      console.log('FINAL DATA:')
+      console.log(parsed)
 
-      console.log("FINAL DATA:");
-      console.log(parsed);
+      localStorage.setItem(cookies, JSON.stringify(parsed))
+    })
 
-      localStorage.setItem(cookies, JSON.stringify(parsed));
-    });
-
-    return "Datei " + file.name + " erfolgreich hochgeladen"
+    return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent(t) {
-    if (!t) return [];
+  function parseContent (t) {
+    if (!t) return []
     try {
-      const data = JSON.parse(t);
-      if (!Array.isArray(data)) return [];
+      const data = JSON.parse(t)
+      if (!Array.isArray(data)) return []
 
       return data
         .filter(e => e && typeof e.role === 'string')
-        .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }));
+        .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }))
     } catch (e) {
-      console.error("Parse Error:", e);
-      return [];
+      console.error('Parse Error:', e)
+      return []
     }
   }
 
-  function getContent() {
-    const raw = localStorage.getItem(cookies);
-    return raw ? JSON.parse(raw) : [];
+  function getContent () {
+    const raw = localStorage.getItem(cookies)
+    return raw ? JSON.parse(raw) : []
   }
 
-  function clearCookies() {
-    localStorage.removeItem(cookies);
-    document.querySelectorAll('.person').forEach(e => e.textContent = 'Frei');
+  async function loadContent () {
+    try {
+      const res = await fetch('/api/latest-schedule')
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success) {
+          if (Array.isArray(json.data)) {
+            localStorage.setItem(cookies, JSON.stringify(json.data))
+            return json.data
+          }
+          // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
+          // lokalen Cache leeren statt auf alten Stand zurückzufallen.
+          localStorage.removeItem(cookies)
+          return []
+        }
+      }
+    } catch (e) {
+      console.warn('Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:', e)
+      return getContent()
+    }
 
-    return "Einteilung Zurückgesetzt"
+    return getContent()
   }
 
-function renderAssignments(a) {
-  const c = document.getElementById('teamSection');
-  if (!c) return;
+  function clearCookies () {
+    localStorage.removeItem(cookies)
+    document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
-  c.style.display = "none"; // Default: nichts drin -> versteckt
+    return 'Einteilung Zurückgesetzt'
+  }
 
-  a.forEach(({ role, name }) => {
-    if (!name) return;
+  // Liest den aktuellen Stand direkt aus dem DOM aus (nach Drag&Drop-Änderungen)
+  // im selben Format, in dem die Einteilung importiert/gerendert wird.
+  function serializeAssignments () {
+    const result = []
 
-    if (role === "Frei") {
-      const d = document.createElement('div');
-      d.className = 'card';
-      d.setAttribute("draggable", "true");
-      d.innerHTML = name;
-      c.appendChild(d);
-      c.style.display = "flex"; // Sobald was reinkommt -> sichtbar
-      return;
+    document.querySelectorAll('.person[data-role]').forEach(el => {
+      const role = el.dataset.role
+      const text = el.textContent.trim()
+      const name = reservedNames.includes(text) ? '' : text
+      result.push({ role, name })
+    })
+
+    document.querySelectorAll('#teamSection .card').forEach(el => {
+      const name = el.textContent.trim()
+      if (name) result.push({ role: 'Frei', name })
+    })
+
+    return result
+  }
+
+  let saveTimer = null
+
+  // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
+  // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
+  function scheduleSave () {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(async () => {
+      const data = serializeAssignments()
+      localStorage.setItem(cookies, JSON.stringify(data))
+
+      try {
+        await fetch('/api/save-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn('Änderung konnte nicht auf dem Server gespeichert werden:', e)
+      }
+    }, 400)
+  }
+
+  function renderAssignments (a) {
+    const c = document.getElementById('teamSection')
+    if (!c) return
+
+    a.forEach(({ role, name }) => {
+      if (!name) return
+
+      if (role === 'Frei') {
+        const d = document.createElement('div')
+        d.className = 'card'
+        d.setAttribute('draggable', !reservedNames.includes(name))
+        d.innerHTML = name
+        c.appendChild(d)
+        return
+      }
+
+      const el = document.querySelector(`.person[data-role="${role}"]`)
+      if (!el) return
+
+      el.textContent = name
+      updatePersonColor(el)
+    })
+  }
+
+  function initDragAndDrop () {
+    let dragged = null
+
+    const pool = document.getElementById('teamSection')
+
+    function clearHighlights () {
+      document
+        .querySelectorAll('.drop-target')
+        .forEach(el => el.classList.remove('drop-target'))
     }
 
-    const el = document.querySelector(`.person[data-role="${role}"]`);
-    if (!el) return;
+    // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
+    // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
+    function performDrop (draggedEl, dropElement) {
+      if (!draggedEl || !dropElement) return
 
-    el.textContent = name;
-    updatePersonColor(el);
-  });
-}
-
-  function initDragAndDrop() {
-    let dragged = null;
-
-    const pool = document.getElementById("teamSection");
-
-    function clearHighlights() {
-      document.querySelectorAll(".drop-target")
-        .forEach(el => el.classList.remove("drop-target"));
-    }
-
-    // Drag Start
-    document.addEventListener("dragstart", e => {
-      const element = e.target.closest(".card, .person");
-
-      if (!element) return;
-
-      dragged = element;
-      dragged.classList.add("dragging");
-    }, true);
-
-    // Drag End
-    document.addEventListener("dragend", e => {
-      const element = e.target.closest(".card, .person");
-
-      if (!element) return;
-
-      element.classList.remove("dragging");
-      clearHighlights();
-      dragged = null;
-    });
-
-    // Drag Over
-    document.addEventListener("dragover", e => {
-      const target = e.target.closest(
-        ".person, .abteilungspersonal, #teamSection"
-      );
-
-      if (!target) return;
-
-      e.preventDefault();
-
-      clearHighlights();
-      target.classList.add("drop-target");
-    });
-
-    // Drop
-    document.addEventListener("drop", e => {
-      if (!dragged) return;
-
-      clearHighlights();
-
-      const personTarget = e.target.closest(".person");
-      const departmentTarget = e.target.closest(".abteilungspersonal");
-      const poolTarget = e.target.closest("#teamSection");
+      const personTarget = dropElement.closest('.person')
+      const departmentTarget = dropElement.closest('.abteilungspersonal')
+      const poolTarget = dropElement.closest('#teamSection')
+      const draggedRole = draggedEl.dataset.role
 
       // CARD -> PERSON
-      if (
-        dragged.classList.contains("card") &&
-        personTarget
-      ) {
-        if (personTarget.textContent.trim() !== "Frei") {
-          return;
+      if (draggedEl.classList.contains('card') && personTarget) {
+        if (!reservedNames.includes(personTarget.textContent.trim())) {
+          return
         }
 
-        personTarget.textContent = dragged.textContent;
-        updatePersonColor(personTarget);
+        personTarget.textContent = draggedEl.textContent
+        updatePersonColor(personTarget)
 
-        dragged.remove();
+        draggedEl.remove()
       }
 
       // PERSON -> PERSON (tauschen)
-      else if (
-        dragged.classList.contains("person") &&
-        personTarget &&
-        dragged !== personTarget
-      ) {
-        const temp = dragged.textContent;
+      else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget) {
+        const draggedText = draggedEl.textContent.trim()
+        const targetText = personTarget.textContent.trim()
+        const targetIsEmpty = reservedNames.includes(targetText)
 
-        dragged.textContent = personTarget.textContent;
-        personTarget.textContent = temp;
+        personTarget.textContent = draggedText
 
-        updatePersonColor(dragged);
-        updatePersonColor(personTarget);
+        if (targetIsEmpty) {
+          draggedEl.textContent = draggedRole === 'ELW' ? 'LD 1' : draggedRole
+        } else {
+          draggedEl.textContent = targetText
+        }
+
+        updatePersonColor(draggedEl)
+        updatePersonColor(personTarget)
       }
 
       // CARD -> ABTEILUNG
-      else if (
-        dragged.classList.contains("card") &&
-        departmentTarget
-      ) {
-        departmentTarget.appendChild(dragged);
+      else if (draggedEl.classList.contains('card') && departmentTarget) {
+        departmentTarget.appendChild(draggedEl)
       }
 
       // PERSON -> POOL
-      else if (
-        dragged.classList.contains("person") &&
-        poolTarget
-      ) {
-        const name = dragged.textContent.trim();
+      else if (draggedEl.classList.contains('person') && poolTarget) {
+        const name = draggedEl.textContent.trim()
 
-        if (
-          name !== "Frei" &&
-          !reservedNames.includes(name)
-        ) {
-          const newCard = document.createElement("div");
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
 
-          newCard.className = "card";
-          newCard.draggable = true;
-          newCard.textContent = name;
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
 
-          pool.appendChild(newCard);
+          pool.appendChild(newCard)
 
-          dragged.textContent = "Frei";
-          updatePersonColor(dragged);
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
         }
       }
 
       // CARD -> POOL
-      else if (
-        dragged.classList.contains("card") &&
-        poolTarget
-      ) {
-        pool.appendChild(dragged);
+      else if (draggedEl.classList.contains('card') && poolTarget) {
+        pool.appendChild(draggedEl)
       }
 
-      dragged = null;
-    });
+      scheduleSave()
+    }
+
+    // ---------- Maus-basiertes Drag & Drop (Desktop, native HTML5 DnD) ----------
+
+    document.addEventListener(
+      'dragstart',
+      e => {
+        const element = e.target.closest('.card, .person')
+
+        if (!element) return
+
+        dragged = element
+        dragged.classList.add('dragging')
+      },
+      true
+    )
+
+    document.addEventListener('dragend', e => {
+      const element = e.target.closest('.card, .person')
+
+      if (!element) return
+
+      element.classList.remove('dragging')
+      clearHighlights()
+      dragged = null
+    })
+
+    document.addEventListener('dragover', e => {
+      const target = e.target.closest(
+        '.person, .abteilungspersonal, #teamSection'
+      )
+
+      if (!target) return
+
+      e.preventDefault()
+
+      clearHighlights()
+      target.classList.add('drop-target')
+    })
+
+    document.addEventListener('drop', e => {
+      if (!dragged) return
+
+      e.preventDefault()
+      clearHighlights()
+      performDrop(dragged, e.target)
+      dragged = null
+    })
+
+    // ---------- Touch-basiertes Drag & Drop (Handy/Tablet) ----------
+    // Die HTML5-Drag&Drop-API basiert auf Maus-Events und funktioniert auf
+    // den meisten mobilen Browsern nicht. Deshalb hier eine eigene,
+    // Touch-Events-basierte Umsetzung mit einem visuellen "Ghost"-Element.
+
+    let touchDragged = null
+    let ghost = null
+    let touchStartPos = null
+    const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
+
+    function createGhost (el) {
+      const rect = el.getBoundingClientRect()
+      const g = el.cloneNode(true)
+
+      g.style.position = 'fixed'
+      g.style.left = rect.left + 'px'
+      g.style.top = rect.top + 'px'
+      g.style.width = rect.width + 'px'
+      g.style.height = rect.height + 'px'
+      g.style.margin = '0'
+      g.style.pointerEvents = 'none'
+      g.style.opacity = '0.85'
+      g.style.zIndex = '9999'
+      g.style.transform = 'scale(1.05)'
+
+      document.body.appendChild(g)
+      return g
+    }
+
+    function moveGhost (x, y) {
+      if (!ghost) return
+      const rect = ghost.getBoundingClientRect()
+      ghost.style.left = x - rect.width / 2 + 'px'
+      ghost.style.top = y - rect.height / 2 + 'px'
+    }
+
+    function elementUnderGhost (x, y) {
+      if (!ghost) return document.elementFromPoint(x, y)
+      ghost.style.display = 'none'
+      const el = document.elementFromPoint(x, y)
+      ghost.style.display = ''
+      return el
+    }
+
+    document.addEventListener(
+      'touchstart',
+      e => {
+        const element = e.target.closest('.card, .person')
+
+        if (!element) return
+        if (element.draggable === false) return
+
+        const touch = e.touches[0]
+        touchDragged = element
+        touchStartPos = { x: touch.clientX, y: touch.clientY }
+      },
+      { passive: true }
+    )
+
+    document.addEventListener(
+      'touchmove',
+      e => {
+        if (!touchDragged) return
+
+        e.preventDefault() // verhindert Scrollen, sobald ein Drag-Kandidat aktiv ist
+
+        const touch = e.touches[0]
+
+        if (!ghost) {
+          const dx = touch.clientX - touchStartPos.x
+          const dy = touch.clientY - touchStartPos.y
+          if (Math.hypot(dx, dy) < TOUCH_MOVE_THRESHOLD) return
+
+          touchDragged.classList.add('dragging')
+          ghost = createGhost(touchDragged)
+        }
+
+        moveGhost(touch.clientX, touch.clientY)
+
+        clearHighlights()
+        const under = elementUnderGhost(touch.clientX, touch.clientY)
+        const target = under && under.closest('.person, .abteilungspersonal, #teamSection')
+        if (target) target.classList.add('drop-target')
+      },
+      { passive: false }
+    )
+
+    document.addEventListener('touchend', e => {
+      if (!touchDragged) return
+
+      if (ghost) {
+        const touch = e.changedTouches[0]
+        const dropElement = elementUnderGhost(touch.clientX, touch.clientY)
+
+        ghost.remove()
+        ghost = null
+
+        touchDragged.classList.remove('dragging')
+        clearHighlights()
+
+        performDrop(touchDragged, dropElement)
+      }
+
+      touchDragged = null
+      touchStartPos = null
+    })
+
+    document.addEventListener('touchcancel', () => {
+      if (ghost) {
+        ghost.remove()
+        ghost = null
+      }
+      if (touchDragged) touchDragged.classList.remove('dragging')
+      clearHighlights()
+      touchDragged = null
+      touchStartPos = null
+    })
   }
 
-  function updatePersonColor(el) {
-    const text = el.textContent.trim();
-
-    // console.log(text)
+  function updatePersonColor (el) {
+    const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
-      el.style.backgroundColor = "#B6D5FB";
+      el.style.backgroundColor = '#B6D5FB'
+      el.draggable = true
     } else {
-      el.style.backgroundColor = "";
+      el.style.backgroundColor = ''
+      el.draggable = false
     }
   }
 
-  function initDeleteButtons() {
-    const deleteBtns = document.querySelectorAll('.close');
-    const pool = document.getElementById("teamSection");
+  function initDeleteButtons () {
+    const deleteBtns = document.querySelectorAll('.close')
+    const pool = document.getElementById('teamSection')
 
     deleteBtns.forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        const parent = event.target.parentElement;
-        const persons = parent.querySelectorAll('.person');
+      btn.addEventListener('click', event => {
+        const parent = event.target.parentElement
+        const persons = parent.querySelectorAll('.person')
 
         persons.forEach(p => {
-          const oldPerson = p.innerHTML;
-          const c = document.createElement("div");
+          const oldPerson = p.textContent.trim()
+          const c = document.createElement('div')
 
-          console.log(p);
-          p.style.backgroundColor = "#D1D5DB"
-          p.textContent = "Frei"
-          c.className = "card";
-          c.setAttribute("draggable", "true");
-          c.textContent = oldPerson;
+          console.log(p)
+          p.style.backgroundColor = '#D1D5DB'
+          c.className = 'card'
+          p.textContent = p.dataset.default || 'Frei'
+          p.draggable = false
+          c.setAttribute('draggable', !reservedNames.includes(oldPerson))
+          c.textContent = oldPerson
 
-          pool.appendChild(c);
-        });
-      });
-    });
+          pool.appendChild(c)
+        })
+
+        scheduleSave()
+      })
+    })
+  }
+
+  async function logout () {
+    try {
+      const res = await fetch('/api/logout', { method: 'POST' })
+      const data = await res.json()
+      window.location.href = data.redirect || 'login.html'
+    } catch (e) {
+      console.error('Logout fehlgeschlagen:', e)
+      window.location.href = 'login.html'
+    }
   }
 
   window.Dienste = {
     readFromFile,
     getContent,
+    loadContent,
     clearCookies,
     parseContent,
     renderAssignments,
     initDragAndDrop,
-    initDeleteButtons
-  };
-
-})();
+    initDeleteButtons,
+    logout
+  }
+})()

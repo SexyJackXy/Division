@@ -22,6 +22,8 @@ SHASUMS256.txt
 **/package-lock.json
 compile_commands.json
 .envrc
+structuredSeating/
+Einteilung/
 
 # npm package
 /npm/dist
@@ -56,3 +58,8 @@ patches/mtime-cache.json
 spec/fixtures/logo.png
 
 .yarn/install-state.gz
+app.db
+app.db-shm
+app.db-wal
+sessions.db
+

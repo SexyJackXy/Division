@@ -1,113 +1,231 @@
 // parseShift.js
 // Wandelt das extrahierte PDF-Array in eine strukturierte JSON-Datei um
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs')
+const path = require('path')
 
 // Template laden
 const template = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "..", "template.json"), "utf-8")
-);
+  fs.readFileSync(path.join(__dirname, '..', 'template.json'), 'utf-8')
+)
 
+const nameBeforeRole = new Set([
+  '1. Dispo',
+  '2. Dispo',
+  '3. Dispo',
+  'LF 2 Fü',
+  'FüAss',
+  'LF 2 Ma',
+  'Schw.Retter',
+  'LF 2 ATF',
+  'LF 1 Fü',
+  'LF 2 ATM',
+  'LF 1 Ma',
+  'LF 2 WTF',
+  'LF 1 ATF',
+  'LF 2 WTM',
+  'LF 1 ATM',
+  'LF 1 WTF',
+  'LF 1 WTM',
+  'DLK1 Fü',
+  'DLK1 Ma',
+  'SoFzg Fü',
+  'SoFzg Ma',
+  'KEF Fü',
+  'KEF Ma',
+  'Fwk Fü',
+  'Fwk Ma',
+  'Frei'
+])
+const forbiddenLines = new Set([
+  'Schichtführer',
+  'Feuerwehr Heilbronn',
+  'Diensteinteilung',
+  'Wäsche',
+  'Gäste',
+  'ILS',
+  'LF 2',
+  'LF 1',
+  'GW-Wasser',
+  'DLK / RW',
+  'Sonderfahrzeuge',
+  'GW-G / WLF',
+  'KEF',
+  'GW-T (Unimog)',
+  'Fw',
+  'K / GW-Rüst',
+  'Kantine',
+  'ALvD',
+  'LD 1',
+  'LD 2',
+  'HLD',
+  'Getränke',
+  'DD',
+  'BvD',
+  'LFüGr',
+  'EAL',
+  'ZAW',
+  'ZSW',
+  'Abrufschicht',
+  'ELW'
+])
 /**
  * Konvertiert das extrahierte Zeilen-Array in das Template-Format.
  * @param {string[]} lines - Das rohe Array aus der PDF-Extraktion
  * @returns {object[]} - Array mit { role, name } Objekten
  */
 function parseShiftArray(lines) {
-  const roleSet = new Set(template.map((t) => t.role));
+  const roleSet = new Set(template.map(t => t.role))
 
-  // Für diese Rollen steht der Name ÜBER (davor) der Rolle
-  const nameBeforeRole = new Set([
-    "1. Dispo",
-    "2. Dispo",
-    "3. Dispo",
-    "LF 2 Fü",
-    "FüAss",
-    "LF 2 Ma",
-    "Schw.Retter",
-    "LF 2 ATF",
-    "LF 1 Fü",
-    "LF 2 ATM",
-    "LF 1 Ma",
-    "LF 2 WTF",
-    "LF 1 ATF",
-    "LF 2 WTM",
-    "LF 1 ATM",
-    "LF 1 WTF",
-    "LF 1 WTM",
-    "DLK1 Fü",
-    "DLK1 Ma",
-    "SoFzg Fü",
-    "SoFzg Ma",
-    "KEF Fü",
-    "KEF Ma",
-    "Fwk Fü",
-    "Fwk Ma",
-  ]);
+  lines.forEach(line => {
+    line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
+  })
 
-  const result = template.map((t) => ({ role: t.role, name: "" }));
-  const roleIndexTracker = {};
+
+  const nameOccurrences = {}
+  lines.forEach((line, idx) => {
+    const entry = line.trim()
+    if (entry === '') return
+    if (!nameOccurrences[entry]) nameOccurrences[entry] = []
+    nameOccurrences[entry].push(idx)
+  })
+
+  const result = template.map(t => ({ role: t.role, name: '' }))
+  const roleIndexTracker = {}
   result.forEach((item, idx) => {
-    if (!roleIndexTracker[item.role]) roleIndexTracker[item.role] = [];
-    roleIndexTracker[item.role].push(idx);
-  });
-  const roleFillCount = {};
+    if (!roleIndexTracker[item.role]) roleIndexTracker[item.role] = []
+    roleIndexTracker[item.role].push(idx)
+  })
+  const roleFillCount = {}
 
-  let i = 0;
+  let i = 0
   while (i < lines.length) {
-    const entry = lines[i].trim();
+    const entry = lines[i].trim()
 
-    if (roleSet.has(entry)) {
-      const role = entry;
-      let name = "";
+    if (entry === 'Wäsche') {
+      if (lines.length < 100) {
+        const firstCafeteria = lines[i - 1].trim()
+        const secondCafetaria = lines[i - 2].trim()
 
-      if (nameBeforeRole.has(role)) {
-        // Name rückwärts suchen — letzter nicht-leerer Eintrag vor dieser Rolle
-        let j = i - 1;
-        while (j >= 0) {
-          const prev = lines[j].trim();
-          if (prev === "") { j--; continue; }
-          if (roleSet.has(prev)) break; // anderer Rollenname → kein Name
-          name = prev;
-          lines[j] = ""; // verbraucht markieren, damit er nicht doppelt genutzt wird
-          break;
-        }
+        result.push({ role: 'Kantine1', name: firstCafeteria })
+        result.push({ role: 'Kantine2', name: secondCafetaria })
+
+        console.log(firstCafeteria, '\n', secondCafetaria)
       } else {
-        // Name vorwärts suchen
-        let j = i + 1;
-        while (j < lines.length) {
-          const next = lines[j].trim();
-          if (next === "") { j++; continue; }
-          if (roleSet.has(next)) break;
-          name = next;
-          i = j;
-          break;
-        }
-      }
+        const firstCafeteria = lines[i - 1].trim()
 
-      const fillCount = roleFillCount[role] || 0;
-      const indices = roleIndexTracker[role] || [];
-      if (indices[fillCount] !== undefined) {
-        result[indices[fillCount]].name = name;
-        roleFillCount[role] = fillCount + 1;
+        result.push({ role: 'Kantine2', name: firstCafeteria })
+
+        Object.entries(nameOccurrences).forEach(([name, indices]) => {
+          if (indices.length <= 1) return // nur Duplikate weiterverarbeiten
+
+          if (nameBeforeRole.has(name)) {
+            // ...
+          } else if (forbiddenLines.has(name)) {
+            // ...
+          } else {
+            const rollenProIndex = indices
+              .map(idx => {
+                // nächste nicht-leere Zeile darüber
+                let j = idx - 1
+                while (j >= 0 && lines[j].trim() === '') j--
+                const above = j >= 0 ? lines[j].trim() : ''
+
+                // nächste nicht-leere Zeile darunter
+                let k = idx + 1
+                while (k < lines.length && lines[k].trim() === '') k++
+                const below = k < lines.length ? lines[k].trim() : ''
+
+                const role = roleSet.has(above) ? above : (roleSet.has(below) ? below : null)
+                return { idx, role }
+              })
+              .filter(eintrag => eintrag.role === null && eintrag.idx !== 0)
+
+            if (rollenProIndex.length > 0) {
+
+              result.push({ role: 'Kantine1', name: name })
+            }
+          }
+        })
       }
     }
 
-    i++;
-  }
+    if (roleSet.has(entry)) {
+      const role = entry
+      let name = ''
 
-  // ELW bekommt immer denselben Namen wie LD 1
-  const ld1Entry = result.find((r) => r.role === "LD 1");
-  if (ld1Entry) {
-    result.forEach((r) => {
-      if (r.role === "ELW") {
-        r.name = ld1Entry.name;
+      if (nameBeforeRole.has(role)) {
+        // Name rückwärts suchen — letzter nicht-leerer Eintrag vor dieser Rolle
+        let j = i - 1
+        while (j >= 0) {
+          const prev = lines[j].trim()
+          if (prev === '') {
+            j--
+            continue
+          }
+          if (roleSet.has(prev)) break // anderer Rollenname → kein Name
+          name = prev
+          lines[j] = '' // verbraucht markieren, damit er nicht doppelt genutzt wird
+          break
+        }
+      } else {
+        // Name vorwärts suchen
+        let j = i + 1
+        while (j < lines.length) {
+          const next = lines[j].trim()
+          if (next === '') {
+            j++
+            continue
+          }
+          if (roleSet.has(next)) break
+          name = next
+          i = j
+          break
+        }
       }
-    });
+
+      const fillCount = roleFillCount[role] || 0
+      const indices = roleIndexTracker[role] || []
+      if (indices[fillCount] !== undefined) {
+        result[indices[fillCount]].name = name
+        roleFillCount[role] = fillCount + 1
+      }
+    }
+
+    i++
   }
 
-  return result;
+  const ld1Entry = result.find(r => r.role === 'LD 1')
+  if (ld1Entry) {
+    result.forEach(r => {
+      if (r.role === 'ELW') {
+        r.name = ld1Entry.name
+      }
+    })
+  }
+
+  const assignedNames = new Set(result.filter(r => r.name).map(r => r.name))
+
+  const dateLineRegex =
+    /^(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag),\s*\d{1,2}\.\s*\w+\s*\d{4}$/
+
+  const freiNames = new Set()
+  lines.forEach(line => {
+    const entry = line.trim()
+
+    if (entry === '') return
+    if (roleSet.has(entry)) return
+    if (nameBeforeRole.has(entry)) return
+    if (assignedNames.has(entry)) return
+    if (freiNames.has(entry)) return
+    if (forbiddenLines.has(entry)) return
+    if (dateLineRegex.test(entry)) return
+
+    freiNames.add(entry)
+    result.push({ role: 'Frei', name: entry })
+  })
+
+  return result
 }
 
-module.exports = { parseShiftArray };
+module.exports = { parseShiftArray }
