@@ -179,6 +179,7 @@
   }
 
   function renderAssignments (a) {
+    const i = 0
     const c = document.getElementById('teamSection')
     if (!c) return
 
@@ -186,6 +187,8 @@
       if (!name) return
 
       if (role === 'Frei') {
+        i++
+
         const d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
@@ -200,6 +203,13 @@
       el.textContent = name
       updatePersonColor(el)
     })
+
+    console.log(i)
+
+    if (i > 0) {
+    const t = document.getElementById('teamSection')
+    t.style.display = 'flex'
+}
   }
 
   function initDragAndDrop () {

@@ -39,23 +39,28 @@ hr {
 
 html {
   font-size: clamp(12px, 0.9vw, 18px);
+  height: 100%;
+  margin: 0;
 }
 
 body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #F3F4F6;
   margin: 0;
-  background: #f3f4f6;
-  max-height: 1080px;
 }
 
 header {
   display: flex;
   width: 100%;
-  background: #ff2a1c;
-  color: #ffffff;
+  background: #FF2A1C;
+  color: #FFFFFF;
   text-align: center;
   gap: 0.6rem;
   align-items: center;
   justify-content: space-between;
+  flex: 0 0 auto;
 }
 
 header img {
@@ -104,7 +109,10 @@ header img {
   margin: 1rem;
   display: flex;
   justify-content: center;
-  height: 900px;
+  flex: 1 1 auto;
+  align-items: center;
+  min-height: 0;
+  height: 100%;
 }
 
 /* IndexPage */
@@ -239,7 +247,7 @@ header img {
   height: min(80px, 90px);
   max-height: fit-content;
   border-radius: 10px;
-  display: flex;
+  display: none;
   flex-direction: row;
   justify-content: center;
   gap: 0.6rem;

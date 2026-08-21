@@ -1,45 +1,103 @@
-@media (max-width: 960px) {
+@media (max-width: 950px) {
   .middle-duty {
     flex-wrap: wrap;
   }
+
   .top-duty {
     flex-direction: row;
   }
+
   .middle-duty .vehicle {
     width: 350px;
-    height: 150px;
+    max-height: 156px;
     flex-wrap: wrap;
     align-content: stretch;
     align-items: center;
   }
 
-  .top-duty .person{
+  .top-duty .person {
     font-size: 1.6ch;
   }
 
-  .person {
-    height: 33%;
-  }
-
-  .vehicle .person {
-    width: 95px;
+  .middle-duty .vehicle .person {
+    width: 150px;
+    height: 25px;
   }
 
   .side .vehicle .person {
-    width: 140px;
+    width: 100px;
     padding: 0.3rem 0;
   }
 
-  .team{
+  .team {
     height: max-content;
   }
 
-  header>a{
+  header>a,
+  .navBar {
+    width: 30%;
+  }
+
+  header>a {
     width: 30% !important;
   }
 
-  .navBar{
-    width: 30%;
+  .navBar {
     margin-right: 0.6rem;
+  }
+
+  .side {
+    max-height: 180px;
+  }
+
+  .workServices .vehicle {
+    flex-wrap: wrap !important;
+    background-color: green;
+  }
+
+  [data-role="DLK1 Fü"] {
+    width: 150px !important;
+  }
+
+  [data-role="DLK1 Ma"] {
+    width: 150px !important;
+  }
+
+  [data-role="SoFzg Fü"] {
+    width: 150px !important;
+  }
+
+  [data-role="SoFzg Ma"] {
+    width: 150px !important;
+  }
+
+  [data-role="Wäsche"] {
+    width: 150px !important;
+    height: 60px !important;
+  }
+
+  .loginPicture {
+    display: none !important;
+    background-color: aqua;
+  }
+
+  .loginContainer {
+    background-color: aqua;
+  }
+}
+
+@media (max-width: 1080px) {
+  .middle-duty .vehicle {
+    width: 180px !important;
+  }
+
+  .top-duty .vehicle {
+    width: 150px !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .middle-duty {
+    background-color: aqua !important;
   }
 }
