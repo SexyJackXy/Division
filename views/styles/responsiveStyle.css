@@ -1,3 +1,13 @@
+@media (max-width: 1080px) and (min-width: 951px) {
+  .middle-duty .vehicle {
+    width: 180px;
+  }
+
+  .top-duty .vehicle {
+    width: 150px;
+  }
+}
+
 @media (max-width: 950px) {
   .middle-duty {
     flex-wrap: wrap;
@@ -27,23 +37,11 @@
   .side .vehicle .person {
     width: 100px;
     padding: 0.3rem 0;
+    font-size: 1.6ch;
   }
 
   .team {
     height: max-content;
-  }
-
-  header>a,
-  .navBar {
-    width: 30%;
-  }
-
-  header>a {
-    width: 30% !important;
-  }
-
-  .navBar {
-    margin-right: 0.6rem;
   }
 
   .side {
@@ -55,6 +53,16 @@
     background-color: green;
   }
 
+  .loginPicture {
+    display: none !important;
+  }
+
+  .login {
+    width: 90vw;
+  }
+}
+
+@media (max-width: 950px) and (min-width: 501px) {
   [data-role="DLK1 Fü"] {
     width: 150px !important;
   }
@@ -75,29 +83,35 @@
     width: 150px !important;
     height: 60px !important;
   }
-
-  .loginPicture {
-    display: none !important;
-    background-color: aqua;
-  }
-
-  .loginContainer {
-    background-color: aqua;
-  }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 500px) {
   .middle-duty .vehicle {
-    width: 180px !important;
+    width: 300px;
   }
 
-  .top-duty .vehicle {
-    width: 150px !important;
+  .side .vehicle .person {
+    width: 90px !important;
+    padding: 0.3rem 0;
+    font-size: 1.4ch;
   }
-}
 
-@media (max-width: 350px) {
-  .middle-duty {
-    background-color: aqua !important;
+  .middle-duty .vehicle .person {
+    width: 125px;
+    height: 25px;
+    font-size: 1.4ch;
+  }
+
+  #hnLogo {
+    display: none;
+  }
+
+  .buttonspace {
+    max-width: 300px;
+    flex-wrap: wrap;
+  }
+
+  .btnSpace {
+    width: 100%;
   }
 }
