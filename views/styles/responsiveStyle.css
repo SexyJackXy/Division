@@ -1,5 +1,45 @@
-@media (max-width: 800px) {
-    .container{
-        background-color: green !important;
-    }
+@media (max-width: 960px) {
+  .middle-duty {
+    flex-wrap: wrap;
+  }
+  .top-duty {
+    flex-direction: row;
+  }
+  .middle-duty .vehicle {
+    width: 350px;
+    height: 150px;
+    flex-wrap: wrap;
+    align-content: stretch;
+    align-items: center;
+  }
+
+  .top-duty .person{
+    font-size: 1.6ch;
+  }
+
+  .person {
+    height: 33%;
+  }
+
+  .vehicle .person {
+    width: 95px;
+  }
+
+  .side .vehicle .person {
+    width: 140px;
+    padding: 0.3rem 0;
+  }
+
+  .team{
+    height: max-content;
+  }
+
+  header>a{
+    width: 30% !important;
+  }
+
+  .navBar{
+    width: 30%;
+    margin-right: 0.6rem;
+  }
 }

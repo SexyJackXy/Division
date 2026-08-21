@@ -1,17 +1,17 @@
 :root {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1.loginText {
   text-align: center;
   font-size: 4ch;
-  color: #FF2A1C;
+  color: #ff2a1c;
   margin-bottom: 0;
 }
 
 h2 {
   margin: 1rem 0;
-  color: #0A0A0A;
+  color: #0a0a0a;
   text-align: center;
 }
 
@@ -19,7 +19,7 @@ h3 {
   display: flex;
   padding-left: 0.6rem;
   padding-top: 0.3rem;
-  color: #0A0A0A;
+  color: #0a0a0a;
   text-align: left;
   font-weight: 300;
   font-size: 1.5ch;
@@ -34,7 +34,7 @@ h3 {
 }
 
 hr {
-  color: #0A0A0A;
+  color: #0a0a0a;
 }
 
 html {
@@ -43,15 +43,15 @@ html {
 
 body {
   margin: 0;
-  background: #F3F4F6;
+  background: #f3f4f6;
   max-height: 1080px;
 }
 
 header {
   display: flex;
   width: 100%;
-  background: #FF2A1C;
-  color: #FFFFFF;
+  background: #ff2a1c;
+  color: #ffffff;
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -65,7 +65,7 @@ header img {
 }
 
 .heading {
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   padding: 1rem;
   flex: 0 1 auto;
@@ -90,7 +90,7 @@ header img {
 .text {
   flex: 0 1 auto;
   text-decoration: none;
-  color: #FFFFFF;
+  color: #ffffff;
   float: right;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
@@ -122,12 +122,12 @@ header img {
 }
 
 .card {
-  background: #D1D5DB;
+  background: #d1d5db;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #0A0A0A;
+  color: #0a0a0a;
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
@@ -136,7 +136,7 @@ header img {
   touch-action: none;
 }
 
-.person[draggable="true"] {
+.person[draggable='true'] {
   touch-action: none;
 }
 
@@ -161,12 +161,11 @@ header img {
   margin-bottom: 1rem;
 }
 
-
 .vehicle {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 10px;
   width: clamp(110px, 8vw, 200px);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
@@ -184,7 +183,7 @@ header img {
 .close {
   right: 0.6rem;
   max-height: 18px;
-  color: #0A0A0A;
+  color: #0a0a0a;
 }
 
 .close:hover {
@@ -200,8 +199,8 @@ header img {
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #0A0A0A;
-  background-color: #D1D5DB;
+  color: #0a0a0a;
+  background-color: #d1d5db;
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
@@ -213,7 +212,7 @@ header img {
 }
 
 .person.drop-hover {
-  outline: 2px dashed #A81309;
+  outline: 2px dashed #a81309;
 }
 
 .vehicle h3 {
@@ -236,7 +235,7 @@ header img {
 .team {
   flex-wrap: wrap;
   padding: 1rem;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   height: min(80px, 90px);
   max-height: fit-content;
   border-radius: 10px;
@@ -258,7 +257,7 @@ header img {
 }
 
 .drop-target {
-  outline: 2px dashed #A81309;
+  outline: 2px dashed #a81309;
   background-color: rgba(255, 0, 0, 0.05);
 }
 
@@ -275,13 +274,12 @@ header img {
   gap: 0.6rem;
 }
 
-input[type="file"]::file-selector-button {
+input[type='file']::file-selector-button {
   display: none;
-
 }
 
-input[type="file"]::file-selector-button:hover {
-  background: #0A0A0A;
+input[type='file']::file-selector-button:hover {
+  background: #0a0a0a;
 }
 
 /*loginPage*/
@@ -296,7 +294,7 @@ input[type="file"]::file-selector-button:hover {
   flex-direction: column;
   justify-content: center;
   width: 350px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
   max-height: 400px;
@@ -342,9 +340,9 @@ input[type="file"]::file-selector-button:hover {
 #registerbtn.btn {
   align-self: center;
   border-radius: 10px;
-  border: 1px solid #FF2A1C;
-  background-color: #FF2A1C;
-  color: #FFFFFF;
+  border: 1px solid #ff2a1c;
+  background-color: #ff2a1c;
+  color: #ffffff;
   font-size: 2ch;
   margin: auto 10px;
 }
@@ -355,9 +353,9 @@ input[type="file"]::file-selector-button:hover {
   background-color: #a81309;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input[type='text'],
+input[type='email'],
+input[type='password'] {
   background-color: #eee;
   border: none;
   padding: 12px 15px;
