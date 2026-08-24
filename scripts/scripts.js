@@ -179,7 +179,7 @@
   }
 
   function renderAssignments (a) {
-    const i = 0
+    let i = 0
     const c = document.getElementById('teamSection')
     if (!c) return
 

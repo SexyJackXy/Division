@@ -349,6 +349,13 @@ input[type='file']::file-selector-button:hover {
 #papyrus {
   display: inline-flex;
   align-items: center;
+  margin-right: 42px;
+    position: absolute; 
+  left: 0; 
+  right: 0; 
+  margin-inline: auto; 
+  width: fit-content;
+  height: 59px;
 }
 
 #loginbtn.btn,
@@ -360,6 +367,11 @@ input[type='file']::file-selector-button:hover {
   color: #ffffff;
   font-size: 2ch;
   margin: auto 10px;
+}
+
+#PapyrusLogo{
+  margin: 0;
+  padding: 0;
 }
 
 #loginbtn.btn:hover,
