@@ -106,6 +106,14 @@
     display: none;
   }
 
+  header{
+    justify-content: flex-end;
+  }
+
+#papyrus{
+  right: 100%;
+}
+
   .buttonspace {
     max-width: 300px;
     flex-wrap: wrap;

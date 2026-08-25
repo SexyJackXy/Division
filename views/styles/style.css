@@ -61,6 +61,7 @@ header {
   align-items: center;
   justify-content: space-between;
   flex: 0 0 auto;
+  height: 59px;
 }
 
 header img {
@@ -125,7 +126,7 @@ header img {
   align-items: stretch;
   margin-top: 0;
   flex-wrap: wrap;
-  max-width: 1800px;
+  max-width: 2000px;
   margin: 1rem auto;
 }
 
