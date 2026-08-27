@@ -41,6 +41,11 @@
     
     console.log(settings);
     
+    if(showWachabteilung === true){
+      const showStation = document.getElementById('showStation');
+      showStation.style.display = 'block';
+    }
+
     if(showArbeitsdienste === true){
       const workServices = document.getElementById('workServices');
       const workServicesTitle = document.getElementById('workServicesTitle')

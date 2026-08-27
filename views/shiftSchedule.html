@@ -15,19 +15,23 @@
 
 <body>
     <header>
-        <a href="https://feuerwehr.heilbronn.de/startseite.html">
-            <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
-        </a>
+        <div id="hnLogo">
+            <a href="https://feuerwehr.heilbronn.de/startseite.html" style="width: 165px;">
+                <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+            </a>
+        </div>
 
-        <div style="display: flex;flex-direction: row;justify-content: center;margin: 0 auto;">
+        <div id="papyrus">
             <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
-                <img src="../img/Logo_2.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
+                <img id="PapyrusLogo" src="../img/Logo_2.png" alt="Papyrus"
+                    style="height: 42px !IMPORTANT;max-height: 42px;">
                 <h1 style="text-decoration: none;color: #FFFFFF;margin: 0;padding: 0;">Papyrus</h1>
             </a>
         </div>
 
+
         <div class="navBar" style="float: right; width: 265px;">
-            <a class="text" style="padding-right: 0.6rem ;" href="login.html" onclick="Dienste.logout(); return false;">
+            <a class="text" style="padding-right: 0.6rem;" href="login.html" onclick="Dienste.logout(); return false;">
                 <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
             </a>
             <a class="text" href="settings.html" style="padding-right: 0.6rem;">
@@ -39,134 +43,146 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" style="width: 100%;">
+        <a class="text" style="padding-right: 0.6rem;" id="addPersonText">
+            <img src="../img/plus.png" alt="hinzufügen" id="addPerson">
+        </a>
 
         <div class="wachabteilungen">
-            <div class="wachabteilung" style="min-width: 30vw;">
+            <div class="wachabteilung" id="WA1">
                 <h2>WA1</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Alexander, Föll</div>
-                    <div class="card" draggable="false">Christian, Wally</div>
-                    <div class="card" draggable="false">Jochen, Frommbach</div>
-                    <div class="card" draggable="false">Johannes, Leimbeck</div>
-                    <div class="card" draggable="false">Marc, Pierro</div>
-                    <div class="card" draggable="false">Marc, Kraft</div>
-                    <div class="card" draggable="false">Mario, Samojauska</div>
-                    <div class="card" draggable="false">Matthias, Ringelstetter</div>
-                    <div class="card" draggable="false">Michael, Lentsch</div>
-                    <div class="card" draggable="false">Michael, Steudle</div>
-                    <div class="card" draggable="false">Niklas, Häfele</div>
-                    <div class="card" draggable="false">Philipp, Bock</div>
-                    <div class="card" draggable="false">Ralf, Ehrlich</div>
-                    <div class="card" draggable="false">Robert, Schieker</div>
-                    <div class="card" draggable="false">Thilo, Scheer</div>
-                    <div class="card" draggable="false">Vincent, Weber</div>
-                    <div class="card" draggable="false">Yannick, Nautscher</div>
+                    <div class="card" draggable="true">Alexander, Föll</div>
+                    <div class="card" draggable="true">Christian Wally</div>
+                    <div class="card" draggable="true">Jochen Frommbach</div>
+                    <div class="card" draggable="true">Johannes Leimbeck</div>
+                    <div class="card" draggable="true">Marc Pierro</div>
+                    <div class="card" draggable="true">Marc Kraft</div>
+                    <div class="card" draggable="true">Mario Samojauska</div>
+                    <div class="card" draggable="true">Matthias Ringelstetter</div>
+                    <div class="card" draggable="true">Michael Lentsch</div>
+                    <div class="card" draggable="true">Michael Steudle</div>
+                    <div class="card" draggable="true">Niklas Häfele</div>
+                    <div class="card" draggable="true">Philipp Bock</div>
+                    <div class="card" draggable="true">Ralf Ehrlich</div>
+                    <div class="card" draggable="true">Robert Schieker</div>
+                    <div class="card" draggable="true">Thilo Scheer</div>
+                    <div class="card" draggable="true">Vincent Weber</div>
+                    <div class="card" draggable="true">Yannick Nautscher</div>
                 </div>
             </div>
 
 
-            <div class="wachabteilung" style="min-width: 30vw;">
+            <div class="wachabteilung" id="WA2">
                 <h2>WA2</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Achim, Demele</div>
-                    <div class="card" draggable="false">Alexander, Kaiser</div>
-                    <div class="card" draggable="false">Andreas, Wahl</div>
-                    <div class="card" draggable="false">Dimitri, Rifert</div>
-                    <div class="card" draggable="false">Elias, Dunz</div>
-                    <div class="card" draggable="false">Jürgen, Seizinger</div>
-                    <div class="card" draggable="false">Marc, Fortwingel</div>
-                    <div class="card" draggable="false">Marius, Ahrend</div>
-                    <div class="card" draggable="false">Marlon, Fried</div>
-                    <div class="card" draggable="false">Marvin, Weik</div>
-                    <div class="card" draggable="false">Niklas, Sprang</div>
-                    <div class="card" draggable="false">Nils, Dalbeck</div>
-                    <div class="card" draggable="false">Oliver, Wörz</div>
-                    <div class="card" draggable="false">Philipp, Siegele</div>
-                    <div class="card" draggable="false">Rainer, Steinnagel</div>
-                    <div class="card" draggable="false">Simon, Butzelaar</div>
-                    <div class="card" draggable="false">Vincenz, Lang</div>
+                    <div class="card" draggable="true">Achim Demele</div>
+                    <div class="card" draggable="true">Alexander Kaiser</div>
+                    <div class="card" draggable="true">Andreas Wahl</div>
+                    <div class="card" draggable="true">Dimitri Rifert</div>
+                    <div class="card" draggable="true">Elias Dunz</div>
+                    <div class="card" draggable="true">Jürgen Seizinger</div>
+                    <div class="card" draggable="true">Marc Fortwingel</div>
+                    <div class="card" draggable="true">Marius Ahrend</div>
+                    <div class="card" draggable="true">Marlon Fried</div>
+                    <div class="card" draggable="true">Marvin Weik</div>
+                    <div class="card" draggable="true">Niklas Sprang</div>
+                    <div class="card" draggable="true">Nils Dalbeck</div>
+                    <div class="card" draggable="true">Oliver Wörz</div>
+                    <div class="card" draggable="true">Philipp Siegele</div>
+                    <div class="card" draggable="true">Rainer Steinnagel</div>
+                    <div class="card" draggable="true">Simon Kull</div>
+                    <div class="card" draggable="true">Vincenz Lang</div>
                 </div>
             </div>
 
-            <div class="wachabteilung" style="min-width: 30vw;">
+            <div class="wachabteilung" id="WA3">
                 <h2>WA3</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Andre, Berg</div>
-                    <div class="card" draggable="false">Bastian, Aras</div>
-                    <div class="card" draggable="false">Christof, Weiss</div>
-                    <div class="card" draggable="false">Fabian, Riehl</div>
-                    <div class="card" draggable="false">Jan, Harst</div>
-                    <div class="card" draggable="false">Lars, Butzkow</div>
-                    <div class="card" draggable="false">Lucas, Pils</div>
-                    <div class="card" draggable="false">Manuel, Mattes</div>
-                    <div class="card" draggable="false">Markus, Hintz</div>
-                    <div class="card" draggable="false">Matthias, Künzel</div>
-                    <div class="card" draggable="false">Michael, Gabeli</div>
-                    <div class="card" draggable="false">Philip, Noller</div>
-                    <div class="card" draggable="false">Sascha, Bläse</div>
-                    <div class="card" draggable="false">Stefan, Samojauska</div>
-                    <div class="card" draggable="false">Thomas, Fromm</div>
-                    <div class="card" draggable="false">Tim, Ockert</div>
-                    <div class="card" draggable="false">Timo, Rössel</div>
+                    <div class="card" draggable="true">Andre Berg</div>
+                    <div class="card" draggable="true">Bastian Aras</div>
+                    <div class="card" draggable="true">Christof Weiss</div>
+                    <div class="card" draggable="true">Fabian Riehl</div>
+                    <div class="card" draggable="true">Jan Harst</div>
+                    <div class="card" draggable="true">Lars Butzkow</div>
+                    <div class="card" draggable="true">Lucas Pils</div>
+                    <div class="card" draggable="true">Manuel Mattes</div>
+                    <div class="card" draggable="true">Markus Hintz</div>
+                    <div class="card" draggable="true">Matthias Künzel</div>
+                    <div class="card" draggable="true">Michael Gabeli</div>
+                    <div class="card" draggable="true">Philip Noller</div>
+                    <div class="card" draggable="true">Sascha Bläse</div>
+                    <div class="card" draggable="true">Stefan Samojauska</div>
+                    <div class="card" draggable="true">Thomas Fromm</div>
+                    <div class="card" draggable="true">Tim Ockert</div>
+                    <div class="card" draggable="true">Timo Rössel</div>
                 </div>
             </div>
 
-            <div class="wachabteilung">
+            <div class="wachabteilung" id="TED">
                 <h2>TED</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Christian, Kumpf</div>
-                    <div class="card" draggable="false">Christian, Stolz</div>
-                    <div class="card" draggable="false">Daniel, Friedle</div>
-                    <div class="card" draggable="false">Eckhard, Aÿ</div>
-                    <div class="card" draggable="false">Frank, Hägele</div>
-                    <div class="card" draggable="false">Julian, Kober</div>
-                    <div class="card" draggable="false">Marcel, Frank</div>
-                    <div class="card" draggable="false">Steffen, Haas</div>
-                    <div class="card" draggable="false">Steffen, Braun</div>
-                    <div class="card" draggable="false">Sven, Flinspach</div>
-                    <div class="card" draggable="false">Thilo, Schuchmann</div>
-                    <div class="card" draggable="false">Timo, Schoch</div>
+                    <div class="card" draggable="true">Christian Kumpf</div>
+                    <div class="card" draggable="true">Christian Stolz</div>
+                    <div class="card" draggable="true">Daniel Friedle</div>
+                    <div class="card" draggable="true">Eckhard Aÿ</div>
+                    <div class="card" draggable="true">Frank Hägele</div>
+                    <div class="card" draggable="true">Julian Kober</div>
+                    <div class="card" draggable="true">Marcel Frank</div>
+                    <div class="card" draggable="true">Steffen Haas</div>
+                    <div class="card" draggable="true">Steffen Braun</div>
+                    <div class="card" draggable="true">Sven Flinspach</div>
+                    <div class="card" draggable="true">Thilo Schuchmann</div>
+                    <div class="card" draggable="true">Timo Schoch</div>
                 </div>
             </div>
 
-            <div class="wachabteilung">
+            <div class="wachabteilung" id="LD">
                 <h2>LD</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Alexander, Reber</div>
-                    <div class="card" draggable="false">Andy, Pfitzenmaier</div>
-                    <div class="card" draggable="false">Benjamin, Zürn</div>
-                    <div class="card" draggable="false">Benjamin, Krahmer</div>
-                    <div class="card" draggable="false">Carsten, Heidegger</div>
-                    <div class="card" draggable="false">Jürgen, Lobmüller</div>
-                    <div class="card" draggable="false">Jürgen, Vogt</div>
-                    <div class="card" draggable="false">Kai, Rudolph</div>
-                    <div class="card" draggable="false">Lars, Heidchen</div>
-                    <div class="card" draggable="false">Marco, Jäger</div>
-                    <div class="card" draggable="false">Markus, Widmann</div>
-                    <div class="card" draggable="false">Matthias, Raum</div>
-                    <div class="card" draggable="false">Matthias, Krüger</div>
-                    <div class="card" draggable="false">Ralph, Nester</div>
-                    <div class="card" draggable="false">Thomas, Knurr</div>
-                    <div class="card" draggable="false">Tim, Rocksien</div>
-                    <div class="card" draggable="false">Uwe, Hirschmüller</div>
-                    <div class="card" draggable="false">Yannick, Pilz</div>
+                    <div class="card" draggable="true">Alexander Reber</div>
+                    <div class="card" draggable="true">Andy Pfitzenmaier</div>
+                    <div class="card" draggable="true">Benjamin Zürn</div>
+                    <div class="card" draggable="true">Benjamin Krahmer</div>
+                    <div class="card" draggable="true">Carsten Heidegger</div>
+                    <div class="card" draggable="true">Jürgen Lobmüller</div>
+                    <div class="card" draggable="true">Jürgen Vogt</div>
+                    <div class="card" draggable="true">Kai Rudolph</div>
+                    <div class="card" draggable="true">Lars Heidchen</div>
+                    <div class="card" draggable="true">Marco Jäger</div>
+                    <div class="card" draggable="true">Markus Widmann</div>
+                    <div class="card" draggable="true">Matthias Raum</div>
+                    <div class="card" draggable="true">Matthias Krüger</div>
+                    <div class="card" draggable="true">Ralph Nester</div>
+                    <div class="card" draggable="true">Thomas Knurr</div>
+                    <div class="card" draggable="true">Tim Rocksien</div>
+                    <div class="card" draggable="true">Uwe Hirschmüller</div>
+                    <div class="card" draggable="true">Yannick Pilz</div>
                 </div>
             </div>
 
-            <div class="wachabteilung">
+            <div class="wachabteilung" id="DD">
+                <h2>DD</h2>
+                <div class="abteilungspersonal">
+                    <div class="card" draggable="true">Fabian Müller</div>
+                    <div class="card" draggable="true">Frank Zimmermann</div>
+                    <div class="card" draggable="true">Tobias Jochim</div>
+                </div>
+            </div>
+
+            <div class="wachabteilung" id="GAL">
                 <h2>GAL</h2>
                 <div class="abteilungspersonal">
-                    <div class="card" draggable="false">Daniel, Döbler</div>
-                    <div class="card" draggable="false">Jona, Wann</div>
-                    <div class="card" draggable="false">Marc, Schramm</div>
-                    <div class="card" draggable="false">Marco, Waldheim</div>
-                    <div class="card" draggable="false">Michael, Gebhardt</div>
-                    <div class="card" draggable="false">Michael, Streeb</div>
-                    <div class="card" draggable="false">Philipp, Bauer</div>
-                    <div class="card" draggable="false">Tim, Rehn</div>
-                    <div class="card" draggable="false">Chantal, Meidel</div>
-                    <div class="card" draggable="false">Nicolas, Hack</div>
+                    <div class="card" draggable="true">Daniel Döbler</div>
+                    <div class="card" draggable="true">Jona Wann</div>
+                    <div class="card" draggable="true">Marc Schramm</div>
+                    <div class="card" draggable="true">Marco Waldheim</div>
+                    <div class="card" draggable="true">Michael Gebhardt</div>
+                    <div class="card" draggable="true">Michael Streeb</div>
+                    <div class="card" draggable="true">Philipp Bauer</div>
+                    <div class="card" draggable="true">Tim Rehn</div>
+                    <div class="card" draggable="true">Chantal Meidel</div>
+                    <div class="card" draggable="true">Nicolas Hack</div>
                 </div>
             </div>
         </div>
