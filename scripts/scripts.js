@@ -220,6 +220,8 @@
     const usedPool = document.getElementById('teamUsed')
     const innerUsedPool = usedPool.querySelector('#innerTeam')
 
+    const trash  = document.getAnimations('trash')
+
     function clearHighlights () {
       document
         .querySelectorAll('.drop-target')
@@ -231,12 +233,11 @@
     function performDrop (draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
-      console.log(draggedEl.classList);
-
       const personTarget = dropElement.closest('.person')
       const departmentTarget = dropElement.closest('.abteilungspersonal')
       const freePoolTarget = dropElement.closest('#teamFree')
       const usedPoolTarget = dropElement.closest('#teamUsed')
+      const trashTarget = dropElement.closest('#trash')
       const draggedRole = draggedEl.dataset.role
 
       // CARD -> PERSON
@@ -315,7 +316,7 @@
         innerFreePool.appendChild(draggedEl)
       }
 
-            else if (draggedEl.classList.contains('card') && usedPoolTarget) {
+     else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
       }
       //FREEPOOL <-> USED POOL
@@ -334,6 +335,11 @@
           draggedEl.textContent = draggedRole
           updatePersonColor(draggedEl)
         }
+      }
+
+      else if(draggedEl.classList.contains('card')&&trashTarget){
+        console.log("schmeiß weg",draggedEl)
+        draggedEl.remove()
       }
 
       scheduleSave()
@@ -365,8 +371,10 @@
     })
 
     document.addEventListener('dragover', e => {
+
+  
       const target = e.target.closest(
-        '.person, .abteilungspersonal, #innerTeam'
+        '.person, .abteilungspersonal, #innerTeam,#trashCan'
       )
 
       if (!target) return
