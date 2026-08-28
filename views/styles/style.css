@@ -47,15 +47,15 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #F3F4F6;
+  background: #f3f4f6;
   margin: 0;
 }
 
 header {
   display: flex;
   width: 100%;
-  background: #FF2A1C;
-  color: #FFFFFF;
+  background: #ff2a1c;
+  color: #ffffff;
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -119,14 +119,17 @@ header img {
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* IndexPage */
-#addPerson,
 #showStation{
+  display: none;
+}
+
+#addPerson,
+#showStationPic {
   height: 32px;
   position: absolute;
   right: 0;
   padding: 0.6rem;
 }
-
 
 .top-duty {
   display: flex;
@@ -252,19 +255,32 @@ header img {
 }
 
 .team {
+  padding: 0.6rem;
+  max-width: min(45vw, 2560px);
+  margin: 0 0.3rem;
+}
+
+#innerTeam {
+  display: flex;
   flex-wrap: wrap;
-  padding: 1rem;
-  background-color: #ffffff;
-  height: min(80px, 90px);
-  max-height: fit-content;
-  border-radius: 10px;
-  display: none;
-  flex-direction: row;
   justify-content: center;
   gap: 0.6rem;
-  align-items: stretch;
-  max-width: min(90vw, 2560px);
-  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 0.6rem 0;
+  border-radius: 10px;
+}
+
+#teamFree{
+display: none;
+}
+
+#teamUsed{
+display: none;
+}
+
+#teamUsed #innerTeam .card{
+  background-color: #ff2a1c;
+  color: #ffffff;
 }
 
 #workServices {
@@ -285,86 +301,24 @@ header img {
   background-color: rgba(255, 0, 0, 0.05);
 }
 
-.nichtImEinsatz{
+.nichtImEinsatz {
   display: flex;
 }
-/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-/* SettingsPage */
-.buttonspace {
-  display: flex;
+
+#cafeteria {
   flex-direction: row;
-  justify-content: center;
-  gap: 0.6rem;
-}
-
-input[type='file']::file-selector-button {
-  display: none;
-}
-
-input[type='file']::file-selector-button:hover {
-  background: #0a0a0a;
-}
-/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-/*loginPage*/
-.loginContainer {
-  display: flex;
-  align-items: stretch;
   width: fit-content;
 }
 
-.login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 350px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
-  max-height: 400px;
-  position: relative;
-  z-index: 2;
+[data-role='Kantine1'],
+[data-role='Kantine2'],
+#Kantine2 {
+  height: 32px;
+  width: 166px;
 }
-
-.loginPicture {
-  width: 360px;
-  margin-left: -10px;
-  z-index: 1;
-}
-
-.loginPicture img {
-  width: 350px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
-}
-
-.inputFields {
-  display: flex;
-  align-self: center;
-  overflow: hidden;
-  max-width: 99%;
-  margin: 12px;
-  flex-direction: column;
-}
-
-.login p {
-  padding: 6px;
-  font-weight: 400;
-  font-size: 2ch;
-  margin: 0;
-}
-
-.btnLogin {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 22px;
-}
-
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 #papyrus {
   display: inline-flex;
   align-items: center;
@@ -376,18 +330,7 @@ input[type='file']::file-selector-button:hover {
   height: 59px;
 }
 
-#loginbtn.btn,
-#registerbtn.btn {
-  align-self: center;
-  border-radius: 10px;
-  border: 1px solid #ff2a1c;
-  background-color: #ff2a1c;
-  color: #ffffff;
-  font-size: 2ch;
-  margin: auto 10px;
-}
-
-#PapyrusLogo{
+#PapyrusLogo {
   margin: 0;
   padding: 0;
 }
@@ -396,6 +339,14 @@ input[type='file']::file-selector-button:hover {
 #registerbtn.btn:hover {
   border: 1px solid #a81309;
   background-color: #a81309;
+}
+
+#trashCan{
+  height: 32px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.6rem;
 }
 
 input[type='text'],

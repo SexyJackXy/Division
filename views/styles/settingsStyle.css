@@ -210,3 +210,18 @@ input:checked + .slider:before {
 #addPersonText {
   height: 100%;
 }
+
+.buttonspace {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+input[type='file']::file-selector-button {
+  display: none;
+}
+
+input[type='file']::file-selector-button:hover {
+  background: #0a0a0a;
+}

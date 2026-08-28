@@ -76,8 +76,8 @@
 
       const parsed = parseContent(t)
 
-      console.log('FINAL DATA:')
-      console.log(parsed)
+      // console.log('FINAL DATA:')
+      // console.log(parsed)
 
       localStorage.setItem(cookies, JSON.stringify(parsed))
     })
@@ -136,8 +136,6 @@
     return 'Einteilung Zurückgesetzt'
   }
 
-  // Liest den aktuellen Stand direkt aus dem DOM aus (nach Drag&Drop-Änderungen)
-  // im selben Format, in dem die Einteilung importiert/gerendert wird.
   function serializeAssignments () {
     const result = []
 
@@ -148,7 +146,7 @@
       result.push({ role, name })
     })
 
-    document.querySelectorAll('#teamSection .card').forEach(el => {
+    document.querySelectorAll('#teamFree .card').forEach(el => {
       const name = el.textContent.trim()
       if (name) result.push({ role: 'Frei', name })
     })
@@ -180,8 +178,9 @@
 
   function renderAssignments (a) {
     let i = 0
-    const c = document.getElementById('teamSection')
-    if (!c) return
+    const poolParent = document.getElementById('teamFree')
+    const freeTeam = poolParent.querySelector('#innerTeam')
+    if (!freeTeam) return
 
     a.forEach(({ role, name }) => {
       if (!name) return
@@ -193,7 +192,7 @@
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
         d.innerHTML = name
-        c.appendChild(d)
+        freeTeam.appendChild(d)
         return
       }
 
@@ -207,15 +206,19 @@
     console.log(i)
 
     if (i > 0) {
-    const t = document.getElementById('teamSection')
-    t.style.display = 'flex'
+    const t = document.getElementById('teamFree')
+    t.style.display = 'block'
 }
   }
 
   function initDragAndDrop () {
     let dragged = null
 
-    const pool = document.getElementById('teamSection')
+    const freePool = document.getElementById('teamFree')
+    const innerFreePool = freePool.querySelector('#innerTeam')
+
+    const usedPool = document.getElementById('teamUsed')
+    const innerUsedPool = usedPool.querySelector('#innerTeam')
 
     function clearHighlights () {
       document
@@ -228,9 +231,12 @@
     function performDrop (draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
+      console.log(draggedEl.classList);
+
       const personTarget = dropElement.closest('.person')
       const departmentTarget = dropElement.closest('.abteilungspersonal')
-      const poolTarget = dropElement.closest('#teamSection')
+      const freePoolTarget = dropElement.closest('#teamFree')
+      const usedPoolTarget = dropElement.closest('#teamUsed')
       const draggedRole = draggedEl.dataset.role
 
       // CARD -> PERSON
@@ -268,8 +274,8 @@
         departmentTarget.appendChild(draggedEl)
       }
 
-      // PERSON -> POOL
-      else if (draggedEl.classList.contains('person') && poolTarget) {
+      // PERSON -> FREE POOL
+      else if (draggedEl.classList.contains('person') && freePoolTarget) {
         const name = draggedEl.textContent.trim()
 
         if (!reservedNames.includes(name)) {
@@ -279,16 +285,55 @@
           newCard.draggable = true
           newCard.textContent = name
 
-          pool.appendChild(newCard)
+          innerFreePool.appendChild(newCard)
 
           draggedEl.textContent = draggedRole
           updatePersonColor(draggedEl)
         }
       }
 
-      // CARD -> POOL
-      else if (draggedEl.classList.contains('card') && poolTarget) {
-        pool.appendChild(draggedEl)
+      // PERSON -> USED POOL
+      else if (draggedEl.classList.contains('person') && usedPoolTarget) {
+        const name = draggedEl.textContent.trim()
+
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
+
+          innerUsedPool.appendChild(newCard)
+
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
+        }
+      }
+
+      // CARD -> FREEPOOL
+      else if (draggedEl.classList.contains('card') && freePoolTarget) {
+        innerFreePool.appendChild(draggedEl)
+      }
+
+            else if (draggedEl.classList.contains('card') && usedPoolTarget) {
+        innerUsedPool.appendChild(draggedEl)
+      }
+      //FREEPOOL <-> USED POOL
+      else if (draggedEl.classList.contains('person') && usedPoolTarget) {
+        const name = draggedEl.textContent.trim()
+
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
+
+          innerUsedPool.appendChild(newCard)
+
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
+        }
       }
 
       scheduleSave()
@@ -321,7 +366,7 @@
 
     document.addEventListener('dragover', e => {
       const target = e.target.closest(
-        '.person, .abteilungspersonal, #teamSection'
+        '.person, .abteilungspersonal, #innerTeam'
       )
 
       if (!target) return
@@ -422,7 +467,7 @@
 
         clearHighlights()
         const under = elementUnderGhost(touch.clientX, touch.clientY)
-        const target = under && under.closest('.person, .abteilungspersonal, #teamSection')
+        const target = under && under.closest('.person, .abteilungspersonal, #innerTeam')
         if (target) target.classList.add('drop-target')
       },
       { passive: false }
@@ -474,7 +519,8 @@
 
   function initDeleteButtons () {
     const deleteBtns = document.querySelectorAll('.close')
-    const pool = document.getElementById('teamSection')
+    const poolParent = document.getElementById('teamFree')
+    const pool = poolParent.querySelector('#innerTeam')
 
     deleteBtns.forEach(btn => {
       btn.addEventListener('click', event => {

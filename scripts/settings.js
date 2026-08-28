@@ -1,93 +1,102 @@
-(function () {
-  function getCheckboxes() {
+;(function () {
+  function getCheckboxes () {
     return {
       showWachabteilung: document.getElementById('showWachabteilung'),
       autoLoadTagdienst: document.getElementById('autoLoadTagdienst'),
       showArbeitsdienste: document.getElementById('showArbeitsdienste'),
-    };
+      showDuty: document.getElementById('showDuty')
+    }
   }
 
-  async function loadSettings() {
-    const settings = await fetch ('/api/settings').then(r => r.json());
-    const settingCheckboxes = getCheckboxes();
+  async function loadSettings () {
+    const settings = await fetch('/api/settings').then(r => r.json())
+    const settingCheckboxes = getCheckboxes()
 
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
-      if (el) el.checked = !!settings[key];
-    });
+      if (el) el.checked = !!settings[key]
+    })
 
-    return settings;
+    return settings
   }
 
-  async function saveSettings() {
-    const settingCheckboxes = getCheckboxes();
-    const settings = {};
+  async function saveSettings () {
+    const settingCheckboxes = getCheckboxes()
+    const settings = {}
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
-      settings[key] = el ? el.checked : false;
-    });
+      settings[key] = el ? el.checked : false
+    })
 
-    const result = await fetch ('/api/settings',{
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json'},
-	body: JSON.stringify(settings)
-	}).then(r => r.json());
-    return result;
+    const result = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settings)
+    }).then(r => r.json())
+    return result
   }
 
-  async function initSettingsAdjustment() {
-    const settings = await fetch('/api/settings').then(r => r.json());
-    const showWachabteilung = settings.showWachabteilung;
-    const autoLoadTagdienst = settings.autoLoadTagdienst;
-    const showArbeitsdienste = settings.showArbeitsdienste;
-    
-    console.log(settings);
-    
-    if(showWachabteilung === true){
-      const showStation = document.getElementById('showStation');
-      showStation.style.display = 'block';
+  async function initSettingsAdjustment () {
+    const settings = await fetch('/api/settings').then(r => r.json())
+    const showWachabteilung = settings.showWachabteilung
+    const autoLoadTagdienst = settings.autoLoadTagdienst
+    const showArbeitsdienste = settings.showArbeitsdienste
+    const dutyTakeout = settings.showDuty
+
+    console.log(settings)
+    if (dutyTakeout === true) {
+      const showInnerTeamUsed = document.getElementById('teamUsed')
+      showInnerTeamUsed.style.display = 'block'
+    } 
+    else {
+      const showteamFree = document.getElementById('teamFree')
+      showteamFree.style.maxWidth = 'min(90vw, 2560px)'
+    }
+    if (showWachabteilung === true) {
+      const showStation = document.getElementById('showStation')
+      showStation.style.display = 'block'
     }
 
-    if(showArbeitsdienste === true){
-      const workServices = document.getElementById('workServices');
+    if (showArbeitsdienste === true) {
+      const workServices = document.getElementById('workServices')
       const workServicesTitle = document.getElementById('workServicesTitle')
-      workServices.style.display = 'flex';
-      workServicesTitle.style.display = 'block';
+      workServices.style.display = 'flex'
+      workServicesTitle.style.display = 'block'
     }
 
-    return settings;
+    return settings
   }
 
-  function initSettingsPage() {
-    loadSettings();
+  function initSettingsPage () {
+    loadSettings()
 
-    const saveBtn = document.getElementById('Save');
+    const saveBtn = document.getElementById('Save')
     if (saveBtn) {
       saveBtn.addEventListener('click', async () => {
-        const p = saveBtn.querySelector("p");
-        const originalText = p ? p.textContent : null;
+        const p = saveBtn.querySelector('p')
+        const originalText = p ? p.textContent : null
 
-        await saveSettings();
+        await saveSettings()
 
         if (p) {
-          p.textContent = "Gespeichert!";
+          p.textContent = 'Gespeichert!'
           setTimeout(() => {
-            p.textContent = originalText;
-          }, 2000);
+            p.textContent = originalText
+          }, 2000)
         }
-      });
+      })
     }
   }
 
   // Nur auf der settings.html ausführen (Button existiert nur dort)
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('Save')) {
-      initSettingsPage();
+      initSettingsPage()
     }
-  });
+  })
 
   // Sofort verfügbar machen, unabhängig von DOMContentLoaded-Reihenfolge
   window.DiensteSettings = {
     loadSettings,
     saveSettings,
-    initSettingsAdjustment,
-  };
-})();
+    initSettingsAdjustment
+  }
+})()

@@ -1,0 +1,66 @@
+/*loginPage*/
+.loginContainer {
+  display: flex;
+  align-items: stretch;
+  width: fit-content;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 350px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  max-height: 400px;
+  position: relative;
+  z-index: 2;
+}
+
+.loginPicture {
+  width: 360px;
+  margin-left: -10px;
+  z-index: 1;
+}
+
+.loginPicture img {
+  width: 350px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+}
+
+.inputFields {
+  display: flex;
+  align-self: center;
+  overflow: hidden;
+  max-width: 99%;
+  margin: 12px;
+  flex-direction: column;
+}
+
+.login p {
+  padding: 6px;
+  font-weight: 400;
+  font-size: 2ch;
+  margin: 0;
+}
+
+.btnLogin {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+#loginbtn.btn,
+#registerbtn.btn {
+  align-self: center;
+  border-radius: 10px;
+  border: 1px solid #ff2a1c;
+  background-color: #ff2a1c;
+  color: #ffffff;
+  font-size: 2ch;
+  margin: auto 10px;
+}
