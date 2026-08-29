@@ -207,7 +207,7 @@
 
     if (i > 0) {
       const t = document.querySelector('.freeTeamSpace')
-      t.style.display = 'block'
+      t.style.display = 'flex'
     }
   }
 
@@ -215,7 +215,6 @@
     let dragged = null
     var path = window.location.pathname;
     var pageName = path.split("/").pop();
-    console.log(pageName);
     let freePool = null;
     let innerFreePool = null;
     let usedPool = null;
@@ -349,7 +348,7 @@
         draggedEl.remove()
       }
 
-      else if (draggedEl.classList.contains('card') && addPerson) {
+      else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html') {
         draggedEl.style.opacity = '0.6'
         draggedEl.classList.add('moved')
 
@@ -579,12 +578,23 @@
     }
   }
 
-  function exportNotWorkingPeope(movedEl){
+  async function exportNotWorkingPeope(movedEl) {
     const parent = movedEl.parentElement;
-    const department = parent.parentElement.id;
-    const name = movedEl.textContent.trim()
-    console.log(name, "wird Exportiert, Id ist:" ,department)
+    const departmentShort = parent.parentElement.id;
+    const person = movedEl.textContent.trim();
 
+    const data = { name: person, department: departmentShort };
+
+    try {
+      const res = await fetch('/api/export-not-working-person', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+    } catch (e) {
+      console.error('Export fehlgeschlagen:', e);
+    }
   }
 
   window.Dienste = {
@@ -599,3 +609,4 @@
     logout
   }
 })()
+

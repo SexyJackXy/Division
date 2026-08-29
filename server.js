@@ -257,5 +257,35 @@ app.get("/api/settings", (req, res) => {
   res.json(JSON.parse(fs.readFileSync(SETTINGS_PATH, "utf-8")));
 });
 
+app.post('/api/export-not-working-person', (req, res) => {
+  const data = req.body;
+
+  const outputDir = path.join(__dirname, 'exportedPersons');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+
+  const filePath = path.join(outputDir, `exportedPersons.json`);
+  if (fs.existsSync(filePath)) {
+    fs.readFile(filePath, 'utf-8', function (err, fileData) {
+      if (err) {
+        console.error('Konnte Datei nicht lesen:', err);
+        return;
+      }
+
+      const json = JSON.parse(fileData);
+      json.push(data);
+
+      fs.writeFile(filePath, JSON.stringify(json, null, 2), 'utf-8', (err) => {
+        if (err) console.error('Konnte Datei nicht schreiben:', err);
+      });
+    });
+  } else {
+    fs.writeFileSync(filePath, JSON.stringify([data], null, 2), 'utf-8');
+  }
+
+  res.json({ success: true, filePath });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "127.0.0.1", () => console.log(`Server läuft auf Port ${PORT}`));

@@ -34,7 +34,7 @@ h3 {
 }
 
 hr {
-  color: #0a0a0a;
+  color: #0a0a0a; /*Darkmode => */
 }
 
 html {
@@ -47,7 +47,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f3f4f6;
+  background: #f3f4f6; /*Darkmode => #1e2022*/
   margin: 0;
 }
 
@@ -55,7 +55,7 @@ header {
   display: flex;
   width: 100%;
   background: #ff2a1c;
-  color: #ffffff;
+  color: #ffffff; /*Darkmode => #181a1b)*/
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -117,7 +117,7 @@ header img {
 }
 
 .card {
-  background: #d1d5db;
+  background: #d1d5db; /* Darkmode => #2f3335*/
   display: flex;
   justify-content: center;
   align-items: center;
