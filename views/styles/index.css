@@ -172,6 +172,44 @@
   padding: 0.6rem;
 }
 
+.alternativPlan {
+  position: absolute;
+  background-color: #d1d5db;
+  border-top: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  border-left: solid 3px #ffffff;
+  height: 100px;
+  width: 15px;
+  right: 0;
+  top: 50%;
+  border-radius: 10px 0px 0px 10px;
+  transition: width 0.3s ease;
+  /* z-index: -2; */
+}
+
+.alternativPlan:hover {
+  width: 30px;
+}
+.altPic{
+    height: 100px;
+    width: 15px;
+}
+
+.altPic img {
+  position: absolute;
+  max-height: 50px;
+  max-width: 20px;
+  right: -12px;
+  top: 53.5%;
+  z-index: 2;
+  transition: right 0.3s ease;
+}
+
+.alternativPlan:hover+.altPic img{
+  right: 4px;
+  display: block;
+}
+
 @media (max-width: 1100px) {
   .heading {
     font-size: 3ch;
