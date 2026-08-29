@@ -1,0 +1,247 @@
+#showStation{
+  display: none;
+}
+
+#addPerson,
+#showStationPic {
+  height: 32px;
+  position: absolute;
+  right: 0;
+  padding: 0.6rem;
+}
+
+.top-duty {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-top: 0;
+  flex-wrap: wrap;
+  max-width: 2000px;
+  margin: 1rem auto;
+}
+
+.card {
+  background: #d1d5db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0a0a0a;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 20px;
+  width: clamp(110px, 10vw, 200px);
+  touch-action: none;
+}
+
+.person[draggable='true'] {
+  touch-action: none;
+}
+
+.card:hover {
+  cursor: grab;
+}
+
+.card:active {
+  background: #ddd;
+}
+
+.card.dragging {
+  opacity: 0.5;
+}
+
+.middle-duty {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+.vehicle {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: clamp(110px, 8vw, 200px);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+  padding-top: 2rem;
+  min-width: 180px;
+  font-size: 1.6ch;
+}
+
+.vehicle h3 {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.6rem;
+}
+
+.close {
+  right: 0.6rem;
+  max-height: 18px;
+  color: #0a0a0a;
+}
+
+.close:hover {
+  cursor: pointer;
+}
+
+.vehicle .person:last-child {
+  margin-bottom: 0.4rem;
+}
+
+.person {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0a0a0a;
+  background-color: #d1d5db;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 80px;
+}
+
+.person:hover {
+  cursor: grab;
+}
+
+.person.drop-hover {
+  outline: 2px dashed #a81309;
+}
+
+.vehicle h3 {
+  margin: 0 !important;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.side .vehicle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.team {
+  padding: 0.6rem;
+  max-width: min(45vw, 2560px);
+  margin: 0 0.3rem;
+}
+
+#innerTeam {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  background-color: #ffffff;
+  padding: 0.6rem 0;
+  border-radius: 10px;
+}
+
+#teamFree{
+display: none;
+}
+
+#teamUsed{
+display: none;
+}
+
+#teamUsed #innerTeam .card{
+  background-color: #ff2a1c;
+  color: #ffffff;
+}
+
+#workServices {
+  display: none;
+}
+
+#workServicesTitle {
+  display: none;
+}
+
+.drop-target {
+  outline: 2px dashed #a81309;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.team.drop-target {
+  outline: 2px dashed blue;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.freeTeamSpace {
+  display: flex;
+}
+
+#cafeteria {
+  flex-direction: row;
+  width: fit-content;
+}
+
+[data-role='Kantine1'],
+[data-role='Kantine2'],
+#Kantine2 {
+  height: 32px;
+  width: 166px;
+}
+
+#papyrus {
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 42px;
+  margin-inline: auto;
+  width: fit-content;
+  height: 59px;
+}
+
+#PapyrusLogo {
+  margin: 0;
+  padding: 0;
+}
+
+#loginbtn.btn:hover,
+#registerbtn.btn:hover {
+  border: 1px solid #a81309;
+  background-color: #a81309;
+}
+
+#trashCan{
+  height: 32px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.6rem;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  background-color: #d1d5db;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 70vw;
+}
+
+@media (max-width: 1100px) {
+  .heading {
+    font-size: 3ch;
+  }
+
+  .vehicle {
+    min-width: 60px;
+  }
+}
