@@ -9,7 +9,7 @@ const { extractShiftFromPdf } = require("./scripts/pdfExtractor");
 const { getUserByUsername, getNamesForUser } = require("./db");
 
 const app = express();
-const SETTINGS_PATH = path.join(__dirname, "settings.json");
+const SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
 
 // Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 const PUBLIC_PATHS = new Set([

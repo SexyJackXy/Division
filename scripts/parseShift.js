@@ -6,7 +6,7 @@ const path = require('path')
 
 // Template laden
 const template = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'template.json'), 'utf-8')
+fs.readFileSync(path.join(__dirname, '..', 'globalVariables', 'template.json'), 'utf-8')
 )
 
 const nameBeforeRole = new Set([

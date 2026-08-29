@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { runBuild } = require("./scripts/build");
-const SETTINGS_PATH = path.join(__dirname, "settings.json");
+const SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
 
 function createWindow() {
   const win = new BrowserWindow({
