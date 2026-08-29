@@ -55,7 +55,8 @@ app.use((req, res, next) => {
     isPublicRequest(req) ||
     req.path.startsWith("/api/login") ||
     (req.method === "GET" && req.path === "/api/latest-schedule") ||
-    (req.method === "POST" && req.path === "/api/save-schedule")
+    (req.method === "POST" && req.path === "/api/save-schedule") ||
+    (req.method === "GET" && req.path === "/api/settings")
   ) {
     return next();
   }
@@ -246,6 +247,7 @@ app.get("/api/latest-schedule", (req, res) => {
 });
 
 app.post("/api/settings", (req, res) => {
+  console.log()
   fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), "utf-8");
   res.json({ success: true });
 });

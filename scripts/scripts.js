@@ -1,4 +1,4 @@
-;(function () {
+; (function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
     'ALvD',
@@ -46,13 +46,13 @@
     'Abrufschicht',
   ]
 
-  function captureDefaults () {
+  function captureDefaults() {
     document.querySelectorAll('.person').forEach(el => {
       el.dataset.default = el.textContent.trim()
     })
   }
 
-  function readFromFile (file) {
+  function readFromFile(file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -85,7 +85,7 @@
     return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent (t) {
+  function parseContent(t) {
     if (!t) return []
     try {
       const data = JSON.parse(t)
@@ -100,12 +100,12 @@
     }
   }
 
-  function getContent () {
+  function getContent() {
     const raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
-  async function loadContent () {
+  async function loadContent() {
     try {
       const res = await fetch('/api/latest-schedule')
       if (res.ok) {
@@ -129,14 +129,14 @@
     return getContent()
   }
 
-  function clearCookies () {
+  function clearCookies() {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
     return 'Einteilung Zurückgesetzt'
   }
 
-  function serializeAssignments () {
+  function serializeAssignments() {
     const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
@@ -158,7 +158,7 @@
 
   // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
   // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
-  function scheduleSave () {
+  function scheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -176,7 +176,7 @@
     }, 400)
   }
 
-  function renderAssignments (a) {
+  function renderAssignments(a) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
@@ -206,23 +206,30 @@
     console.log(i)
 
     if (i > 0) {
-    const t = document.getElementById('teamFree')
-    t.style.display = 'block'
-}
+      const t = document.querySelector('.freeTeamSpace')
+      t.style.display = 'block'
+    }
   }
 
-  function initDragAndDrop () {
+  function initDragAndDrop() {
     let dragged = null
+    var path = window.location.pathname;
+    var pageName = path.split("/").pop();
+    console.log(pageName);
+    let freePool = null;
+    let innerFreePool = null;
+    let usedPool = null;
+    let innerUsedPool = null;
 
-    const freePool = document.getElementById('teamFree')
-    const innerFreePool = freePool.querySelector('#innerTeam')
+    if (pageName === 'index.html' || pageName === 'dashboard.html') {
+      freePool = document.getElementById('teamFree')
+      innerFreePool = freePool.querySelector('#innerTeam')
 
-    const usedPool = document.getElementById('teamUsed')
-    const innerUsedPool = usedPool.querySelector('#innerTeam')
+      usedPool = document.getElementById('teamUsed')
+      innerUsedPool = usedPool.querySelector('#innerTeam')
+    }
 
-    const trash  = document.getAnimations('trash')
-
-    function clearHighlights () {
+    function clearHighlights() {
       document
         .querySelectorAll('.drop-target')
         .forEach(el => el.classList.remove('drop-target'))
@@ -230,7 +237,7 @@
 
     // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
     // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
-    function performDrop (draggedEl, dropElement) {
+    function performDrop(draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
       const personTarget = dropElement.closest('.person')
@@ -239,6 +246,7 @@
       const usedPoolTarget = dropElement.closest('#teamUsed')
       const trashTarget = dropElement.closest('#trash')
       const draggedRole = draggedEl.dataset.role
+      const addPerson = dropElement.closest('#addPerson')
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
@@ -316,7 +324,7 @@
         innerFreePool.appendChild(draggedEl)
       }
 
-     else if (draggedEl.classList.contains('card') && usedPoolTarget) {
+      else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
       }
       //FREEPOOL <-> USED POOL
@@ -337,9 +345,15 @@
         }
       }
 
-      else if(draggedEl.classList.contains('card')&&trashTarget){
-        console.log("schmeiß weg",draggedEl)
+      else if (draggedEl.classList.contains('card') && trashTarget) {
         draggedEl.remove()
+      }
+
+      else if (draggedEl.classList.contains('card') && addPerson) {
+        draggedEl.style.opacity = '0.6'
+        draggedEl.classList.add('moved')
+
+        exportNotWorkingPeope(draggedEl);
       }
 
       scheduleSave()
@@ -372,9 +386,8 @@
 
     document.addEventListener('dragover', e => {
 
-  
       const target = e.target.closest(
-        '.person, .abteilungspersonal, #innerTeam,#trashCan'
+        '.person, .abteilungspersonal, #innerTeam, #trashCan, #addPerson'
       )
 
       if (!target) return
@@ -404,7 +417,7 @@
     let touchStartPos = null
     const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
-    function createGhost (el) {
+    function createGhost(el) {
       const rect = el.getBoundingClientRect()
       const g = el.cloneNode(true)
 
@@ -423,14 +436,14 @@
       return g
     }
 
-    function moveGhost (x, y) {
+    function moveGhost(x, y) {
       if (!ghost) return
       const rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
 
-    function elementUnderGhost (x, y) {
+    function elementUnderGhost(x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
       const el = document.elementFromPoint(x, y)
@@ -513,7 +526,7 @@
     })
   }
 
-  function updatePersonColor (el) {
+  function updatePersonColor(el) {
     const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
@@ -525,7 +538,7 @@
     }
   }
 
-  function initDeleteButtons () {
+  function initDeleteButtons() {
     const deleteBtns = document.querySelectorAll('.close')
     const poolParent = document.getElementById('teamFree')
     const pool = poolParent.querySelector('#innerTeam')
@@ -555,7 +568,7 @@
     })
   }
 
-  async function logout () {
+  async function logout() {
     try {
       const res = await fetch('/api/logout', { method: 'POST' })
       const data = await res.json()
@@ -564,6 +577,14 @@
       console.error('Logout fehlgeschlagen:', e)
       window.location.href = 'login.html'
     }
+  }
+
+  function exportNotWorkingPeope(movedEl){
+    const parent = movedEl.parentElement;
+    const department = parent.parentElement.id;
+    const name = movedEl.textContent.trim()
+    console.log(name, "wird Exportiert, Id ist:" ,department)
+
   }
 
   window.Dienste = {

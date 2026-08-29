@@ -106,12 +106,6 @@
   min-height: 0;
 }
 
-.team {
-  padding: 0.6rem;
-  max-width: min(45vw, 2560px);
-  margin: 0 0.3rem;
-}
-
 #innerTeam {
   display: flex;
   flex-wrap: wrap;
@@ -141,16 +135,6 @@
 
 #workServicesTitle {
   display: none;
-}
-
-.drop-target {
-  outline: 2px dashed #a81309;
-  background-color: rgba(255, 0, 0, 0.05);
-}
-
-.team.drop-target {
-  outline: 2px dashed blue;
-  background-color: rgba(255, 0, 0, 0.05);
 }
 
 .freeTeamSpace {

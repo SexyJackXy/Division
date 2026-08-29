@@ -143,6 +143,11 @@ header img {
   opacity: 0.5;
 }
 
+.drop-target {
+  outline: 2px dashed #a81309;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
 #papyrus {
   display: inline-flex;
   align-items: center;
