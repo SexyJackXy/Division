@@ -1,0 +1,78 @@
+#addPerson {
+    height: 32px;
+    position: absolute;
+    right: 0;
+    padding: 0.6rem;
+}
+
+.wachabteilungen {
+  display: flex;
+  gap: 0.3rem;
+  flex-direction: row;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.wachabteilung {
+  background-color: #f3f4f6;
+  max-width: 10vw;
+  padding: 0.3em 0.2rem;
+  border-radius: 10px;
+}
+
+.wachabteilung > h2 {
+  text-shadow: 0px 0px 2px #0a0a0a;
+}
+
+.abteilungspersonal {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  margin: 0.3rem auto 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-radius: 10px;
+}
+
+.abteilungspersonal .card {
+  font-size: 1.6ch;
+}
+
+.waPerson {
+  background: #d1d5db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0a0a0a;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 80px;
+  width: clamp(110px, 9vw, 200px);
+}
+
+#WA1 .card {
+  background-color: #ffcdd2;
+}
+
+#WA2 .card {
+  background-color: #fff9c4;
+}
+
+#WA3 .card {
+  background-color: #c8e6c9;
+}
+#TED .card {
+  background-color: #b3e5fc;
+}
+#LD .card {
+  background-color: #d1d5db;
+}
+#DD .card {
+  background-color: #ffe0b2;
+}
+#GAL .card {
+  background-color: #b6d5fb;
+}

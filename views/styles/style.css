@@ -115,7 +115,46 @@ header img {
   min-height: 0;
   height: 100%;
 }
-/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-/* IndexPage */
+
+.card {
+  background: #d1d5db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #0a0a0a;
+  margin: 0.1rem 0.4rem;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  max-height: 20px;
+  width: clamp(110px, 10vw, 200px);
+  touch-action: none;
+}
+
+.card:hover {
+  cursor: grab;
+}
+
+.card:active {
+  background: #ddd;
+}
+
+.card.dragging {
+  opacity: 0.5;
+}
+
+#papyrus {
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 42px;
+  margin-inline: auto;
+  width: fit-content;
+  height: 59px;
+}
+
+#PapyrusLogo {
+  margin: 0;
+  padding: 0;
+}

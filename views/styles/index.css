@@ -1,4 +1,4 @@
-#showStation{
+#showStation {
   display: none;
 }
 
@@ -22,35 +22,8 @@
   margin: 1rem auto;
 }
 
-.card {
-  background: #d1d5db;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: #0a0a0a;
-  margin: 0.1rem 0.4rem;
-  border-radius: 10px;
-  padding: 0.5rem 0;
-  max-height: 20px;
-  width: clamp(110px, 10vw, 200px);
-  touch-action: none;
-}
-
 .person[draggable='true'] {
   touch-action: none;
-}
-
-.card:hover {
-  cursor: grab;
-}
-
-.card:active {
-  background: #ddd;
-}
-
-.card.dragging {
-  opacity: 0.5;
 }
 
 .middle-duty {
@@ -149,15 +122,15 @@
   border-radius: 10px;
 }
 
-#teamFree{
-display: none;
+#teamFree {
+  display: block;
 }
 
-#teamUsed{
-display: none;
+#teamUsed {
+  display: none;
 }
 
-#teamUsed #innerTeam .card{
+#teamUsed #innerTeam .card {
   background-color: #ff2a1c;
   color: #ffffff;
 }
@@ -182,6 +155,7 @@ display: none;
 
 .freeTeamSpace {
   display: flex;
+  justify-content: space-around;
 }
 
 #cafeteria {
@@ -196,44 +170,18 @@ display: none;
   width: 166px;
 }
 
-#papyrus {
-  display: inline-flex;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  right: 42px;
-  margin-inline: auto;
-  width: fit-content;
-  height: 59px;
-}
-
-#PapyrusLogo {
-  margin: 0;
-  padding: 0;
-}
-
 #loginbtn.btn:hover,
 #registerbtn.btn:hover {
   border: 1px solid #a81309;
   background-color: #a81309;
 }
 
-#trashCan{
+#trashCan {
   height: 32px;
   position: absolute;
   right: 0;
   bottom: 0;
   padding: 0.6rem;
-}
-
-input[type='text'],
-input[type='email'],
-input[type='password'] {
-  background-color: #d1d5db;
-  border: none;
-  padding: 12px 15px;
-  margin: 8px 0;
-  width: 70vw;
 }
 
 @media (max-width: 1100px) {

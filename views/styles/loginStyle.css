@@ -64,3 +64,14 @@
   font-size: 2ch;
   margin: auto 10px;
 }
+
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  background-color: #d1d5db;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px;
+  width: 15vw;
+  border-radius: 10px;
+}
