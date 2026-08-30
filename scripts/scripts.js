@@ -76,9 +76,6 @@
 
       const parsed = parseContent(t)
 
-      // console.log('FINAL DATA:')
-      // console.log(parsed)
-
       localStorage.setItem(cookies, JSON.stringify(parsed))
     })
 
@@ -176,13 +173,13 @@
     }, 400)
   }
 
-  function renderAssignments(a) {
+  function renderAssignments(assignment) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
     if (!freeTeam) return
 
-    a.forEach(({ role, name }) => {
+    assignment.forEach(({ role, name }) => {
       if (!name) return
 
       if (role === 'Frei') {
@@ -203,12 +200,12 @@
       updatePersonColor(el)
     })
 
-    console.log(i)
-
     if (i > 0) {
       const t = document.querySelector('.freeTeamSpace')
       t.style.display = 'flex'
     }
+
+    importNotWorkingPeople()
   }
 
   function initDragAndDrop() {
@@ -352,7 +349,7 @@
         draggedEl.style.opacity = '0.6'
         draggedEl.classList.add('moved')
 
-        exportNotWorkingPeope(draggedEl);
+        exportNotWorkingPeople(draggedEl);
       }
 
       scheduleSave()
@@ -578,7 +575,7 @@
     }
   }
 
-  async function exportNotWorkingPeope(movedEl) {
+  async function exportNotWorkingPeople(movedEl) {
     const parent = movedEl.parentElement;
     const departmentShort = parent.parentElement.id;
     const person = movedEl.textContent.trim();
@@ -597,6 +594,28 @@
     }
   }
 
+  async function importNotWorkingPeople() {
+    const res = await fetch('/api/import-not-working-persons');
+    const result = await res.json();
+
+    console.log(result)
+
+    const poolParent = document.getElementById('teamFree')
+    const freeTeam = poolParent.querySelector('#innerTeam')
+
+    result.forEach(({ role, name }) => {
+      if (!name) return
+
+      const div = document.createElement('div')
+      div.className = 'card'
+      div.setAttribute('draggable', !reservedNames.includes(name))
+      div.innerHTML = name
+      div.style.backgroundColor = '#ffcdd2'
+      freeTeam.appendChild(div)
+      return
+    })
+  }
+
   window.Dienste = {
     readFromFile,
     getContent,
@@ -606,7 +625,8 @@
     renderAssignments,
     initDragAndDrop,
     initDeleteButtons,
-    logout
+    logout,
+    importNotWorkingPeople,
   }
 })()
 
