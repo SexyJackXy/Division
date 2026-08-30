@@ -287,5 +287,18 @@ app.post('/api/export-not-working-person', (req, res) => {
   res.json({ success: true, filePath });
 });
 
+app.get('/api/import-not-working-persons', (req, res) => {
+  const filePath = path.join(__dirname, 'exportedPersons', 'exportedPersons.json');
+
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      if (err.code === 'ENOENT') return res.json([]);
+      return res.status(500).json({ success: false, error: 'Lesefehler' });
+    }
+
+    res.json(JSON.parse(data));
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "127.0.0.1", () => console.log(`Server läuft auf Port ${PORT}`));

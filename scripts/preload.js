@@ -6,5 +6,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   extractAndSave: (base64) => ipcRenderer.invoke("extract-and-save", base64),
   saveSettings: (settings) => ipcRenderer.invoke("save-settings", settings),
   loadSettings: () => ipcRenderer.invoke("load-settings"),
-   exportNotWorkingPerson: (data) => ipcRenderer.invoke("export-not-working-person", data),
+  exportNotWorkingPerson: (data) => ipcRenderer.invoke("export-not-working-person", data),
 });
