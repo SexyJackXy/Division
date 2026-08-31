@@ -163,3 +163,38 @@ header img {
   margin: 0;
   padding: 0;
 }
+
+.card#WA1,
+#WA1 .card {
+  background-color: #ffcdd2;
+}
+
+.card#WA2,
+#WA2 .card {
+  background-color: #fff9c4;
+}
+
+.card#WA3,
+#WA3 .card {
+  background-color: #c8e6c9;
+}
+
+.card#TED,
+#TED .card {
+  background-color: #b3e5fc;
+}
+
+.card#LD,
+#LD .card {
+  background-color: #d1d5db;
+}
+
+.card#DD,
+#DD .card {
+  background-color: #ffe0b2;
+}
+
+.card#GAL,
+#GAL .card {
+  background-color: #b6d5fb;
+}
