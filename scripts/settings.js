@@ -41,7 +41,6 @@
     const showArbeitsdienste = settings.showArbeitsdienste
     const dutyTakeout = settings.showDuty
 
-    console.log(settings)
     if (dutyTakeout === true) {
       const showInnerTeamUsed = document.getElementById('teamUsed')
       showInnerTeamUsed.style.display = 'block'
