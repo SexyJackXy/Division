@@ -141,9 +141,6 @@
         reader.readAsDataURL(file);
       });
 
-      //console.log(file)
-      //console.log(f)
-
       const result = await fetch('/api/extract-and-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

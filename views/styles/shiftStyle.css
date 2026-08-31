@@ -53,26 +53,3 @@
   width: clamp(110px, 9vw, 200px);
 }
 
-#WA1 .card {
-  background-color: #ffcdd2;
-}
-
-#WA2 .card {
-  background-color: #fff9c4;
-}
-
-#WA3 .card {
-  background-color: #c8e6c9;
-}
-#TED .card {
-  background-color: #b3e5fc;
-}
-#LD .card {
-  background-color: #d1d5db;
-}
-#DD .card {
-  background-color: #ffe0b2;
-}
-#GAL .card {
-  background-color: #b6d5fb;
-}

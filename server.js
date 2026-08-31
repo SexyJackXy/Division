@@ -165,8 +165,13 @@ app.post("/api/extract-and-save", async (req, res) => {
 app.post("/api/reset-schedule", (req, res) => {
   try {
     const dir = path.join(__dirname, "structuredSeating");
+    const notWorkingPeople = path.join(__dirname, 'exportedPersons', `exportedPersons.json`);
     if (!fs.existsSync(dir)) {
       return res.json({ success: true });
+    }
+
+    if(fs.existsSync(notWorkingPeople)){
+      fs.rmSync(notWorkingPeople);
     }
 
     const archiveDir = path.join(dir, "archive");

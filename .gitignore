@@ -22,8 +22,11 @@ SHASUMS256.txt
 **/package-lock.json
 compile_commands.json
 .envrc
+
+#Folder created by the programm
 structuredSeating/
 Einteilung/
+exportedPersons/
 
 # npm package
 /npm/dist

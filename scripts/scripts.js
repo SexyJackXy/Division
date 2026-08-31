@@ -1,4 +1,4 @@
-; (function () {
+;(function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
     'ALvD',
@@ -27,32 +27,32 @@
     'LF 2 ATM',
     'LF 2 WTF',
     'LF 2 WTM',
-    "LF 2 Ma",
-    "Schw.Retter",
-    "DLK1 Fü",
-    "DLK1 Ma",
-    "SoFzg Fü",
-    "SoFzg Ma",
-    "KEF Fü",
-    "KEF Ma",
-    "Fwk Fü",
-    "Fwk Ma",
+    'LF 2 Ma',
+    'Schw.Retter',
+    'DLK1 Fü',
+    'DLK1 Ma',
+    'SoFzg Fü',
+    'SoFzg Ma',
+    'KEF Fü',
+    'KEF Ma',
+    'Fwk Fü',
+    'Fwk Ma',
     'Maschinist',
     'Kantine',
     'Wäsche',
     'Getränke',
     'ZAW',
     'ZSW',
-    'Abrufschicht',
+    'Abrufschicht'
   ]
 
-  function captureDefaults() {
+  function captureDefaults () {
     document.querySelectorAll('.person').forEach(el => {
       el.dataset.default = el.textContent.trim()
     })
   }
 
-  function readFromFile(file) {
+  function readFromFile (file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -82,7 +82,7 @@
     return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent(t) {
+  function parseContent (t) {
     if (!t) return []
     try {
       const data = JSON.parse(t)
@@ -97,12 +97,12 @@
     }
   }
 
-  function getContent() {
+  function getContent () {
     const raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
-  async function loadContent() {
+  async function loadContent () {
     try {
       const res = await fetch('/api/latest-schedule')
       if (res.ok) {
@@ -119,21 +119,24 @@
         }
       }
     } catch (e) {
-      console.warn('Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:', e)
+      console.warn(
+        'Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:',
+        e
+      )
       return getContent()
     }
 
     return getContent()
   }
 
-  function clearCookies() {
+  function clearCookies () {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
     return 'Einteilung Zurückgesetzt'
   }
 
-  function serializeAssignments() {
+  function serializeAssignments () {
     const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
@@ -155,7 +158,7 @@
 
   // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
   // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
-  function scheduleSave() {
+  function scheduleSave () {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -168,12 +171,15 @@
           body: JSON.stringify({ data })
         })
       } catch (e) {
-        console.warn('Änderung konnte nicht auf dem Server gespeichert werden:', e)
+        console.warn(
+          'Änderung konnte nicht auf dem Server gespeichert werden:',
+          e
+        )
       }
     }, 400)
   }
 
-  function renderAssignments(assignment) {
+  function renderAssignments (assignment) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
@@ -208,14 +214,14 @@
     importNotWorkingPeople()
   }
 
-  function initDragAndDrop() {
+  function initDragAndDrop () {
     let dragged = null
-    var path = window.location.pathname;
-    var pageName = path.split("/").pop();
-    let freePool = null;
-    let innerFreePool = null;
-    let usedPool = null;
-    let innerUsedPool = null;
+    var path = window.location.pathname
+    var pageName = path.split('/').pop()
+    let freePool = null
+    let innerFreePool = null
+    let usedPool = null
+    let innerUsedPool = null
 
     if (pageName === 'index.html' || pageName === 'dashboard.html') {
       freePool = document.getElementById('teamFree')
@@ -225,7 +231,7 @@
       innerUsedPool = usedPool.querySelector('#innerTeam')
     }
 
-    function clearHighlights() {
+    function clearHighlights () {
       document
         .querySelectorAll('.drop-target')
         .forEach(el => el.classList.remove('drop-target'))
@@ -233,7 +239,7 @@
 
     // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
     // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
-    function performDrop(draggedEl, dropElement) {
+    function performDrop (draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
       const personTarget = dropElement.closest('.person')
@@ -257,7 +263,11 @@
       }
 
       // PERSON -> PERSON (tauschen)
-      else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget) {
+      else if (
+        draggedEl.classList.contains('person') &&
+        personTarget &&
+        draggedEl !== personTarget
+      ) {
         const draggedText = draggedEl.textContent.trim()
         const targetText = personTarget.textContent.trim()
         const targetIsEmpty = reservedNames.includes(targetText)
@@ -318,9 +328,7 @@
       // CARD -> FREEPOOL
       else if (draggedEl.classList.contains('card') && freePoolTarget) {
         innerFreePool.appendChild(draggedEl)
-      }
-
-      else if (draggedEl.classList.contains('card') && usedPoolTarget) {
+      } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
       }
       //FREEPOOL <-> USED POOL
@@ -339,17 +347,17 @@
           draggedEl.textContent = draggedRole
           updatePersonColor(draggedEl)
         }
-      }
-
-      else if (draggedEl.classList.contains('card') && trashTarget) {
+      } else if (draggedEl.classList.contains('card') && trashTarget) {
         draggedEl.remove()
-      }
-
-      else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html') {
+      } else if (
+        draggedEl.classList.contains('card') &&
+        addPerson &&
+        pageName === 'shiftSchedule.html'
+      ) {
         draggedEl.style.opacity = '0.6'
         draggedEl.classList.add('moved')
 
-        exportNotWorkingPeople(draggedEl);
+        exportNotWorkingPeople(draggedEl)
       }
 
       scheduleSave()
@@ -381,7 +389,6 @@
     })
 
     document.addEventListener('dragover', e => {
-
       const target = e.target.closest(
         '.person, .abteilungspersonal, #innerTeam, #trashCan, #addPerson'
       )
@@ -413,7 +420,7 @@
     let touchStartPos = null
     const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
-    function createGhost(el) {
+    function createGhost (el) {
       const rect = el.getBoundingClientRect()
       const g = el.cloneNode(true)
 
@@ -432,14 +439,14 @@
       return g
     }
 
-    function moveGhost(x, y) {
+    function moveGhost (x, y) {
       if (!ghost) return
       const rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
 
-    function elementUnderGhost(x, y) {
+    function elementUnderGhost (x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
       const el = document.elementFromPoint(x, y)
@@ -484,7 +491,8 @@
 
         clearHighlights()
         const under = elementUnderGhost(touch.clientX, touch.clientY)
-        const target = under && under.closest('.person, .abteilungspersonal, #innerTeam')
+        const target =
+          under && under.closest('.person, .abteilungspersonal, #innerTeam')
         if (target) target.classList.add('drop-target')
       },
       { passive: false }
@@ -522,7 +530,7 @@
     })
   }
 
-  function updatePersonColor(el) {
+  function updatePersonColor (el) {
     const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
@@ -534,7 +542,7 @@
     }
   }
 
-  function initDeleteButtons() {
+  function initDeleteButtons () {
     const deleteBtns = document.querySelectorAll('.close')
     const poolParent = document.getElementById('teamFree')
     const pool = poolParent.querySelector('#innerTeam')
@@ -564,7 +572,7 @@
     })
   }
 
-  async function logout() {
+  async function logout () {
     try {
       const res = await fetch('/api/logout', { method: 'POST' })
       const data = await res.json()
@@ -575,42 +583,43 @@
     }
   }
 
-  async function exportNotWorkingPeople(movedEl) {
-    const parent = movedEl.parentElement;
-    const departmentShort = parent.parentElement.id;
-    const person = movedEl.textContent.trim();
+  async function exportNotWorkingPeople (movedEl) {
+    const parent = movedEl.parentElement
+    const departmentShort = parent.parentElement.id
+    const person = movedEl.textContent.trim()
 
-    const data = { name: person, department: departmentShort };
+    const data = { name: person, department: departmentShort }
 
     try {
       const res = await fetch('/api/export-not-working-person', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
-      });
-      const result = await res.json();
+      })
+      const result = await res.json()
     } catch (e) {
-      console.error('Export fehlgeschlagen:', e);
+      console.error('Export fehlgeschlagen:', e)
     }
   }
 
-  async function importNotWorkingPeople() {
-    const res = await fetch('/api/import-not-working-persons');
-    const result = await res.json();
+  async function importNotWorkingPeople () {
+    const res = await fetch('/api/import-not-working-persons')
+    const result = await res.json()
 
     console.log(result)
 
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
 
-    result.forEach(({ role, name }) => {
+    result.forEach(({ department, name }) => {
       if (!name) return
 
       const div = document.createElement('div')
       div.className = 'card'
       div.setAttribute('draggable', !reservedNames.includes(name))
       div.innerHTML = name
-      div.style.backgroundColor = '#ffcdd2'
+      // div.style.backgroundColor = '#ffcdd2'
+      div.setAttribute('id', department)
       freeTeam.appendChild(div)
       return
     })
@@ -626,7 +635,6 @@
     initDragAndDrop,
     initDeleteButtons,
     logout,
-    importNotWorkingPeople,
+    importNotWorkingPeople
   }
 })()
-
