@@ -189,9 +189,9 @@
 .alternativPlan:hover {
   width: 30px;
 }
-.altPic{
-    height: 100px;
-    width: 15px;
+.altPic {
+  height: 100px;
+  width: 15px;
 }
 
 .altPic img {
@@ -204,7 +204,7 @@
   transition: right 0.3s ease;
 }
 
-.alternativPlan:hover+.altPic img{
+.alternativPlan:hover + .altPic img {
   right: 4px;
   display: block;
 }
@@ -244,6 +244,42 @@
   background-color: #b6d5fb;
 }
 
+#dialog iframe {
+  display: none;
+  border-top: none;
+  border-right: none;
+  border-left: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  height: 94vh;
+  width: 70vw;
+  right: 0;
+  z-index: 2;
+  background-color: #f3f4f6;
+  position: absolute;
+  right: 0;
+  top: 59px;
+  z-index: 2;
+  border-radius: 10px 0px 0px 10px;
+  box-shadow: -10px 10px 15px 5px rgba(0, 0, 0, 0.7);
+  transition: right 10s ease;
+}
+
+#dialog .alternativPlanClose {
+    position: absolute;
+  background-color: #f3f4f6;
+  border-top: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  border-left: solid 3px #ffffff;
+  height: 100px;
+  width: 15px;
+  right: 0;
+  top: 50%;
+  border-radius: 10px 0px 0px 10px;
+  display: none;
+  right: 70vw;
+  z-index: 3;
+  transition: right 10s ease;
+}
 
 @media (max-width: 1100px) {
   .heading {
