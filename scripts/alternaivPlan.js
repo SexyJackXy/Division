@@ -1,8 +1,8 @@
 async function showAlternativePlan() {
-  const dialogDiv = document.getElementById('dialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('dialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.alternativPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -31,10 +31,10 @@ async function showAlternativePlan() {
   })
 }
 async function closeAlternativPlan() {
-  const dialogDiv = document.getElementById('dialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('dialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.alternativPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -64,13 +64,13 @@ async function closeAlternativPlan() {
 }
 
 async function altertivPlanLoad() {
-  let i = 0
-  const poolParent = document
+  var i = 0
+  var poolParent = document
     .getElementById('iframe')
     .contentWindow.document.getElementById('teamFree')
-  const freeTeam = poolParent.querySelector('#innerTeam')
+  var freeTeam = poolParent.querySelector('#innerTeam')
 
-  const assignments = await window.Dienste.loadContent()
+  var assignments = await window.Dienste.loadContent()
   if (!freeTeam) return
 
   assignments.forEach(({ role, name }) => {
@@ -79,7 +79,7 @@ async function altertivPlanLoad() {
     if (role === 'Frei') {
       i++
 
-      const d = document.createElement('div')
+      var d = document.createElement('div')
       d.className = 'card'
       d.setAttribute('draggable', !reservedNames.includes(name))
       d.innerHTML = name
@@ -87,12 +87,12 @@ async function altertivPlanLoad() {
       return
     }
 
-    const el = document.querySelector(`.person[data-role="${role}"]`)
+    var el = document.querySelector(`.person[data-role="${role}"]`)
     if (!el) return
   })
 
   if (i > 0) {
-    const t = document.querySelector('.freeTeamSpace')
+    var t = document.querySelector('.freeTeamSpace')
     t.style.display = 'flex'
   }
 

@@ -63,10 +63,10 @@
 
 
     <script>
-        const loginBtn = document.getElementById("loginbtn");
-        const usernameInput = document.getElementById("username");
-        const passwordInput = document.getElementById("password");
-        const errorEl = document.getElementById("loginError");
+        var loginBtn = document.getElementById("loginbtn");
+        var usernameInput = document.getElementById("username");
+        var passwordInput = document.getElementById("password");
+        var errorEl = document.getElementById("loginError");
 
         function showError(msg) {
             errorEl.textContent = msg;
@@ -76,8 +76,8 @@
         async function doLogin() {
             console.log("login")
 
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
+            var username = usernameInput.value.trim();
+            var password = passwordInput.value;
 
             if (!username || !password) {
                 showError("Bitte Benutzername und Passwort eingeben.");
@@ -85,12 +85,12 @@
             }
 
             try {
-                const res = await fetch("/api/login", {
+                var res = await fetch("/api/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password })
                 });
-                const data = await res.json();
+                var data = await res.json();
 
                 if (data.success) {
                     window.location.href = data.redirect || "index.html";
