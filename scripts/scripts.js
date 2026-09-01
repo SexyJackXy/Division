@@ -46,12 +46,6 @@
     'Abrufschicht'
   ]
 
-  function captureDefaults () {
-    document.querySelectorAll('.person').forEach(el => {
-      el.dataset.default = el.textContent.trim()
-    })
-  }
-
   function readFromFile (file) {
     file.arrayBuffer().then(b => {
       const candidates = [
@@ -215,6 +209,10 @@
   }
 
   function initDragAndDrop () {
+    
+var path = window.location.pathname;
+var page = path.split("/").pop();
+
     let dragged = null
     var path = window.location.pathname
     var pageName = path.split('/').pop()
@@ -223,13 +221,11 @@
     let usedPool = null
     let innerUsedPool = null
 
-    if (pageName === 'index.html' || pageName === 'dashboard.html') {
-      freePool = document.getElementById('teamFree')
-      innerFreePool = freePool.querySelector('#innerTeam')
-
-      usedPool = document.getElementById('teamUsed')
-      innerUsedPool = usedPool.querySelector('#innerTeam')
-    }
+    freePool = document.getElementById('teamFree')
+    usedPool = document.getElementById('teamUsed')
+      
+    if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
+    if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
 
     function clearHighlights () {
       document
@@ -242,6 +238,8 @@
     function performDrop (draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
+      
+
       const personTarget = dropElement.closest('.person')
       const departmentTarget = dropElement.closest('.abteilungspersonal')
       const freePoolTarget = dropElement.closest('#teamFree')
@@ -252,9 +250,11 @@
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
-        if (!reservedNames.includes(personTarget.textContent.trim())) {
+
+                if (!reservedNames.includes(personTarget.dataset.role)) {
           return
         }
+
 
         personTarget.textContent = draggedEl.textContent
         updatePersonColor(personTarget)
@@ -360,7 +360,9 @@
         exportNotWorkingPeople(draggedEl)
       }
 
+      if(pageName === 'index.html'){
       scheduleSave()
+      }
     }
 
     // ---------- Maus-basiertes Drag & Drop (Desktop, native HTML5 DnD) ----------
@@ -556,7 +558,6 @@
           const oldPerson = p.textContent.trim()
           const c = document.createElement('div')
 
-          console.log(p)
           p.style.backgroundColor = '#D1D5DB'
           c.className = 'card'
           p.textContent = p.dataset.default || 'Frei'

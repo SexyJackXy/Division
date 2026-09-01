@@ -110,7 +110,6 @@ function parseShiftArray(lines) {
         result.push({ role: 'Kantine1', name: firstCafeteria })
         result.push({ role: 'Kantine2', name: secondCafetaria })
 
-        console.log(firstCafeteria, '\n', secondCafetaria)
       } else {
         const firstCafeteria = lines[i - 1].trim()
 

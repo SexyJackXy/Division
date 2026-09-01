@@ -61,6 +61,12 @@ app.use((req, res, next) => {
   ) {
     return next();
   }
+
+  // War bisher komplett vergessen: eingeloggte Sessions einfach durchlassen.
+  if (req.session && req.session.userId) {
+    return next();
+  }
+
   if (req.path.startsWith("/api/")) {
     return res.status(401).json({ success: false, error: "Nicht eingeloggt" });
   }
@@ -77,7 +83,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/login", async (req, res) => {
-  console.log('login')
 
   const { username, password } = req.body || {};
 
@@ -103,8 +108,6 @@ app.post("/api/login", async (req, res) => {
 
   req.session.userId = user.id;
   req.session.username = user.username;
-
-  console.log('erfolgreich eingeloggt')
 
   res.json({ success: true, redirect: "/views/index.html" });
 });
@@ -254,7 +257,6 @@ app.get("/api/latest-schedule", (req, res) => {
 });
 
 app.post("/api/settings", (req, res) => {
-  console.log()
   fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), "utf-8");
   res.json({ success: true });
 });

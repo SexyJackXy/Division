@@ -15,7 +15,12 @@ async function showAlternativePlan () {
     dialogIframe.classList.add('is-open')
   })
 
-  altertivPlanLoad()
+  if (!dialogIframe.src) {
+    await new Promise(resolve => {
+      dialogIframe.addEventListener('load', resolve, { once: true })
+      dialogIframe.src = dialogIframe.dataset.src
+    })
+  }
 
   await delay(400)
 
@@ -25,7 +30,6 @@ async function showAlternativePlan () {
     dialogButton.classList.add('is-open')
   })
 }
-
 async function closeAlternativPlan () {
   const dialogDiv = document.getElementById('dialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
@@ -47,7 +51,7 @@ async function closeAlternativPlan () {
 
   await delay(1100)
 
-    dialogIframe.classList.remove('is-open')
+  dialogIframe.classList.remove('is-open')
 
   dialogIframe.addEventListener(
     'transitionend',
@@ -60,10 +64,40 @@ async function closeAlternativPlan () {
 }
 
 async function altertivPlanLoad () {
-  //   window.DiensteSettings.initSettingsAdjustment()
+    let i = 0
+  const poolParent = document
+    .getElementById('iframe')
+    .contentWindow.document.getElementById('teamFree')
+  const freeTeam = poolParent.querySelector('#innerTeam')
 
   const assignments = await window.Dienste.loadContent()
-  if (!assignments || !assignments.length) return
+  if (!freeTeam) return
 
-  console.log(assignments)
+  assignments.forEach(({ role, name }) => {
+    if (!name) return
+
+    if (role === 'Frei') {
+      i++
+
+      const d = document.createElement('div')
+      d.className = 'card'
+      d.setAttribute('draggable', !reservedNames.includes(name))
+      d.innerHTML = name
+      freeTeam.appendChild(d)
+      return
+    }
+
+    const el = document.querySelector(`.person[data-role="${role}"]`)
+    if (!el) return
+
+    // el.textContent = name
+    // updatePersonColor(el)
+  })
+
+  if (i > 0) {
+    const t = document.querySelector('.freeTeamSpace')
+    t.style.display = 'flex'
+  }
+
+  // importNotWorkingPeople()
 }
