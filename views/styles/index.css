@@ -157,12 +157,6 @@
   width: 166px;
 }
 
-#loginbtn.btn:hover,
-#registerbtn.btn:hover {
-  border: 1px solid #a81309;
-  background-color: #a81309;
-}
-
 #trashCan {
   height: 32px;
   position: absolute;
@@ -192,7 +186,6 @@
   height: 100px;
   width: 15px;
 }
-
 
 .alternativPlan:hover + .altPic img {
   right: 4px;

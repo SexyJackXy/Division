@@ -1,4 +1,4 @@
-async function showAlternativePlan () {
+async function showAlternativePlan() {
   const dialogDiv = document.getElementById('dialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
@@ -30,7 +30,7 @@ async function showAlternativePlan () {
     dialogButton.classList.add('is-open')
   })
 }
-async function closeAlternativPlan () {
+async function closeAlternativPlan() {
   const dialogDiv = document.getElementById('dialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
@@ -63,8 +63,8 @@ async function closeAlternativPlan () {
   )
 }
 
-async function altertivPlanLoad () {
-    let i = 0
+async function altertivPlanLoad() {
+  let i = 0
   const poolParent = document
     .getElementById('iframe')
     .contentWindow.document.getElementById('teamFree')
@@ -89,9 +89,6 @@ async function altertivPlanLoad () {
 
     const el = document.querySelector(`.person[data-role="${role}"]`)
     if (!el) return
-
-    // el.textContent = name
-    // updatePersonColor(el)
   })
 
   if (i > 0) {

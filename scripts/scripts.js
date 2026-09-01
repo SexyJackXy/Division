@@ -1,4 +1,4 @@
-;(function () {
+; (function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
     'ALvD',
@@ -46,7 +46,7 @@
     'Abrufschicht'
   ]
 
-  function readFromFile (file) {
+  function readFromFile(file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -76,7 +76,7 @@
     return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent (t) {
+  function parseContent(t) {
     if (!t) return []
     try {
       const data = JSON.parse(t)
@@ -91,14 +91,22 @@
     }
   }
 
-  function getContent () {
+  function getContent() {
     const raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
-  async function loadContent () {
+  async function loadContent() {
+    var res;
+    var path = window.location.pathname
+    var pageName = path.split('/').pop()
+
     try {
-      const res = await fetch('/api/latest-schedule')
+      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+        res = await fetch('/api/latest-schedule')
+      } else if (pageName === 'temporaryPlan.html') {
+        res = await fetch('/api/latest-temporary-schedule')
+      }
       if (res.ok) {
         const json = await res.json()
         if (json.success) {
@@ -123,14 +131,14 @@
     return getContent()
   }
 
-  function clearCookies () {
+  function clearCookies() {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
     return 'Einteilung Zurückgesetzt'
   }
 
-  function serializeAssignments () {
+  function serializeAssignments() {
     const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
@@ -152,7 +160,7 @@
 
   // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
   // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
-  function scheduleSave () {
+  function scheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -173,7 +181,28 @@
     }, 400)
   }
 
-  function renderAssignments (assignment) {
+  function temporaryScheduleSave() {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(async () => {
+      const data = serializeAssignments()
+      localStorage.setItem(cookies, JSON.stringify(data))
+
+      try {
+        await fetch('/api/save-temporary-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn(
+          'Änderung konnte nicht auf dem Server gespeichert werden:',
+          e
+        )
+      }
+    }, 400)
+  }
+
+  function renderAssignments(assignment) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
@@ -208,11 +237,7 @@
     importNotWorkingPeople()
   }
 
-  function initDragAndDrop () {
-    
-var path = window.location.pathname;
-var page = path.split("/").pop();
-
+  function initDragAndDrop() {
     let dragged = null
     var path = window.location.pathname
     var pageName = path.split('/').pop()
@@ -223,11 +248,11 @@ var page = path.split("/").pop();
 
     freePool = document.getElementById('teamFree')
     usedPool = document.getElementById('teamUsed')
-      
+
     if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
     if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
 
-    function clearHighlights () {
+    function clearHighlights() {
       document
         .querySelectorAll('.drop-target')
         .forEach(el => el.classList.remove('drop-target'))
@@ -235,10 +260,8 @@ var page = path.split("/").pop();
 
     // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
     // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
-    function performDrop (draggedEl, dropElement) {
+    function performDrop(draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
-
-      
 
       const personTarget = dropElement.closest('.person')
       const departmentTarget = dropElement.closest('.abteilungspersonal')
@@ -251,7 +274,7 @@ var page = path.split("/").pop();
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
 
-                if (!reservedNames.includes(personTarget.dataset.role)) {
+        if (!reservedNames.includes(personTarget.dataset.role)) {
           return
         }
 
@@ -360,8 +383,10 @@ var page = path.split("/").pop();
         exportNotWorkingPeople(draggedEl)
       }
 
-      if(pageName === 'index.html'){
-      scheduleSave()
+      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+        scheduleSave()
+      } else if (pageName === 'temporaryPlan.html') {
+        temporaryScheduleSave()
       }
     }
 
@@ -422,7 +447,7 @@ var page = path.split("/").pop();
     let touchStartPos = null
     const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
-    function createGhost (el) {
+    function createGhost(el) {
       const rect = el.getBoundingClientRect()
       const g = el.cloneNode(true)
 
@@ -441,14 +466,14 @@ var page = path.split("/").pop();
       return g
     }
 
-    function moveGhost (x, y) {
+    function moveGhost(x, y) {
       if (!ghost) return
       const rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
 
-    function elementUnderGhost (x, y) {
+    function elementUnderGhost(x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
       const el = document.elementFromPoint(x, y)
@@ -532,7 +557,7 @@ var page = path.split("/").pop();
     })
   }
 
-  function updatePersonColor (el) {
+  function updatePersonColor(el) {
     const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
@@ -544,7 +569,7 @@ var page = path.split("/").pop();
     }
   }
 
-  function initDeleteButtons () {
+  function initDeleteButtons() {
     const deleteBtns = document.querySelectorAll('.close')
     const poolParent = document.getElementById('teamFree')
     const pool = poolParent.querySelector('#innerTeam')
@@ -573,7 +598,7 @@ var page = path.split("/").pop();
     })
   }
 
-  async function logout () {
+  async function logout() {
     try {
       const res = await fetch('/api/logout', { method: 'POST' })
       const data = await res.json()
@@ -584,7 +609,7 @@ var page = path.split("/").pop();
     }
   }
 
-  async function exportNotWorkingPeople (movedEl) {
+  async function exportNotWorkingPeople(movedEl) {
     const parent = movedEl.parentElement
     const departmentShort = parent.parentElement.id
     const person = movedEl.textContent.trim()
@@ -603,29 +628,29 @@ var page = path.split("/").pop();
     }
   }
 
-  async function importNotWorkingPeople () {
+  async function importNotWorkingPeople() {
     const res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'
     })
     const result = await res.json()
 
-    if(result.length > 0){
-      
-    const poolParent = document.getElementById('teamFree')
-    const freeTeam = poolParent.querySelector('#innerTeam')
+    if (result.length > 0) {
 
-    result.forEach(({ department, name }) => {
-      if (!name) return
+      const poolParent = document.getElementById('teamFree')
+      const freeTeam = poolParent.querySelector('#innerTeam')
 
-      const div = document.createElement('div')
-      div.className = 'card'
-      div.setAttribute('draggable', !reservedNames.includes(name))
-      div.innerHTML = name
-      // div.style.backgroundColor = '#ffcdd2'
-      div.setAttribute('id', department)
-      freeTeam.appendChild(div)
-      return
-    })
+      result.forEach(({ department, name }) => {
+        if (!name) return
+
+        const div = document.createElement('div')
+        div.className = 'card'
+        div.setAttribute('draggable', !reservedNames.includes(name))
+        div.innerHTML = name
+        // div.style.backgroundColor = '#ffcdd2'
+        div.setAttribute('id', department)
+        freeTeam.appendChild(div)
+        return
+      })
     }
   }
 

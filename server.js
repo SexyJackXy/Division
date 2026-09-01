@@ -54,9 +54,11 @@ app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith("/api/login") ||
-    (req.method === "GET" && req.path === "/api/latest-schedule") ||
-    (req.method === "GET" && req.path === "/api/import-not-working-persons") || // NEU
     (req.method === "POST" && req.path === "/api/save-schedule") ||
+    (req.method === "POST" && req.path === "/api/save-temporary-schedule") ||
+    (req.method === "GET" && req.path === "/api/latest-schedule") ||
+    (req.method === "GET" && req.path === "/api/latest-temporary-schedule") ||
+    (req.method === "GET" && req.path === "/api/import-not-working-persons") ||
     (req.method === "GET" && req.path === "/api/settings")
   ) {
     return next();
@@ -133,14 +135,14 @@ app.post("/api/extract-and-save", async (req, res) => {
     const buffer = Buffer.from(base64, "base64");
     const shiftJson = await extractShiftFromPdf(buffer);
 
-    const outputDir = path.join(__dirname, "structuredSeating");
+    const outputDir = path.join(__dirname, "dailySchedule");
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
     const now = new Date();
     const dd = String(now.getDate()).padStart(2, "0");
     const MM = String(now.getMonth() + 1).padStart(2, "0");
     const yyyy = now.getFullYear();
-    const baseName = `Einteilung_${dd}${MM}${yyyy}`;
+    const baseName = `current`;
 
     let fileName = `${baseName}.json`;
     let counter = 1;
@@ -169,13 +171,13 @@ app.post("/api/extract-and-save", async (req, res) => {
 
 app.post("/api/reset-schedule", (req, res) => {
   try {
-    const dir = path.join(__dirname, "structuredSeating");
+    const dir = path.join(__dirname, "dailySchedule");
     const notWorkingPeople = path.join(__dirname, 'exportedPersons', `exportedPersons.json`);
     if (!fs.existsSync(dir)) {
       return res.json({ success: true });
     }
 
-    if(fs.existsSync(notWorkingPeople)){
+    if (fs.existsSync(notWorkingPeople)) {
       fs.rmSync(notWorkingPeople);
     }
 
@@ -208,7 +210,63 @@ app.post("/api/save-schedule", (req, res) => {
         .json({ success: false, error: "data muss ein Array sein" });
     }
 
-    const dir = path.join(__dirname, "structuredSeating");
+    const dir = path.join(__dirname, "dailySchedule");
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
+    fs.writeFileSync(
+      path.join(dir, "current.json"),
+      JSON.stringify(data, null, 2),
+      "utf-8"
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/reset-temporary-schedule", (req, res) => {
+  try {
+    const dir = path.join(__dirname, "temporarySchedule");
+    if (!fs.existsSync(dir)) {
+      return res.json({ success: true });
+    }
+
+    if (fs.existsSync(notWorkingPeople)) {
+      fs.rmSync(notWorkingPeople);
+    }
+
+    const archiveDir = path.join(dir, "archive");
+    if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir);
+
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+    const stamp = Date.now();
+
+    files.forEach((f) => {
+      fs.renameSync(
+        path.join(dir, f),
+        path.join(archiveDir, `${stamp}_${f}`)
+      );
+    });
+
+    res.json({ success: true, archived: files.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/save-temporary-schedule", (req, res) => {
+  try {
+    const { data } = req.body || {};
+    if (!Array.isArray(data)) {
+      return res
+        .status(400)
+        .json({ success: false, error: "data muss ein Array sein" });
+    }
+
+    const dir = path.join(__dirname, "temporarySchedule");
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
     fs.writeFileSync(
@@ -226,7 +284,39 @@ app.post("/api/save-schedule", (req, res) => {
 
 app.get("/api/latest-schedule", (req, res) => {
   try {
-    const dir = path.join(__dirname, "structuredSeating");
+    const dir = path.join(__dirname, "dailySchedule");
+    if (!fs.existsSync(dir)) {
+      return res.json({ success: true, data: null });
+    }
+
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => {
+        const full = path.join(dir, f);
+        return { name: f, mtime: fs.statSync(full).mtimeMs };
+      })
+      .sort((a, b) => b.mtime - a.mtime);
+
+    if (!files.length) {
+      return res.json({ success: true, data: null });
+    }
+
+    const latest = files[0];
+    const data = JSON.parse(
+      fs.readFileSync(path.join(dir, latest.name), "utf-8")
+    );
+
+    res.json({ success: true, fileName: latest.name, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get("/api/latest-temporary-schedule", (req, res) => {
+  try {
+    const dir = path.join(__dirname, "temporarySchedule");
     if (!fs.existsSync(dir)) {
       return res.json({ success: true, data: null });
     }

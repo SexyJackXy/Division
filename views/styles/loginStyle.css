@@ -65,6 +65,12 @@
   margin: auto 10px;
 }
 
+#loginbtn.btn:hover,
+#registerbtn.btn:hover {
+  border: 1px solid #a81309;
+  background-color: #a81309;
+}
+
 input[type='text'],
 input[type='email'],
 input[type='password'] {
