@@ -55,12 +55,10 @@ app.use((req, res, next) => {
     isPublicRequest(req) ||
     req.path.startsWith("/api/login") ||
     (req.method === "GET" && req.path === "/api/latest-schedule") ||
+    (req.method === "GET" && req.path === "/api/import-not-working-persons") || // NEU
     (req.method === "POST" && req.path === "/api/save-schedule") ||
     (req.method === "GET" && req.path === "/api/settings")
   ) {
-    return next();
-  }
-  if (req.session && req.session.userId) {
     return next();
   }
   if (req.path.startsWith("/api/")) {
@@ -79,6 +77,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/login", async (req, res) => {
+  console.log('login')
+
   const { username, password } = req.body || {};
 
   if (!username || !password) {
@@ -103,6 +103,8 @@ app.post("/api/login", async (req, res) => {
 
   req.session.userId = user.id;
   req.session.username = user.username;
+
+  console.log('erfolgreich eingeloggt')
 
   res.json({ success: true, redirect: "/views/index.html" });
 });

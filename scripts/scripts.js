@@ -603,11 +603,13 @@
   }
 
   async function importNotWorkingPeople () {
-    const res = await fetch('/api/import-not-working-persons')
+    const res = await fetch('/api/import-not-working-persons', {
+      credentials: 'include' // oder 'same-origin'
+    })
     const result = await res.json()
 
-    console.log(result)
-
+    if(result.length > 0){
+      
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
 
@@ -623,6 +625,7 @@
       freeTeam.appendChild(div)
       return
     })
+    }
   }
 
   window.Dienste = {

@@ -1,4 +1,4 @@
-async function showAlternativPlan () {
+async function showAlternativePlan () {
   const dialogDiv = document.getElementById('dialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
