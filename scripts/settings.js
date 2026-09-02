@@ -85,14 +85,12 @@
     }
   }
 
-  // Nur auf der settings.html ausführen (Button existiert nur dort)
   document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('Save')) {
       initSettingsPage()
     }
   })
 
-  // Sofort verfügbar machen, unabhängig von DOMContentLoaded-Reihenfolge
   window.DiensteSettings = {
     loadSettings,
     saveSettings,

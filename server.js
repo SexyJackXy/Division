@@ -18,7 +18,7 @@ const PUBLIC_PATHS = new Set([
   '/views/login.html'
 ])
 
-function isPublicRequest (req) {
+function isPublicRequest(req) {
   if (PUBLIC_PATHS.has(req.path)) return true
   // Statische Assets (CSS, Bilder, Client-Scripts) müssen immer ladbar sein,
   // sonst kann die Login-Seite selbst nicht gerendert werden.
@@ -310,11 +310,7 @@ app.get('/api/latest-schedule', (req, res) => {
 app.get('/api/latest-temporary-schedule', (req, res) => {
   try {
     const dir = path.join(__dirname, 'temporarySchedule')
-    const currentFile = path.join(
-      __dirname,
-      'temporarySchedule',
-      'current.json'
-    )
+    const currentFile = path.join(__dirname, 'temporarySchedule', 'current.json')
     if (!fs.existsSync(currentFile)) {
       const fixSchedule = path.join(__dirname, 'dailySchedule')
 

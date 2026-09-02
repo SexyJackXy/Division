@@ -1,4 +1,4 @@
-;(function () {
+; (function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
     'ALvD',
@@ -46,7 +46,7 @@
     'Abrufschicht'
   ]
 
-  function readFromFile (file) {
+  function readFromFile(file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -76,7 +76,7 @@
     return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent (t) {
+  function parseContent(t) {
     if (!t) return []
     try {
       const data = JSON.parse(t)
@@ -91,12 +91,12 @@
     }
   }
 
-  function getContent () {
+  function getContent() {
     const raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
-  async function loadContent () {
+  async function loadContent() {
     var res
     var path = window.location.pathname
     var pageName = path.split('/').pop()
@@ -133,14 +133,14 @@
     return getContent()
   }
 
-  function clearCookies () {
+  function clearCookies() {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
     return 'Einteilung Zurückgesetzt'
   }
 
-  function serializeAssignments () {
+  function serializeAssignments() {
     const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
@@ -162,7 +162,7 @@
 
   // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
   // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
-  function scheduleSave () {
+  function scheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -183,7 +183,7 @@
     }, 400)
   }
 
-  function temporaryScheduleSave () {
+  function temporaryScheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -204,7 +204,7 @@
     }, 400)
   }
 
-  function renderAssignments (assignment) {
+  function renderAssignments(assignment) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
@@ -239,7 +239,7 @@
     importNotWorkingPeople()
   }
 
-  function initDragAndDrop () {
+  function initDragAndDrop() {
     let dragged = null
     var path = window.location.pathname
     var pageName = path.split('/').pop()
@@ -247,14 +247,19 @@
     let innerFreePool = null
     let usedPool = null
     let innerUsedPool = null
+    let triggerPool = null
 
     freePool = document.getElementById('teamFree')
     usedPool = document.getElementById('teamUsed')
+    triggerPool = document.getElementById('triggeredSpace')
+
+    console.log(triggerPool)
 
     if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
     if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
+    if (triggerPool) triggerPool = triggerPool.querySelector('#innerTeam')
 
-    function clearHighlights () {
+    function clearHighlights() {
       document
         .querySelectorAll('.drop-target')
         .forEach(el => el.classList.remove('drop-target'))
@@ -262,13 +267,14 @@
 
     // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
     // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
-    function performDrop (draggedEl, dropElement) {
+    function performDrop(draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
       const personTarget = dropElement.closest('.person')
       const departmentTarget = dropElement.closest('.abteilungspersonal')
       const freePoolTarget = dropElement.closest('#teamFree')
       const usedPoolTarget = dropElement.closest('#teamUsed')
+      const triggerPoolTarget = dropElement.closest('#triggeredSpace')
       const trashTarget = dropElement.closest('#trash')
       const draggedRole = draggedEl.dataset.role
       const addPerson = dropElement.closest('#addPerson')
@@ -348,11 +354,33 @@
         }
       }
 
+      // PERSOM -> TRIGGERT POOL
+      else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
+        const name = draggedEl.textContent.trim()
+
+        console.log(name)
+
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
+
+          triggerPool.appendChild(newCard)
+
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
+        }
+      }
+
       // CARD -> FREEPOOL
       else if (draggedEl.classList.contains('card') && freePoolTarget) {
         innerFreePool.appendChild(draggedEl)
       } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
+      } else if (draggedEl.classList.contains('card') && triggerPoolTarget) {
+        triggerPool.appendChild(draggedEl)
       }
       //FREEPOOL <-> USED POOL
       else if (draggedEl.classList.contains('person') && usedPoolTarget) {
@@ -447,7 +475,7 @@
     let touchStartPos = null
     const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
-    function createGhost (el) {
+    function createGhost(el) {
       const rect = el.getBoundingClientRect()
       const g = el.cloneNode(true)
 
@@ -466,14 +494,14 @@
       return g
     }
 
-    function moveGhost (x, y) {
+    function moveGhost(x, y) {
       if (!ghost) return
       const rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
 
-    function elementUnderGhost (x, y) {
+    function elementUnderGhost(x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
       const el = document.elementFromPoint(x, y)
@@ -557,7 +585,7 @@
     })
   }
 
-  function updatePersonColor (el) {
+  function updatePersonColor(el) {
     const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
@@ -569,7 +597,7 @@
     }
   }
 
-  function initDeleteButtons () {
+  function initDeleteButtons() {
     const deleteBtns = document.querySelectorAll('.close')
     const poolParent = document.getElementById('teamFree')
     const pool = poolParent.querySelector('#innerTeam')
@@ -598,7 +626,7 @@
     })
   }
 
-  async function logout () {
+  async function logout() {
     try {
       const res = await fetch('/api/logout', { method: 'POST' })
       const data = await res.json()
@@ -609,7 +637,7 @@
     }
   }
 
-  async function exportNotWorkingPeople (movedEl) {
+  async function exportNotWorkingPeople(movedEl) {
     const parent = movedEl.parentElement
     const departmentShort = parent.parentElement.id
     const person = movedEl.textContent.trim()
@@ -628,7 +656,7 @@
     }
   }
 
-  async function importNotWorkingPeople () {
+  async function importNotWorkingPeople() {
     const res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'
     })

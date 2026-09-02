@@ -50,14 +50,7 @@
     <div class="buttonspace">
       <input id="inpoutJson" type="file" accept=".json" style="display:none">
       <input id="inputPdf" type="file" accept=".pdf" style="display:none">
-
-      <!-- <div class=" btnSpace">
-        <button id="btnJson" class="btn" type="button">
-          <p>JSON Importieren</p>
-        </button>
-        <a id="importResult"></a>
-      </div> -->
-
+      
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
           <p>PDF Importieren</p>
@@ -81,7 +74,7 @@
           <span class="slider"></span>
         </label>
       </div>
-            <div class="settingLine">
+      <div class="settingLine">
         <a>Zeige Dienst außer Haus [WiP]</a>
         <label class="switch">
           <input type="checkbox" id="showDuty">
@@ -147,6 +140,9 @@
 
       localStorage.setItem('dienste_csv', JSON.stringify(result.data));
       pdfResult.textContent = "Erfolgreich importiert"
+      setTimeout(() => {
+        pdfResult.textContent = '';
+      }, 2000);
 
       const p = btnUpload.querySelector("p");
       const originalText = p.textContent;
@@ -159,21 +155,18 @@
 
     btnReset.addEventListener('click', async () => {
       const res = window.Dienste.clearCookies();
+      const response = await fetch('/api/reset-schedule', { method: 'POST' });
+      const responseTemp = await fetch('/api/reset-temporary-schedule', { method: 'POST' })
 
-      try {
-        const response = await fetch('/api/reset-schedule', { method: 'POST' });
-        const responseTemp = await fetch ('/api/reset-temporary-schedule', {method:'POST'})
-
-        if (!response.ok && !responseTemp.ok) {
-          const body = await response.json().catch(() => ({}));
-          throw new Error(body.error || `HTTP ${response.status}`);
-        }
-
-        resetResult.textContent = res;
-      } catch (e) {
-        console.error('Server-Reset fehlgeschlagen:', e);
-        resetResult.textContent = res + ' (Server-Reset fehlgeschlagen: ' + e.message + ' — bitte Seite neu laden und erneut versuchen)';
+      if (!response.ok && !responseTemp.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${response.status}`);
       }
+
+      resetResult.textContent = res;
+      setTimeout(() => {
+        resetResult.textContent = '';
+      }, 2000);
     });
 
     btnUpload.addEventListener("click", async () => inputPdf.click())
