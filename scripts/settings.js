@@ -92,6 +92,8 @@
     }
   })
 
+module.exports.initSettingsAdjustment = initSettingsAdjustment;
+
   // Sofort verfügbar machen, unabhängig von DOMContentLoaded-Reihenfolge
   window.DiensteSettings = {
     loadSettings,
