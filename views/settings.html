@@ -162,8 +162,9 @@
 
       try {
         const response = await fetch('/api/reset-schedule', { method: 'POST' });
+        const responseTemp = await fetch ('/api/reset-temporary-schedule', {method:'POST'})
 
-        if (!response.ok) {
+        if (!response.ok && !responseTemp.ok) {
           const body = await response.json().catch(() => ({}));
           throw new Error(body.error || `HTTP ${response.status}`);
         }

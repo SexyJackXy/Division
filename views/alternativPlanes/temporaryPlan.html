@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../../scripts/scripts.js"></script>
   <script src="../../scripts/alternaivPlan.js"></script>
+  <script src="../../scripts/settings.js"></script>
 </head>
 
 <body style="height: 100vh;">
@@ -164,9 +165,13 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-      // window.DiensteSettings.initSettingsAdjustment();
+      console.log("test")
+
+      window.DiensteSettings.initSettingsAdjustment();
 
       const assignments = await window.Dienste.loadContent();
+
+      console.log(assignments)
       if (!assignments || !assignments.length) return;
 
       window.Dienste.renderAssignments(assignments);

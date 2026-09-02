@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
   <script src="../scripts/settings.js" defer></script>
+  <script src="../../scripts/alternaivPlan.js"></script>
 </head>
 
 <body>
@@ -183,8 +184,8 @@
 
       </div>
     </section>
-    
-    <div class="alternativPlan" onclick="showAlternativPlan()">
+
+    <div class="alternativPlan" onclick="showAlternativePlan()">
     </div>
 
     <h2 id="workServicesTitle">Arbeitsdienste</h2>
@@ -242,6 +243,12 @@
         <section id="innerTeam">
         </section>
       </div>
+    </div>
+
+    <div id="dialog" title="Basic dialog">
+      <div class="alternativPlanClose" onclick="closeAlternativPlan()">
+      </div>
+      <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
     </div>
 
   </main>

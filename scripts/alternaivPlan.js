@@ -73,6 +73,8 @@ async function altertivPlanLoad() {
   const assignments = await window.Dienste.loadContent()
   if (!freeTeam) return
 
+  console.log(assignments)
+
   assignments.forEach(({ role, name }) => {
     if (!name) return
 

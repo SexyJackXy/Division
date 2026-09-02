@@ -105,10 +105,13 @@
       if (pageName === 'index.html' || pageName === 'dasboard.html') {
         res = await fetch('/api/latest-schedule')
       } else if (pageName === 'temporaryPlan.html') {
+        console.log("temp")
         res = await fetch('/api/latest-temporary-schedule')
       }
       if (res.ok) {
         const json = await res.json()
+
+        console.log(json)
         if (json.success) {
           if (Array.isArray(json.data)) {
             localStorage.setItem(cookies, JSON.stringify(json.data))
