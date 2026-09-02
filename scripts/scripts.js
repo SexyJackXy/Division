@@ -1,4 +1,4 @@
-; (function () {
+;(function () {
   const cookies = 'dienste_csv'
   const reservedNames = [
     'ALvD',
@@ -46,7 +46,7 @@
     'Abrufschicht'
   ]
 
-  function readFromFile(file) {
+  function readFromFile (file) {
     file.arrayBuffer().then(b => {
       const candidates = [
         new TextDecoder('utf-8').decode(b),
@@ -76,7 +76,7 @@
     return 'Datei ' + file.name + ' erfolgreich hochgeladen'
   }
 
-  function parseContent(t) {
+  function parseContent (t) {
     if (!t) return []
     try {
       const data = JSON.parse(t)
@@ -91,13 +91,13 @@
     }
   }
 
-  function getContent() {
+  function getContent () {
     const raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
-  async function loadContent() {
-    var res;
+  async function loadContent () {
+    var res
     var path = window.location.pathname
     var pageName = path.split('/').pop()
 
@@ -105,17 +105,16 @@
       if (pageName === 'index.html' || pageName === 'dasboard.html') {
         res = await fetch('/api/latest-schedule')
       } else if (pageName === 'temporaryPlan.html') {
-        console.log("temp")
         res = await fetch('/api/latest-temporary-schedule')
       }
       if (res.ok) {
         const json = await res.json()
-
-        console.log(json)
         if (json.success) {
-          if (Array.isArray(json.data)) {
+          if (json.data) {
             localStorage.setItem(cookies, JSON.stringify(json.data))
             return json.data
+          } else if (json.fixedData) {
+            return json.fixedData
           }
           // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
           // lokalen Cache leeren statt auf alten Stand zurückzufallen.
@@ -134,14 +133,14 @@
     return getContent()
   }
 
-  function clearCookies() {
+  function clearCookies () {
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
     return 'Einteilung Zurückgesetzt'
   }
 
-  function serializeAssignments() {
+  function serializeAssignments () {
     const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
@@ -163,7 +162,7 @@
 
   // Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
   // Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
-  function scheduleSave() {
+  function scheduleSave () {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -184,7 +183,7 @@
     }, 400)
   }
 
-  function temporaryScheduleSave() {
+  function temporaryScheduleSave () {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
@@ -205,7 +204,7 @@
     }, 400)
   }
 
-  function renderAssignments(assignment) {
+  function renderAssignments (assignment) {
     let i = 0
     const poolParent = document.getElementById('teamFree')
     const freeTeam = poolParent.querySelector('#innerTeam')
@@ -240,7 +239,7 @@
     importNotWorkingPeople()
   }
 
-  function initDragAndDrop() {
+  function initDragAndDrop () {
     let dragged = null
     var path = window.location.pathname
     var pageName = path.split('/').pop()
@@ -255,7 +254,7 @@
     if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
     if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
 
-    function clearHighlights() {
+    function clearHighlights () {
       document
         .querySelectorAll('.drop-target')
         .forEach(el => el.classList.remove('drop-target'))
@@ -263,7 +262,7 @@
 
     // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
     // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
-    function performDrop(draggedEl, dropElement) {
+    function performDrop (draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
       const personTarget = dropElement.closest('.person')
@@ -276,11 +275,9 @@
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
-
         if (!reservedNames.includes(personTarget.dataset.role)) {
           return
         }
-
 
         personTarget.textContent = draggedEl.textContent
         updatePersonColor(personTarget)
@@ -450,7 +447,7 @@
     let touchStartPos = null
     const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
-    function createGhost(el) {
+    function createGhost (el) {
       const rect = el.getBoundingClientRect()
       const g = el.cloneNode(true)
 
@@ -469,14 +466,14 @@
       return g
     }
 
-    function moveGhost(x, y) {
+    function moveGhost (x, y) {
       if (!ghost) return
       const rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
 
-    function elementUnderGhost(x, y) {
+    function elementUnderGhost (x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
       const el = document.elementFromPoint(x, y)
@@ -560,7 +557,7 @@
     })
   }
 
-  function updatePersonColor(el) {
+  function updatePersonColor (el) {
     const text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
@@ -572,7 +569,7 @@
     }
   }
 
-  function initDeleteButtons() {
+  function initDeleteButtons () {
     const deleteBtns = document.querySelectorAll('.close')
     const poolParent = document.getElementById('teamFree')
     const pool = poolParent.querySelector('#innerTeam')
@@ -601,7 +598,7 @@
     })
   }
 
-  async function logout() {
+  async function logout () {
     try {
       const res = await fetch('/api/logout', { method: 'POST' })
       const data = await res.json()
@@ -612,7 +609,7 @@
     }
   }
 
-  async function exportNotWorkingPeople(movedEl) {
+  async function exportNotWorkingPeople (movedEl) {
     const parent = movedEl.parentElement
     const departmentShort = parent.parentElement.id
     const person = movedEl.textContent.trim()
@@ -631,14 +628,13 @@
     }
   }
 
-  async function importNotWorkingPeople() {
+  async function importNotWorkingPeople () {
     const res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'
     })
     const result = await res.json()
 
     if (result.length > 0) {
-
       const poolParent = document.getElementById('teamFree')
       const freeTeam = poolParent.querySelector('#innerTeam')
 

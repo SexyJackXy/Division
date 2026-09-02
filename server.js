@@ -232,7 +232,7 @@ app.post('/api/reset-temporary-schedule', (req, res) => {
     if (!fs.existsSync(dir)) {
       return res.json({ success: true })
     }
-    
+
     const archiveDir = path.join(dir, 'archive')
     if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir)
 
@@ -310,7 +310,12 @@ app.get('/api/latest-schedule', (req, res) => {
 app.get('/api/latest-temporary-schedule', (req, res) => {
   try {
     const dir = path.join(__dirname, 'temporarySchedule')
-    if (!fs.existsSync(dir)) {
+    const currentFile = path.join(
+      __dirname,
+      'temporarySchedule',
+      'current.json'
+    )
+    if (!fs.existsSync(currentFile)) {
       const fixSchedule = path.join(__dirname, 'dailySchedule')
 
       const files = fs
@@ -330,6 +335,8 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
       const fixedData = JSON.parse(
         fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
       )
+
+      console.log(fixedData)
 
       return res.json({ success: true, fileName: fixedLatest.name, fixedData })
     }
