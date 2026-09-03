@@ -188,6 +188,9 @@
     <div class="alternativPlan" onclick="showAlternativePlan()">
     </div>
 
+    <div class="activityPlan" onclick="showActivityPlan()">
+    </div>
+
     <h2 id="workServicesTitle">Arbeitsdienste</h2>
 
     <section class="middle-duty" id="workServices">
@@ -246,10 +249,17 @@
     </div>
 
     <div id="dialog" title="Basic dialog">
-      <div class="alternativPlanClose" onclick="closeAlternativPlan()">
+      <div class="temporaryPlan" onclick="closeTemporaryPlan()">
       </div>
       <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
     </div>
+
+    <div id="dialog" title="Basic dialog">
+      <div class="activityPlan" onclick="closeActivityPlan()">
+      </div>
+      <iframe id="iframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    </div>
+
 
   </main>
 

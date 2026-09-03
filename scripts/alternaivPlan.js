@@ -1,7 +1,8 @@
 async function showAlternativePlan() {
-  const dialogDiv = document.getElementById('dialog')
+    console.log("show")
+  const dialogDiv = document.getElementById('temporaryDialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
+  const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
   const delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
@@ -30,10 +31,11 @@ async function showAlternativePlan() {
     dialogButton.classList.add('is-open')
   })
 }
-async function closeAlternativPlan() {
-  const dialogDiv = document.getElementById('dialog')
+async function closeTemporaryPlan() {
+  console.log("close")
+  const dialogDiv = document.getElementById('temporaryDialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.alternativPlanClose')
+  const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
   const delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
@@ -62,7 +64,6 @@ async function closeAlternativPlan() {
     { once: true }
   )
 }
-
 async function altertivPlanLoad() {
   let i = 0
   const poolParent = document
@@ -99,4 +100,44 @@ async function altertivPlanLoad() {
   }
 
   // importNotWorkingPeople()
+}
+
+async function showActivityPlan() {
+  console.log("show")
+  const dialogDiv = document.getElementById('activityDialog')
+
+  console.log(dialogDiv)
+  const dialogIframe = dialogDiv.querySelector('#iframe')
+  const dialogButton = dialogDiv.querySelector('.activityPlanClose')
+  const delay = millis =>
+    new Promise((resolve, reject) => {
+      setTimeout(_ => resolve(), millis)
+    })
+
+  document.body.style.overflow = 'hidden'
+
+  dialogIframe.style.display = 'block'
+
+  requestAnimationFrame(() => {
+    dialogIframe.classList.add('is-open')
+  })
+
+  if (!dialogIframe.src) {
+    await new Promise(resolve => {
+      dialogIframe.addEventListener('load', resolve, { once: true })
+      dialogIframe.src = dialogIframe.dataset.src
+    })
+  }
+
+  await delay(400)
+
+  dialogButton.style.display = 'block'
+
+  requestAnimationFrame(() => {
+    dialogButton.classList.add('is-open')
+  })
+}
+
+async function closeActivityPlan() {
+  console.log("close")
 }

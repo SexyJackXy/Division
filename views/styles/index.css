@@ -106,6 +106,12 @@
   min-height: 0;
 }
 
+.freeTeamSpace {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.6rem;
+}
+
 #innerTeam {
   display: flex;
   flex-wrap: wrap;
@@ -139,12 +145,6 @@
   display: none;
 }
 
-.freeTeamSpace {
-  display: flex;
-  justify-content: space-around;
-  gap: 0.6rem;
-}
-
 #cafeteria {
   flex-direction: row;
   width: fit-content;
@@ -165,34 +165,41 @@
   padding: 0.6rem;
 }
 
-.alternativPlan {
+/* Styling for the fly outs */
+.temporaryPlan,
+.activityPlan {
   position: absolute;
-  background-color: #d1d5db;
   border-top: solid 3px #ffffff;
   border-bottom: solid 3px #ffffff;
   border-left: solid 3px #ffffff;
   height: 100px;
   width: 15px;
   right: 0;
-  top: 50%;
+
   border-radius: 10px 0px 0px 10px;
   transition: width 0.3s ease-out;
+  box-shadow: -10px 22px 25px -8px #000000;
 }
 
-.alternativPlan:hover {
-  width: 30px;
-}
-.altPic {
-  height: 100px;
-  width: 15px;
+.temporaryPlan {
+  background-color: #d1d5db;
+  top: 50%;
 }
 
-.alternativPlan:hover + .altPic img {
-  right: 4px;
+.activityPlan {
+  background-color: green;
+  top: 45%;
+}
+
+.temporaryPlan:hover,
+.activityPlan:hover {
   display: block;
+  width: 30px;
+  box-shadow: none;
 }
 
-#dialog iframe {
+#temporaryDialog iframe,
+#activityDialog iframe {
   display: none;
   border-top: none;
   border-right: none;
@@ -213,11 +220,13 @@
   transition: transform 0.4s ease-out;
 }
 
-#dialog iframe.is-open {
+#temporaryDialog iframe.is-open,
+#activityDialog iframe.is-open {
   transform: translateX(0);
 }
 
-#dialog .alternativPlanClose {
+#temporaryDialog .temporaryPlanClose ,
+#activityDialog .activityPlanClose {
   position: absolute;
   background-color: #f3f4f6;
   border-top: solid 3px #ffffff;
@@ -235,16 +244,7 @@
   transition: transform 1s ease-out;
 }
 
-#dialog .alternativPlanClose.is-open{
-    transform: translateX(0);
-}
-
-@media (max-width: 1100px) {
-  .heading {
-    font-size: 3ch;
-  }
-
-  .vehicle {
-    min-width: 60px;
-  }
+#temporaryDialog .temporaryPlanClose.is-open,
+#activityDialog .activityPlanClose.is-open {
+  transform: translateX(0);
 }

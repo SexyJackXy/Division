@@ -190,7 +190,10 @@
       </div>
     </section>
 
-    <div class="alternativPlan" onclick="showAlternativePlan()">
+    <div class="temporaryPlan" onclick="showAlternativePlan()">
+    </div>
+
+    <div class="activityPlan" onclick="showActivityPlan()">
     </div>
 
     <h2 id="workServicesTitle">Arbeitsdienste</h2>
@@ -251,10 +254,16 @@
     </div>
   </main>
 
-  <div id="dialog" title="Basic dialog">
-    <div class="alternativPlanClose" onclick="closeAlternativPlan()">
+  <div id="temporaryDialog" title="Basic dialog">
+    <div class="temporaryPlanClose" onclick="closeTemporaryPlan()">
     </div>
     <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+  </div>
+
+  <div id="activityDialog" title="Basic dialog">
+    <div class="activityPlanClose" onclick="closeActivityPlan()">
+    </div>
+    <iframe id="iframe" data-src="alternativPlanes/activityPlan.html"></iframe>
   </div>
 
   <script>
