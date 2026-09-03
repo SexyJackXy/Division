@@ -253,7 +253,6 @@
     usedPool = document.getElementById('teamUsed')
     triggerPool = document.getElementById('triggeredSpace')
 
-    console.log(triggerPool)
 
     if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
     if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
@@ -358,7 +357,6 @@
       else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
         const name = draggedEl.textContent.trim()
 
-        console.log(name)
 
         if (!reservedNames.includes(name)) {
           const newCard = document.createElement('div')

@@ -171,7 +171,6 @@
 
       const assignments = await window.Dienste.loadContent();
 
-      console.log(assignments)
       if (!assignments || !assignments.length) return;
 
       window.Dienste.renderAssignments(assignments);

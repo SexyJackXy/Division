@@ -332,8 +332,6 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
         fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
       )
 
-      console.log(fixedData)
-
       return res.json({ success: true, fileName: fixedLatest.name, fixedData })
     }
 

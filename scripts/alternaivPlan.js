@@ -1,5 +1,4 @@
 async function showAlternativePlan() {
-    console.log("show")
   const dialogDiv = document.getElementById('temporaryDialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
@@ -32,7 +31,6 @@ async function showAlternativePlan() {
   })
 }
 async function closeTemporaryPlan() {
-  console.log("close")
   const dialogDiv = document.getElementById('temporaryDialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
@@ -74,7 +72,6 @@ async function altertivPlanLoad() {
   const assignments = await window.Dienste.loadContent()
   if (!freeTeam) return
 
-  console.log(assignments)
 
   assignments.forEach(({ role, name }) => {
     if (!name) return
@@ -103,10 +100,7 @@ async function altertivPlanLoad() {
 }
 
 async function showActivityPlan() {
-  console.log("show")
   const dialogDiv = document.getElementById('activityDialog')
-
-  console.log(dialogDiv)
   const dialogIframe = dialogDiv.querySelector('#iframe')
   const dialogButton = dialogDiv.querySelector('.activityPlanClose')
   const delay = millis =>
@@ -139,5 +133,5 @@ async function showActivityPlan() {
 }
 
 async function closeActivityPlan() {
-  console.log("close")
+
 }
